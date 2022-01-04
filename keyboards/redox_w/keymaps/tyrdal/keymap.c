@@ -1,3 +1,10 @@
+#include "action.h"
+#include "action_layer.h"
+#include "eeconfig.h"
+#include "keycode.h"
+#include "process_leader.h"
+#include "quantum.h"
+#include "quantum_keycodes.h"
 #include QMK_KEYBOARD_H
 #include "de_us_layout.h"
 
@@ -54,7 +61,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             KC_TAB  , DE_Q    , DE_W    , DE_F    , DE_P    , DE_B    , KC_ESC  ,                          KC_ESC  , DE_J    , DE_L    , DE_U    , DE_Y    , CU_BSLS , CU_EQL  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            CU_SLSH , DE_A    , DE_R    , DE_S    , DE_T    , DE_G    , KC_LBRC ,                          KC_RBRC , DE_M    , DE_N    , DE_E    , DE_I    , KC_O    , CU_SCLN ,
+            CU_SLSH , DE_A    , DE_R    , DE_S    , DE_T    , DE_G    , KC_LBRC ,                          KC_RBRC , DE_M    , DE_N    , DE_E    , DE_I    , DE_O    , CU_SCLN ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             KC_LSPO , DE_Z    , DE_X    , DE_C    , DE_D    , DE_V    , LT_PGUP , LT_HOME ,      LT_END  , LT_PGDN , DE_K    , DE_H    , KC_MINS , CU_COMM , CU_DOT  , KC_RSPC ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
@@ -92,15 +99,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_MULTIMEDIA] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            TO_BASE , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , TO_GAME , XXXXXXX , XXXXXXX , XXXXXXX , _______ ,
+            _______ , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , TO_GAME , XXXXXXX , XXXXXXX , XXXXXXX , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            XXXXXXX , XXXXXXX , KC_MUTE , KC_VOLD , KC_VOLU , XXXXXXX , XXXXXXX ,                          KC_WAKE , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
+            XXXXXXX , XXXXXXX , KC_MUTE , KC_VOLD , KC_VOLU , XXXXXXX , XXXXXXX ,                          XXXXXXX , CU_FIRST, CU_LAST , CU_MAIL , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_MPRV , KC_MRWD , KC_MSTP , KC_MPLY , KC_MFFD , KC_MNXT , KC_EJCT ,                          KC_SLEP , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
+            KC_MPRV , KC_MRWD , KC_MSTP , KC_MPLY , KC_MFFD , KC_MNXT , KC_EJCT ,                          XXXXXXX , CU_AE   , CU_EACUT, CU_UE   , CU_OE   , CU_SZ   , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,      DF_DE   , DF_US   , KC_PWR  , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,      KC_PWR  , KC_WAKE , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,      XXXXXXX ,      XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX ,      XXXXXXX ,      RESET   , XXXXXXX , NK_ON   , NK_OFF
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,      XXXXXXX ,      XXXXXXX , XXXXXXX ,      XXXXXXX , KC_SLEP ,      XXXXXXX ,      RESET   , XXXXXXX , NK_ON   , NK_OFF
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -110,11 +117,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             KC_TAB  , KC_Q    , KC_W    , KC_E    , KC_R    , KC_T    , KC_ESC  ,                          KC_ESC  , KC_Y    , KC_I    , KC_O    , KC_P    , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_LSFT , KC_A    , KC_S    , KC_D    , KC_F    , KC_G    , XXXXXXX ,                          XXXXXXX , KC_H    , KC_J    , KC_K    , KC_L    , XXXXXXX , KC_RSFT ,
+            KC_LSFT , KC_A    , KC_S    , KC_D    , KC_F    , KC_G    , XXXXXXX ,                          XXXXXXX , KC_H    , KC_J    , KC_K    , KC_UP   , KC_L   , KC_RSFT ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_LCTL , KC_Y    , KC_X    , KC_C    , KC_V    , KC_B    , KC_PGUP , KC_HOME ,      KC_END  , KC_PGDN , KC_N    , KC_M    , XXXXXXX , KC_UP   , XXXXXXX , KC_RCTL ,
+            KC_LCTL , KC_Y    , KC_X    , KC_C    , KC_V    , KC_B    , KC_PGUP , KC_HOME ,      KC_END  , KC_PGDN , KC_N    , KC_M    , KC_LEFT , KC_DOWN , KC_RGHT , KC_RCTL ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,      KC_LALT ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      KC_RALT ,      KC_LEFT , KC_DOWN , KC_RGHT , XXXXXXX
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,      KC_LALT ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      KC_RALT ,      KC_LEAD , XXXXXXX , XXXXXXX , XXXXXXX
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -168,21 +175,37 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 #ifdef LEADER_ENABLE
 LEADER_EXTERNS();
 
-// first draft for umlaute and dead keys
 void matrix_scan_user(void) {
     LEADER_DICTIONARY() {
         leading = false;
 
-        SEQ_ONE_KEY(KC_A) { SEND_STRING("ä"); }
-        SEQ_TWO_KEYS(KC_A, KC_A) { SEND_STRING("Ä"); }
-        SEQ_ONE_KEY(KC_O) { SEND_STRING("ö"); }
-        SEQ_TWO_KEYS(KC_O, KC_O) { SEND_STRING("Ö"); }
-        SEQ_ONE_KEY(KC_U) { SEND_STRING("ü"); }
-        SEQ_TWO_KEYS(KC_U, KC_U) { SEND_STRING("Ü"); }
-        SEQ_TWO_KEYS(KC_S, KC_S) { SEND_STRING("ß"); }
-        SEQ_TWO_KEYS(KC_N, KC_R) { SEND_STRING("René"); }
-        SEQ_TWO_KEYS(KC_N, KC_M) { SEND_STRING("Möhring"); }
-        SEQ_TWO_KEYS(KC_E, KC_M) { SEND_STRING("rene_moehring@gmx.de"); }
+        // debug
+        SEQ_THREE_KEYS(KC_D, KC_B, KC_G) {
+            register_code16(DEBUG);
+            unregister_code16(DEBUG);
+        }
+
+        // nkro toggle
+        SEQ_TWO_KEYS(KC_N, KC_K) {
+            register_code16(NK_TOGG);
+            unregister_code16(NK_TOGG);
+        }
+
+        // goto default layer
+        SEQ_TWO_KEYS(KC_D, KC_F) { layer_on(eeconfig_read_default_layer()); }  // df -> default
+        SEQ_TWO_KEYS(KC_S, KC_T) { layer_on(eeconfig_read_default_layer()); }  // st -> standard
+
+        // game mode
+        SEQ_TWO_KEYS(KC_G, KC_A) { layer_on(_GAMING); }
+
+        // set us as default layer
+        SEQ_TWO_KEYS(KC_U, KC_S) { set_single_persistent_default_layer(_COLEMAK_DH_US); }
+
+        // set ge(rman) as default layer
+        SEQ_TWO_KEYS(KC_G, KC_E) { set_single_persistent_default_layer(_COLEMAK_DH_DE); }
+
+        // reset
+        SEQ_THREE_KEYS(KC_R, KC_S, KC_T) { reset_keyboard(); }
     }
 
     leader_end();

@@ -5,7 +5,14 @@
 #include "quantum_keycodes.h"
 
 enum userspace_custom_keycodes {
-    CU_DUMMY = SAFE_RANGE,  // start of the customizable number SAFE_RANGE
+    CU_FIRST = SAFE_RANGE,  // start of the customizable number SAFE_RANGE - First name
+    CU_LAST,                // Last name
+    CU_MAIL,                // email address
+    CU_AE,                  // ä | Ä
+    CU_UE,                  // ü | Ü
+    CU_OE,                  // ö | Ö
+    CU_EACUT,               // é | É
+    CU_SZ,                  // ß
 
 #ifdef GERMAN_ENABLE
     CU_LSFT,  // LSFT | (
