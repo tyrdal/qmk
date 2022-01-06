@@ -24,7 +24,7 @@
 #define _COLEMAK_DH_US 5
 
 enum custom_keycodes {
-    CU_CODE = SAFE_RANGE,
+    CU_CODE = NEW_SAFE_RANGE,
 };
 
 // Shortcut to make keymap more readable
@@ -52,12 +52,14 @@ enum custom_keycodes {
 #define BF_LEFT LCA(KC_LEFT)         // switch n/vim buffer to the left
 #define BF_RGHT LCA(KC_RGHT)         // switch n/vim buffer to the right
 
+// To be able to use the common
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_COLEMAK_DH_DE] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            KC_EXEC , DE_1    , CU_2    , CU_3    , DE_4    , DE_5    ,                                              CU_6    , CU_7    , CU_8    , CU_9    , CU_0    , MO_MEDIA,
+            MO_MEDIA, CU_1    , CU_2    , CU_3    , CU_4    , CU_5    ,                                              CU_6    , CU_7    , CU_8    , CU_9    , CU_0    , MO_MEDIA,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             KC_TAB  , DE_Q    , DE_W    , DE_F    , DE_P    , DE_B    , KC_ESC  ,                          KC_ESC  , DE_J    , DE_L    , DE_U    , DE_Y    , CU_BSLS , CU_EQL  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
@@ -65,7 +67,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             KC_LSPO , DE_Z    , DE_X    , DE_C    , DE_D    , DE_V    , LT_PGUP , LT_HOME ,      LT_END  , LT_PGDN , DE_K    , DE_H    , KC_MINS , CU_COMM , CU_DOT  , KC_RSPC ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            KC_LGUI , KC_LCTL , OSM_HYP , OSM_MEH ,      KC_LALT ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      KC_RALT ,      KC_LEAD , CU_QUOT , KC_RALT , GT_MENU
+            KC_LGUI , KC_LCTL , OSM_HYP , OSM_MEH ,      KC_LALT ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      KC_RALT ,      KC_LEAD , CU_QUOT , KC_RCTL , GT_MENU
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -73,13 +75,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             KC_LNUM , KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_F5   ,                                              KC_F8   , KC_F9   , KC_F10  , KC_F11  , KC_F12  , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , KC_EXLM , CU_QUOT , KC_HASH , KC_TILD , KC_PERC , KC_F6   ,                          KC_F7   , KC_PSLS , KC_P7   , KC_P8   , KC_P9   , KC_PMNS, _______  ,
+            _______ , CU_EXLM , CU_QUOT , CU_HASH , CU_TILD , CU_PERC , KC_F6   ,                          KC_F7   , KC_PSLS , KC_P7   , KC_P8   , KC_P9   , KC_PMNS, _______  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_QUES , KC_CIRC , KC_AMPR , KC_PIPE , KC_DLR  , KC_DQUO , _______ ,                          _______ , KC_PAST , KC_P4   , KC_P5   , KC_P6   , KC_PPLS , KC_COLN ,
+            CU_QUES , CU_CIRC , CU_AMPR , CU_PIPE , CU_DLR  , CU_DQUO , _______ ,                          _______ , KC_PAST , KC_P4   , KC_P5   , KC_P6   , KC_PPLS , CU_COLN ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , KC_AT   , CU_GRV  , KC_UNDS , KC_LT   , KC_GT   , _______ , _______,       _______ , _______ , KC_COMM , KC_P1   , KC_P2   , KC_P3   , KC_PENT , _______ ,
+            _______ , CU_AT   , CU_GRV  , CU_UNDS , CU_LT   , CU_GT   , _______ , _______,       _______ , _______ , CU_PCMM , KC_P1   , KC_P2   , KC_P3   , KC_PENT , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , _______ , _______ , _______ ,      _______ ,      _______ , _______ ,      _______ , _______ ,      KC_P0   ,      KC_P0   , KC_PDOT , KC_PENT , _______
+            _______ , _______ , _______ , _______ ,      _______ ,      _______ , _______ ,      _______ , _______ ,      KC_P0   ,      KC_P0   , CU_PDOT , KC_PENT , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -101,13 +103,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             _______ , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , TO_GAME , XXXXXXX , XXXXXXX , XXXXXXX , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            XXXXXXX , XXXXXXX , KC_MUTE , KC_VOLD , KC_VOLU , XXXXXXX , XXXXXXX ,                          XXXXXXX , CU_FIRST, CU_LAST , CU_MAIL , XXXXXXX , XXXXXXX , XXXXXXX ,
+            XXXXXXX , XXXXXXX , KC_MUTE , KC_VOLD , KC_VOLU , XXXXXXX , KC_EXEC ,                          XXXXXXX , XXXXXXX , CU_FIRST, CU_LAST , CU_MAIL , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             KC_MPRV , KC_MRWD , KC_MSTP , KC_MPLY , KC_MFFD , KC_MNXT , KC_EJCT ,                          XXXXXXX , CU_AE   , CU_EACUT, CU_UE   , CU_OE   , CU_SZ   , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,      KC_PWR  , KC_WAKE , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_FIND , XXXXXXX ,      KC_PWR  , KC_WAKE , XXXXXXX , CU_EURO , CU_DEG  , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,      XXXXXXX ,      XXXXXXX , XXXXXXX ,      XXXXXXX , KC_SLEP ,      XXXXXXX ,      RESET   , XXXXXXX , NK_ON   , NK_OFF
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,      KC_SLCT ,      KC_UNDO , KC_AGAIN,      XXXXXXX , KC_SLEP ,      XXXXXXX ,      XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -127,7 +129,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_COLEMAK_DH_US] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            KC_EXEC , KC_1    , KC_2    , KC_3    , KC_4    , KC_5    ,                                              KC_6    , KC_7    , KC_8    , KC_9    , KC_0    , MO_MEDIA,
+            MO_MEDIA, KC_1    , KC_2    , KC_3    , KC_4    , KC_5    ,                                              KC_6    , KC_7    , KC_8    , KC_9    , KC_0    , MO_MEDIA,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             KC_TAB  , KC_Q    , KC_W    , KC_F    , KC_P    , KC_B    , KC_ESC  ,                          KC_ESC  , KC_J    , KC_L    , KC_U    , KC_Y    , KC_SCLN , KC_QUOT ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
@@ -135,12 +137,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             KC_LSPO , KC_Z    , KC_X    , KC_C    , KC_D    , KC_V    , LT_PGUP , LT_HOME ,      LT_END  , LT_PGDN , KC_N    , KC_M    , KC_COMM , KC_DOT  , KC_SLSH , KC_RSPC ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            KC_LGUI , KC_LCTL , OSM_HYP , OSM_MEH ,      KC_LALT ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      KC_RALT ,      KC_LEFT , KC_DOWN , KC_UP   , KC_RGHT
+            KC_LGUI , KC_LCTL , OSM_HYP , OSM_MEH ,      KC_LALT ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      KC_RALT ,      KC_LEAD , KC_QUOT , KC_RCTL , GT_MENU
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         )
 
 };
 // clang-format on
+
+// key code customization happens here
+// bool process_record_keymap(uint16_t keycode, keyrecord_t *record) { return true; }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
@@ -192,17 +197,23 @@ void matrix_scan_user(void) {
         }
 
         // goto default layer
-        SEQ_TWO_KEYS(KC_D, KC_F) { layer_on(eeconfig_read_default_layer()); }  // df -> default
-        SEQ_TWO_KEYS(KC_S, KC_T) { layer_on(eeconfig_read_default_layer()); }  // st -> standard
+        SEQ_TWO_KEYS(KC_D, KC_F) { layer_on(def_layer); }  // df -> default
+        SEQ_TWO_KEYS(KC_S, KC_T) { layer_on(def_layer); }  // st -> standard
 
         // game mode
         SEQ_TWO_KEYS(KC_G, KC_A) { layer_on(_GAMING); }
 
         // set us as default layer
-        SEQ_TWO_KEYS(KC_U, KC_S) { set_single_persistent_default_layer(_COLEMAK_DH_US); }
+        SEQ_TWO_KEYS(KC_U, KC_S) {
+            set_single_persistent_default_layer(_COLEMAK_DH_US);
+            def_layer = _COLEMAK_DH_US;
+        }
 
         // set ge(rman) as default layer
-        SEQ_TWO_KEYS(KC_G, KC_E) { set_single_persistent_default_layer(_COLEMAK_DH_DE); }
+        SEQ_TWO_KEYS(KC_G, KC_E) {
+            set_single_persistent_default_layer(_COLEMAK_DH_DE);
+            def_layer = _COLEMAK_DH_DE;
+        }
 
         // reset
         SEQ_THREE_KEYS(KC_R, KC_S, KC_T) { reset_keyboard(); }
