@@ -1,7 +1,10 @@
 #include "de_us_layout.h"
 #include "action.h"
+#include "action_util.h"
+#include "config.h"
 #include "debug.h"
 #include "keycode.h"
+#include "keycode_legacy.h"
 #include "quantum.h"
 #include "quantum_keycodes.h"
 #include "timer.h"
@@ -21,251 +24,225 @@ __attribute__((constructor)) void init_def_layer(void) {
 }
 
 __attribute__((weak)) bool process_record_keymap(uint16_t keycode, keyrecord_t* record) { return true; }
-//__attribute__((weak)) void timer_timeout_keymap(void) {}
 
-// These indicate if left and right shift are physically pressed
-static bool shift = false;
+#ifdef GERMAN_ENABLE
+#    define MAP_CUSTOM_KEYCODE(pressed, shift_pressed, normal, shifted)        \
+        {                                                                      \
+            static uint16_t kc;                                                \
+            send_custom_keycode(&kc, pressed, shift_pressed, normal, shifted); \
+        }
 
-// Interrupt and times for space cadet shift ( shift / parenthesis)
-bool sc_shift = false;
-// uint16_t shift_timer = 0;
-//
-// void handle_sc_shift(uint16_t keycode, bool pressed) {
-//     if (pressed) {
-//         sc_shift    = true;
-//         shift_timer = timer_read();
-//     } else {
-//         sc_shift = false;
-//         if (timer_elapsed(shift_timer) < TAPPING_TERM && sc_shift) {
-//             register_code16(keycode);
-//         }
-//     }
-// }
-
-inline bool is_shift(void) { return shift || sc_shift; }
-
-static void send_custom_string(const char* normal, const char* shifted) {
-    if (is_shift()) {
-        send_string(shifted);
+inline void send_custom_keycode(uint16_t* kc, bool pressed, bool shift_pressed, uint16_t normal, uint16_t shifted) {
+    if (pressed) {
+        if (shift_pressed) {
+            del_mods(MOD_MASK_SHIFT);
+            *kc = shifted;
+        } else {
+            *kc = normal;
+        }
+        register_code16(*kc);
+        if (shift_pressed) {
+            register_code(KC_LSHIFT);
+        }
     } else {
-        send_string(normal);
+        unregister_code16(*kc);
     }
 }
 
-static void send_custom_keycode(uint16_t normal, uint16_t shifted) {
-    if (is_shift()) {
-        register_code16(normal);
-        unregister_code16(normal);
-    } else {
-        register_code16(shifted);
-        unregister_code16(shifted);
-    }
-}
+#    define SPACE_CADET_CODE(x)                             \
+        {                                                   \
+            static uint16_t timer;                          \
+            if (record->event.pressed) {                    \
+                timer = timer_read();                       \
+                register_code(KC_LEFT_SHIFT);               \
+            } else {                                        \
+                unregister_code(KC_LEFT_SHIFT);             \
+                if (timer_elapsed(timer) <= TAPPING_TERM) { \
+                    tap_code16(x);                          \
+                }                                           \
+            }                                               \
+        }
+#endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
-    switch (keycode) {
-            // detemine if shift is pressed
-        case KC_S:
-        case KC_RSFT:
-            shift = record->event.pressed;
-            break;
-            // TODO send correct parens
-        case KC_LSPO:
-        case KC_RSPC:
-            sc_shift = record->event.pressed;
-            break;
+    bool is_shift_pressed = get_mods() & MOD_MASK_SHIFT;
+    bool pressed          = record->event.pressed;
 
+    switch (keycode) {
             // leader based key codes
         case CU_FIRST:
-            send_string("René");
+            if (record->event.pressed) {
+                SEND_STRING("René");
+            }
             break;
         case CU_LAST:
-            send_string("Möhring");
+            if (record->event.pressed) {
+                SEND_STRING("Möhring");
+            }
             break;
         case CU_MAIL:
-            send_string("rene_moehring@gmx.de");
+            if (record->event.pressed) {
+                SEND_STRING("rene_moehring@gmx.de");
+            }
             break;
         case CU_AE:
             if (record->event.pressed) {
-                send_custom_string("ä", "Ä");
+                send_string(is_shift_pressed ? "Ä" : "ä");
             }
             break;
         case CU_UE:
             if (record->event.pressed) {
-                send_custom_string("ü", "Ü");
+                send_string(is_shift_pressed ? "Ü" : "ü");
             }
             break;
         case CU_OE:
             if (record->event.pressed) {
-                send_custom_string("ö", "Ö");
+                send_string(is_shift_pressed ? "Ö" : "ö");
             }
             break;
         case CU_EACUT:
             if (record->event.pressed) {
-                send_custom_string("é", "É");
+                send_string(is_shift_pressed ? "É" : "é");
             }
             break;
         case CU_SZ:
-            send_string("ß");
+            if (record->event.pressed) {
+                SEND_STRING("ß");
+            }
             break;
         case CU_EURO:
-            send_string("€");
+            if (record->event.pressed) {
+                SEND_STRING("€");
+            }
             break;
         case CU_DEG:
-            send_string("°");
+            if (record->event.pressed) {
+                SEND_STRING("°");
+            }
             break;
 
 #ifdef GERMAN_ENABLE
         case CU_2:
-            if (record->event.pressed) {
-                send_custom_keycode(KC_2, RALT(KC_Q));
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_2, RALT(KC_Q));
             break;
         case CU_3:
-            if (record->event.pressed) {
-                send_custom_keycode(KC_3, KC_NUHS);
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_3, KC_NONUS_HASH);
             break;
         case CU_6:
-            if (record->event.pressed) {
-                send_custom_keycode(KC_6, KC_GRV);
-                register_code(KC_SPACE);  // needed cause it is a dead key
-                unregister_code(KC_SPACE);
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_6, CU_CIRC);
             break;
         case CU_7:
-            if (record->event.pressed) {
-                send_custom_keycode(KC_7, KC_6);
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_7, S(KC_6));
             break;
         case CU_8:
-            if (record->event.pressed) {
-                send_custom_keycode(KC_8, KC_RBRC);
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_8, S(KC_RIGHT_BRACKET));
             break;
         case CU_9:
-            if (record->event.pressed) {
-                send_custom_keycode(KC_9, KC_8);
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_9, S(KC_8));
             break;
         case CU_0:
-            if (record->event.pressed) {
-                send_custom_keycode(KC_0, KC_9);
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_0, S(KC_9));
             break;
         case CU_COMM:
-            if (record->event.pressed) {
-                if (is_shift()) {
-                    send_string("<");
-                } else {
-                    register_code(KC_COMM);
-                    unregister_code(KC_COMM);
-                }
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_COMMA, KC_NONUS_BACKSLASH);
             break;
         case CU_DOT:
-            if (record->event.pressed) {
-                send_custom_keycode(KC_DOT, KC_NUBS);
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_DOT, S(KC_NONUS_BACKSLASH));
             break;
         case CU_SLSH:
-            if (record->event.pressed) {
-                send_custom_keycode(KC_PSLS, KC_MINS);
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_KP_SLASH, S(KC_MINUS));
             break;
         case CU_SCLN:
-            if (record->event.pressed) {
-                send_custom_keycode(S(KC_COMM), KC_DOT);
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_COMMA), S(KC_DOT));
             break;
         case CU_QUOT:
-            if (record->event.pressed) {
-                send_custom_keycode(S(KC_NUHS), KC_2);
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_NONUS_HASH), S(KC_2));
             break;
         case CU_GRV:
-            if (record->event.pressed) {
-                if (is_shift()) {
-                    send_string("~");
-                } else {
-                    register_code16(S(KC_EQL));
-                    unregister_code16(S(KC_EQL));
-                    // dead key needs space afterwards
-                    register_code(KC_SPACE);
-                    unregister_code(KC_SPACE);
-                }
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, CU_GRV_S, S(KC_RIGHT_BRACKET));
             break;
         case CU_EQL:
-            if (record->event.pressed) {
-                send_custom_keycode(S(KC_0), KC_PPLS);
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_0), S(KC_KP_PLUS));
             break;
         case CU_LBRC:
-            if (record->event.pressed) {
-                send_custom_string("[", "{");
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, RALT(KC_8), RALT(KC_7));
             break;
         case CU_RBRC:
-            if (record->event.pressed) {
-                send_custom_string("]", "}");
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, RALT(KC_9), RALT(KC_0));
             break;
         case CU_BSLS:
-            if (record->event.pressed) {
-                send_custom_string("\\", "|");
-            }
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, RALT(KC_MINUS), RALT(KC_NONUS_BACKSLASH));
             break;
+        // Custom Symbolics
         case CU_EXLM:
-            send_string("!");
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_1), S(KC_1));
             break;
         case CU_HASH:
-            send_string("#");
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_NONUS_HASH, KC_NONUS_HASH);
             break;
         case CU_TILD:
-            send_string("~");
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, RALT(KC_RIGHT_BRACKET), RALT(KC_RIGHT_BRACKET));
             break;
         case CU_PERC:
-            send_string("%");
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_5), S(KC_5));
             break;
-        case CU_CIRC:
-            send_string("^");
+        case CU_CIRC:  // DEAD
+            SEND_STRING("^");
             break;
         case CU_AMPR:
-            send_string("&");
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_6), S(KC_6));
             break;
         case CU_PIPE:
-            send_string("|");
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, RALT(KC_NONUS_BACKSLASH), RALT(KC_NONUS_BACKSLASH));
             break;
         case CU_DLR:
-            send_string("$");
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_4), S(KC_4));
             break;
         case CU_DQUO:
-            send_string("\"");
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_2), S(KC_2));
             break;
         case CU_AT:
-            send_string("@");
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, RALT(KC_Q), RALT(KC_Q));
             break;
         case CU_UNDS:
-            send_string("_");
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_SLASH), S(KC_SLASH));
             break;
         case CU_LT:
-            send_string("<");
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_NONUS_BACKSLASH, KC_NONUS_BACKSLASH);
             break;
         case CU_GT:
-            send_string(">");
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_NONUS_BACKSLASH), S(KC_NONUS_BACKSLASH));
             break;
         case CU_COLN:
-            send_string(":");
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_DOT), S(KC_DOT));
             break;
         case CU_QUES:
-            send_string("?");
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_MINUS), S(KC_MINUS));
             break;
-        case CU_PDOT:
-            send_string(".");
+        case CU_GRV_S:  // DEAD
+            SEND_STRING("`");
             break;
-        case CU_PCMM:
-            send_string(",");
+        case CU_SCLN_S:
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_COMMA), S(KC_COMMA));
+            break;
+        case CU_DOT_S:
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_DOT, KC_DOT);
+            break;
+        case CU_COM_S:
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_COMMA, KC_COMMA);
+            break;
+        case CU_PO:
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_8), S(KC_8));
+            break;
+        case CU_PC:
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_9), S(KC_9));
+            break;
+        // space cadet shift
+        case CU_LSPO:
+            SPACE_CADET_CODE(S(KC_8));
+            break;
+        case CU_RSPC:
+            SPACE_CADET_CODE(S(KC_9));
             break;
 #endif
     };

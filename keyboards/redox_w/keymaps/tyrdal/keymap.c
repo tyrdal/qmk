@@ -7,27 +7,29 @@
 #include "quantum_keycodes.h"
 #include QMK_KEYBOARD_H
 #include "de_us_layout.h"
+#include "keymap_german.h"
 
 #ifdef __clang__
 #    pragma clang diagnostic ignored "-Wunknown-attributes"  // clangd does not know PROGMEM
 #endif
 
-// Each layer gets a name for readability, which is then used in the keymap matrix below.
-// The underscores don't mean anything - you can have a layer called STUFF or any other name.
-// Layer names don't all need to be of the same length, obviously, and you can also skip them
-// entirely and just use numbers.
-#define _COLEMAK_DH_DE 0
-#define _NUMPAD 1
-#define _NAVIGATION 2
-#define _MULTIMEDIA 3
-#define _GAMING 4
-#define _COLEMAK_DH_US 5
+enum Layers {
+    _COLEMAK_DH_DE,
+    _NUMPAD,
+    _NAVIGATION,
+    _MULTIMEDIA,
+    _GAMING,
+    _COLEMAK_DH_US,
+};
 
 enum custom_keycodes {
     CU_CODE = NEW_SAFE_RANGE,
 };
 
 // Shortcut to make keymap more readable
+#define LCTL_ESC LCTL_T(KC_ESC)
+#define RCTL_ESC RCTL_T(KC_ESC)
+
 #define OSM_HYP OSM(MOD_HYPR)
 #define OSM_MEH OSM(MOD_MEH)
 
@@ -52,7 +54,9 @@ enum custom_keycodes {
 #define BF_LEFT LCA(KC_LEFT)         // switch n/vim buffer to the left
 #define BF_RGHT LCA(KC_RGHT)         // switch n/vim buffer to the right
 
-// To be able to use the common
+// IMPORTANT:
+// With the current implementation you cannot use CU_LSPO/CU_RSPC at the same time as the normal KC_LSFT/KC_RSFT
+// modifiers. Choose one set or the other.
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -61,13 +65,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             MO_MEDIA, CU_1    , CU_2    , CU_3    , CU_4    , CU_5    ,                                              CU_6    , CU_7    , CU_8    , CU_9    , CU_0    , MO_MEDIA,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_TAB  , DE_Q    , DE_W    , DE_F    , DE_P    , DE_B    , KC_ESC  ,                          KC_ESC  , DE_J    , DE_L    , DE_U    , DE_Y    , CU_BSLS , CU_EQL  ,
+            KC_TAB  , DE_Q    , DE_W    , DE_F    , DE_P    , DE_B    , CU_BSLS ,                          CU_SLSH , DE_J    , DE_L    , DE_U    , DE_Y    , CU_MINS , CU_EQL  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            CU_SLSH , DE_A    , DE_R    , DE_S    , DE_T    , DE_G    , KC_LBRC ,                          KC_RBRC , DE_M    , DE_N    , DE_E    , DE_I    , DE_O    , CU_SCLN ,
+            LCTL_ESC, DE_A    , DE_R    , DE_S    , DE_T    , DE_G    , KC_LBRC ,                          KC_RBRC , DE_M    , DE_N    , DE_E    , DE_I    , DE_O    , RCTL_ESC,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_LSPO , DE_Z    , DE_X    , DE_C    , DE_D    , DE_V    , LT_PGUP , LT_HOME ,      LT_END  , LT_PGDN , DE_K    , DE_H    , KC_MINS , CU_COMM , CU_DOT  , KC_RSPC ,
+            CU_LSPO , DE_Z    , DE_X    , DE_C    , DE_D    , DE_V    , LT_PGUP , LT_HOME ,      LT_END  , LT_PGDN , DE_K    , DE_H    , CU_SCLN , CU_COMM , CU_DOT  , CU_RSPC ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            KC_LGUI , KC_LCTL , OSM_HYP , OSM_MEH ,      KC_LALT ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      KC_RALT ,      KC_LEAD , CU_QUOT , KC_RCTL , GT_MENU
+            KC_LGUI , KC_MYCM , OSM_HYP , OSM_MEH ,      KC_LALT ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      KC_RALT ,      KC_LEAD , CU_QUOT , KC_EXEC , GT_MENU
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -79,9 +83,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             CU_QUES , CU_CIRC , CU_AMPR , CU_PIPE , CU_DLR  , CU_DQUO , _______ ,                          _______ , KC_PAST , KC_P4   , KC_P5   , KC_P6   , KC_PPLS , CU_COLN ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , CU_AT   , CU_GRV  , CU_UNDS , CU_LT   , CU_GT   , _______ , _______,       _______ , _______ , CU_PCMM , KC_P1   , KC_P2   , KC_P3   , KC_PENT , _______ ,
+            _______ , CU_AT   , CU_GRV_S, CU_UNDS , CU_LT   , CU_GT   , _______ , _______,       _______ , _______ , CU_COM_S, KC_P1   , KC_P2   , KC_P3   , KC_PENT , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , _______ , _______ , _______ ,      _______ ,      _______ , _______ ,      _______ , _______ ,      KC_P0   ,      KC_P0   , CU_PDOT , KC_PENT , _______
+            _______ , _______ , _______ , _______ ,      _______ ,      _______ , _______ ,      _______ , _______ ,      _______ ,      KC_P0   , CU_DOT_S, KC_PENT , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -131,13 +135,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             MO_MEDIA, KC_1    , KC_2    , KC_3    , KC_4    , KC_5    ,                                              KC_6    , KC_7    , KC_8    , KC_9    , KC_0    , MO_MEDIA,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_TAB  , KC_Q    , KC_W    , KC_F    , KC_P    , KC_B    , KC_ESC  ,                          KC_ESC  , KC_J    , KC_L    , KC_U    , KC_Y    , KC_SCLN , KC_QUOT ,
+            KC_TAB  , KC_Q    , KC_W    , KC_F    , KC_P    , KC_B    , KC_BSLS ,                          KC_SLSH , KC_J    , KC_L    , KC_U    , KC_Y    , KC_MINS , KC_EQL  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_BSLS , KC_A    , KC_R    , KC_S    , KC_T    , KC_G    , KC_LBRC ,                          KC_RBRC , KC_M    , KC_N    , KC_E    , KC_I    , KC_O    , KC_EQL  ,
+            LCTL_ESC, KC_A    , KC_R    , KC_S    , KC_T    , KC_G    , KC_LBRC ,                          KC_RBRC , KC_M    , KC_N    , KC_E    , KC_I    , KC_O    , RCTL_ESC,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_LSPO , KC_Z    , KC_X    , KC_C    , KC_D    , KC_V    , LT_PGUP , LT_HOME ,      LT_END  , LT_PGDN , KC_N    , KC_M    , KC_COMM , KC_DOT  , KC_SLSH , KC_RSPC ,
+            KC_LSPO , KC_Z    , KC_X    , KC_C    , KC_D    , KC_V    , LT_PGUP , LT_HOME ,      LT_END  , LT_PGDN , KC_N    , KC_M    , KC_SCLN , KC_COMM , KC_DOT  , KC_RSPC ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            KC_LGUI , KC_LCTL , OSM_HYP , OSM_MEH ,      KC_LALT ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      KC_RALT ,      KC_LEAD , KC_QUOT , KC_RCTL , GT_MENU
+            KC_LGUI , KC_MYCM , OSM_HYP , OSM_MEH ,      KC_LALT ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      KC_RALT ,      KC_LEAD , KC_QUOT , KC_EXEC , GT_MENU
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         )
 
