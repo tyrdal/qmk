@@ -1,8 +1,10 @@
 #include "action.h"
+#include "action_code.h"
 #include "action_layer.h"
 #include "eeconfig.h"
 #include "keycode.h"
 #include "process_leader.h"
+#include "process_tap_dance.h"
 #include "quantum.h"
 #include "quantum_keycodes.h"
 #include QMK_KEYBOARD_H
@@ -32,6 +34,7 @@ enum custom_keycodes {
 
 #define OSM_HYP OSM(MOD_HYPR)
 #define OSM_MEH OSM(MOD_MEH)
+#define OSM_SHFT OSM(MOD_LSFT)
 
 #define C_BREAK LCTL(KC_PAUS)  // ctrl + break => cancel build process in msvs
 #define CA_DEL LCA(KC_DEL)     // ctrl + alt + del
@@ -58,14 +61,42 @@ enum custom_keycodes {
 // With the current implementation you cannot use CU_LSPO/CU_RSPC at the same time as the normal KC_LSFT/KC_RSFT
 // modifiers. Choose one set or the other.
 
+enum TAP_DOUBLE_KEYCODES {
+    TD_1_6,
+    TD_2_7,
+    TD_3_8,
+    TD_4_9,
+    TD_5_0,
+    TD_F1_F6,
+    TD_F2_F7,
+    TD_F3_F8,
+    TD_F4_F9,
+    TD_F5_F0,
+    TD_Q_PLY,  // Q - Media Play/Pause
+};
+
 // clang-format off
+qk_tap_dance_action_t tap_dance_actions[] = {
+	[TD_1_6]   = ACTION_TAP_DANCE_DOUBLE(KC_1,KC_6),
+	[TD_2_7]   = ACTION_TAP_DANCE_DOUBLE(KC_2, KC_7),
+	[TD_3_8]   = ACTION_TAP_DANCE_DOUBLE(KC_3, KC_8),
+	[TD_4_9]   = ACTION_TAP_DANCE_DOUBLE(KC_4, KC_9),
+	[TD_5_0]   = ACTION_TAP_DANCE_DOUBLE(KC_5, KC_0),
+	[TD_F1_F6] = ACTION_TAP_DANCE_DOUBLE(KC_F1,KC_6),
+	[TD_F2_F7] = ACTION_TAP_DANCE_DOUBLE(KC_F2, KC_F7),
+	[TD_F3_F8] = ACTION_TAP_DANCE_DOUBLE(KC_F3, KC_F8),
+	[TD_F4_F9] = ACTION_TAP_DANCE_DOUBLE(KC_F4, KC_F9),
+	[TD_F5_F0] = ACTION_TAP_DANCE_DOUBLE(KC_F5, KC_F10),
+	[TD_Q_PLY] = ACTION_TAP_DANCE_DOUBLE(KC_Q, KC_MPLY),
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_COLEMAK_DH_DE] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             MO_MEDIA, CU_1    , CU_2    , CU_3    , CU_4    , CU_5    ,                                              CU_6    , CU_7    , CU_8    , CU_9    , CU_0    , MO_MEDIA,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_TAB  , DE_Q    , DE_W    , DE_F    , DE_P    , DE_B    , CU_BSLS ,                          CU_SLSH , DE_J    , DE_L    , DE_U    , DE_Y    , CU_MINS , CU_EQL  ,
+            KC_TAB  , TD_Q_PLY, DE_W    , DE_F    , DE_P    , DE_B    , CU_BSLS ,                          CU_SLSH , DE_J    , DE_L    , DE_U    , DE_Y    , CU_MINS , CU_EQL  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             LCTL_ESC, DE_A    , DE_R    , DE_S    , DE_T    , DE_G    , KC_LBRC ,                          KC_RBRC , DE_M    , DE_N    , DE_E    , DE_I    , DE_O    , RCTL_ESC,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
@@ -111,7 +142,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             KC_MPRV , KC_MRWD , KC_MSTP , KC_MPLY , KC_MFFD , KC_MNXT , KC_EJCT ,                          XXXXXXX , CU_AE   , CU_EACUT, CU_UE   , CU_OE   , CU_SZ   , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_FIND , XXXXXXX ,      KC_PWR  , KC_WAKE , XXXXXXX , CU_EURO , CU_DEG  , XXXXXXX , XXXXXXX , XXXXXXX ,
+            XXXXXXX , XXXXXXX , XXXXXXX , KC_CUT  , KC_COPY , KC_PSTE , KC_FIND , XXXXXXX ,      KC_PWR  , KC_WAKE , XXXXXXX , CU_EURO , CU_DEG  , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
             XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,      KC_SLCT ,      KC_UNDO , KC_AGAIN,      XXXXXXX , KC_SLEP ,      XXXXXXX ,      XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
@@ -119,15 +150,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_GAMING] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            TT_BASE , KC_1    , KC_2    , KC_3    , KC_4    , KC_5    ,                                              KC_6    , KC_7    , KC_8    , KC_9    , KC_0    , XXXXXXX ,
+            OSM_SHFT, TD_1_6  , TD_2_7  , TD_3_8  , TD_4_9  , TD_5_0  ,                                              KC_6    , KC_7    , KC_8    , KC_9    , KC_0    , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             KC_TAB  , KC_Q    , KC_W    , KC_E    , KC_R    , KC_T    , KC_ESC  ,                          KC_ESC  , KC_Y    , KC_I    , KC_O    , KC_P    , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_LSFT , KC_A    , KC_S    , KC_D    , KC_F    , KC_G    , XXXXXXX ,                          XXXXXXX , KC_H    , KC_J    , KC_K    , KC_UP   , KC_L   , KC_RSFT ,
+            KC_LSFT , KC_A    , KC_S    , KC_D    , KC_F    , KC_G    , TD_F5_F0,                          XXXXXXX , KC_H    , KC_J    , KC_K    , KC_UP   , KC_L   , KC_RSFT ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             KC_LCTL , KC_Y    , KC_X    , KC_C    , KC_V    , KC_B    , KC_PGUP , KC_HOME ,      KC_END  , KC_PGDN , KC_N    , KC_M    , KC_LEFT , KC_DOWN , KC_RGHT , KC_RCTL ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,      KC_LALT ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      KC_RALT ,      KC_LEAD , XXXXXXX , XXXXXXX , XXXXXXX
+            TD_F1_F6, TD_F2_F7, TD_F3_F8, TD_F4_F9,      KC_LALT ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      KC_RALT ,      KC_LEAD , XXXXXXX , XXXXXXX , XXXXXXX
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -135,7 +166,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             MO_MEDIA, KC_1    , KC_2    , KC_3    , KC_4    , KC_5    ,                                              KC_6    , KC_7    , KC_8    , KC_9    , KC_0    , MO_MEDIA,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_TAB  , KC_Q    , KC_W    , KC_F    , KC_P    , KC_B    , KC_BSLS ,                          KC_SLSH , KC_J    , KC_L    , KC_U    , KC_Y    , KC_MINS , KC_EQL  ,
+            KC_TAB  , TD_Q_PLY, KC_W    , KC_F    , KC_P    , KC_B    , KC_BSLS ,                          KC_SLSH , KC_J    , KC_L    , KC_U    , KC_Y    , KC_MINS , KC_EQL  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             LCTL_ESC, KC_A    , KC_R    , KC_S    , KC_T    , KC_G    , KC_LBRC ,                          KC_RBRC , KC_M    , KC_N    , KC_E    , KC_I    , KC_O    , RCTL_ESC,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
@@ -189,18 +220,12 @@ void matrix_scan_user(void) {
         leading = false;
 
         // debug
-        SEQ_THREE_KEYS(KC_D, KC_B, KC_G) {
-            register_code16(DEBUG);
-            unregister_code16(DEBUG);
-        }
+        SEQ_THREE_KEYS(KC_D, KC_B, KC_G) { tap_code16(DEBUG); }
 
         // nkro toggle
-        SEQ_TWO_KEYS(KC_N, KC_K) {
-            register_code16(NK_TOGG);
-            unregister_code16(NK_TOGG);
-        }
+        SEQ_TWO_KEYS(KC_N, KC_K) { tap_code16(NK_TOGG); }
 
-        // goto default layer
+        // goto/turn on default layer
         SEQ_TWO_KEYS(KC_D, KC_F) { layer_on(def_layer); }  // df -> default
         SEQ_TWO_KEYS(KC_S, KC_T) { layer_on(def_layer); }  // st -> standard
 
