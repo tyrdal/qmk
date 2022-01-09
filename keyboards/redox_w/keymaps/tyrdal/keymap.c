@@ -56,6 +56,7 @@ enum custom_keycodes {
 #define VD_RGHT LCTL(LGUI(KC_RGHT))  // switch windows virtual desktop to the right
 #define BF_LEFT LCA(KC_LEFT)         // switch n/vim buffer to the left
 #define BF_RGHT LCA(KC_RGHT)         // switch n/vim buffer to the right
+#define LCTL_W LCTL(DE_W)            // ctrl+w for easy window management in n/vim
 
 // IMPORTANT:
 // With the current implementation you cannot use CU_LSPO/CU_RSPC at the same time as the normal KC_LSFT/KC_RSFT
@@ -128,7 +129,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             XXXXXXX , XXXXXXX , KC_MS_L , KC_MS_D , KC_MS_R , KC_WH_D , CA_DEL  ,                          CS_ESC  , KC_PGDN , KC_LEFT , KC_DOWN , KC_RGHT , KC_END  , KC_SLCK ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            XXXXXXX , KC_BTN5 , KC_BTN4 , KC_BTN3 , KC_BTN2 , KC_BTN1 , _______ , _______,       _______ , _______ , XXXXXXX , BF_LEFT , XXXXXXX , BF_RGHT , XXXXXXX , KC_PAUS ,
+            XXXXXXX , KC_BTN5 , KC_BTN4 , KC_BTN3 , KC_BTN2 , KC_BTN1 , _______ , _______,       _______ , _______ , XXXXXXX , BF_LEFT , LCTL_W  , BF_RGHT , XXXXXXX , KC_PAUS ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
             _______ , _______ , XXXXXXX , XXXXXXX ,      _______ ,      KC_BTN2 , KC_BTN1,       _______ , _______ ,      _______ ,      XXXXXXX , XXXXXXX , _______ , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
