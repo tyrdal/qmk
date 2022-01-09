@@ -244,6 +244,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         case CU_RSPC:
             SPACE_CADET_CODE(S(KC_9));
             break;
+        // numpad  - arrow keys when shifted
+        case CU_P4:
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_KP_4, KC_LEFT);
+            break;
+        case CU_P5:
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_KP_5, KC_DOWN);
+            break;
+        case CU_P6:
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_KP_6, KC_RIGHT);
+            break;
+        case CU_P8:
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_KP_8, KC_UP);
+            break;
 #endif
     };
     return process_record_keymap(keycode, record);

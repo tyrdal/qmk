@@ -55,6 +55,10 @@ enum userspace_custom_keycodes {
     CU_COM_S,   // ,
     CU_LSPO,    // space cadet left shift | (
     CU_RSPC,    // space cadet left shift | )
+    CU_P4,      // numpad 4 | left
+    CU_P5,      // numpad 5 | down
+    CU_P6,      // numpad 6 | right
+    CU_P8,      // numpad 8 | up
 #endif
     NEW_SAFE_RANGE
 };
