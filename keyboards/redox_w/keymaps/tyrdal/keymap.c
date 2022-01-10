@@ -31,6 +31,8 @@ enum custom_keycodes {
 // Shortcut to make keymap more readable
 #define LCTL_ESC LCTL_T(KC_ESC)
 #define RCTL_ESC RCTL_T(KC_ESC)
+#define LA_QUES LALT(CU_QUES)
+#define RA_COLN LALT(CU_COLN)
 
 #define OSM_HYP OSM(MOD_HYPR)
 #define OSM_MEH OSM(MOD_MEH)
@@ -56,7 +58,6 @@ enum custom_keycodes {
 #define VD_RGHT LCTL(LGUI(KC_RGHT))  // switch windows virtual desktop to the right
 #define BF_LEFT LCA(KC_LEFT)         // switch n/vim buffer to the left
 #define BF_RGHT LCA(KC_RGHT)         // switch n/vim buffer to the right
-#define LCTL_W LCTL(DE_W)            // ctrl+w for easy window management in n/vim
 
 // IMPORTANT:
 // With the current implementation you cannot use CU_LSPO/CU_RSPC at the same time as the normal KC_LSFT/KC_RSFT
@@ -111,13 +112,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             KC_LNUM , KC_F1   , KC_F2   , KC_F3   , KC_F4   , KC_F5   ,                                              KC_F8   , KC_F9   , KC_F10  , KC_F11  , KC_F12  , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , CU_EXLM , CU_QUOT , CU_HASH , CU_TILD , CU_PERC , KC_F6   ,                          KC_F7   , KC_PSLS , KC_P7   , CU_P8   , KC_P9   , KC_PMNS, _______  ,
+            _______ , CU_EXLM , CU_QUOT , CU_HASH , CU_TILD , CU_PERC , KC_F6   ,                          KC_F7   , KC_PSLS , KC_P7   , CU_P8   , KC_P9   , KC_PMNS , _______  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            CU_QUES , CU_CIRC , CU_AMPR , CU_PIPE , CU_DLR  , CU_DQUO , _______ ,                          _______ , KC_PAST , CU_P4   , CU_P5   , CU_P6   , KC_PPLS , CU_COLN ,
+            _______ , CU_CIRC , CU_AMPR , CU_PIPE , CU_DLR  , CU_DQUO , _______ ,                          _______ , KC_PAST , CU_P4   , CU_P5   , CU_P6   , KC_PPLS , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , CU_AT   , CU_GRV_S, CU_UNDS , CU_LT   , CU_GT   , _______ , _______,       _______ , _______ , CU_COM_S, KC_P1   , KC_P2   , KC_P3   , KC_PENT , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , _______ , _______ , _______ ,      _______ ,      _______ , _______ ,      _______ , _______ ,      _______ ,      KC_P0   , CU_DOT_S, KC_PENT , _______
+            _______ , _______ , _______ , _______ ,      LA_QUES ,      _______ , _______ ,      _______ , _______ ,      RA_COLN ,      KC_P0   , CU_DOT_S, KC_PENT , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -129,7 +130,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             XXXXXXX , XXXXXXX , KC_MS_L , KC_MS_D , KC_MS_R , KC_WH_D , CA_DEL  ,                          CS_ESC  , KC_PGDN , KC_LEFT , KC_DOWN , KC_RGHT , KC_END  , KC_SLCK ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            XXXXXXX , KC_BTN5 , KC_BTN4 , KC_BTN3 , KC_BTN2 , KC_BTN1 , _______ , _______,       _______ , _______ , XXXXXXX , BF_LEFT , LCTL_W  , BF_RGHT , XXXXXXX , KC_PAUS ,
+            XXXXXXX , KC_BTN5 , KC_BTN4 , KC_BTN3 , KC_BTN2 , KC_BTN1 , _______ , _______,       _______ , _______ , XXXXXXX , BF_LEFT , XXXXXXX , BF_RGHT , XXXXXXX , KC_PAUS ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
             _______ , _______ , XXXXXXX , XXXXXXX ,      _______ ,      KC_BTN2 , KC_BTN1,       _______ , _______ ,      _______ ,      XXXXXXX , XXXXXXX , _______ , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
@@ -171,7 +172,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             LCTL_ESC, KC_A    , KC_R    , KC_S    , KC_T    , KC_G    , KC_LBRC ,                          KC_RBRC , KC_M    , KC_N    , KC_E    , KC_I    , KC_O    , RCTL_ESC,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_LSPO , KC_Z    , KC_X    , KC_C    , KC_D    , KC_V    , LT_PGUP , LT_HOME ,      LT_END  , LT_PGDN , KC_N    , KC_M    , KC_SCLN , KC_COMM , KC_DOT  , KC_RSPC ,
+            KC_LSPO , KC_Z    , KC_X    , KC_C    , KC_D    , KC_V    , LT_PGUP , LT_HOME ,      LT_END  , LT_PGDN , KC_K    , KC_H    , KC_SCLN , KC_COMM , KC_DOT  , KC_RSPC ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
             KC_LGUI , KC_MYCM , OSM_HYP , OSM_MEH ,      KC_LALT ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      KC_RALT ,      KC_LEAD , KC_QUOT , KC_EXEC , GT_MENU
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
