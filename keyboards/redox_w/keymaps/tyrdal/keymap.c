@@ -93,7 +93,10 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 	[TD_Q_PLY] = ACTION_TAP_DANCE_DOUBLE(KC_Q, KC_MPLY),
 };
 
+// check which one feels more ergonomic
 // Idea: remove numbers on default layer and replace with all 24 F-Keys, make sure all symbols are covered on def + numpad
+// Idea: alternative-> flip number on default so the symbols are normal and the nmber shifted => all F-Keys can
+//       replace symbols on the numpad layer, numlock goes to num side
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
