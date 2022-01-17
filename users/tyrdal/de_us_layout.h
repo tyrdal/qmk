@@ -13,6 +13,7 @@ enum userspace_custom_keycodes {
     CU_SZ,                  // ß
     CU_EURO,                // €
     CU_DEG,                 // °
+    CU_VOL,                 // Volume
 
 #ifdef GERMAN_ENABLE
     CU_COMM,    // , | <

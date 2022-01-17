@@ -257,6 +257,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         case CU_P8:
             MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_KP_8, KC_UP);
             break;
+        // Multimedia
+        case CU_VOL:
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_VOLU, KC_VOLD);
+            break;
 #endif
     };
     return process_record_keymap(keycode, record);
