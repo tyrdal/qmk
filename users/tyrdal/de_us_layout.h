@@ -14,6 +14,9 @@ enum userspace_custom_keycodes {
     CU_EURO,                // €
     CU_DEG,                 // °
     CU_VOL,                 // Volume
+    CU_TRCK,                // Skip Track
+    CU_FUZZ,                // Vim FuzzyFinder Leader
+    CU_HOP,                 // Vim Hop Leader
 
 #ifdef GERMAN_ENABLE
     CU_COMM,    // , | <
