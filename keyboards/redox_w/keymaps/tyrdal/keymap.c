@@ -28,6 +28,7 @@ enum Layers {
 enum custom_keycodes {
     CU_CODE = NEW_SAFE_RANGE,
 };
+KC_AMPR
 
 // Shortcut to make keymap more readable
 #define LCTL_ESC LCTL_T(KC_ESC)
@@ -53,9 +54,8 @@ enum custom_keycodes {
 #define DF_DE DF(_COLEMAK_DH_DE)
 #define DF_US DF(_COLEMAK_DH_US)
 
-// IMPORTANT:
-// With the current implementation you cannot use CU_LSPO/CU_RSPC at the same time as the normal KC_LSFT/KC_RSFT
-// modifiers. Choose one set or the other.
+#define TG_NUMP TG(_NUMPAD)
+#define TG_NAV TG(_NAVIGATION)
 
 void on_parens_open_tap(qk_tap_dance_state_t* state, void* data);
 void on_parens_close_tap(qk_tap_dance_state_t* state, void* data);
@@ -142,7 +142,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_NUMPAD] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            XXXXXXX , CU_DEG  , CU_EACUT, CU_LAST , CU_FIRST, CU_MAIL ,                                              KC_CALC , CU_PO   , CU_PC   , CU_LBRC , CU_RBRC , XXXXXXX ,
+            TG_NUMP , CU_DEG  , CU_EACUT, CU_LAST , CU_FIRST, CU_MAIL ,                                              KC_CALC , CU_PO   , CU_PC   , CU_LBRC , CU_RBRC , TG_NUMP ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , CU_EXLM , CU_QUOT , CU_HASH , CU_TILD , CU_PERC , CU_EQL  ,                          KC_NLCK , KC_PSLS , KC_P7   , CU_P8   , KC_P9   , KC_PMNS , _______  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
@@ -156,15 +156,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_NAVIGATION] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , KC_PSCR , KC_SLCK , KC_PAUS , XXXXXXX , _______ ,
+            TG_NAV  , XXXXXXX , KC_ACL0 , KC_ACL1 , KC_ACL2 , XXXXXXX ,                                              XXXXXXX , KC_PSCR , KC_SLCK , KC_PAUS , XXXXXXX , TG_NAV  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , XXXXXXX , KC_MS_U , XXXXXXX , KC_WH_U , KC_WFWD ,                          XXXXXXX , KC_PGUP , KC_HOME , KC_UP   , KC_END  , XXXXXXX , _______ ,
+            _______ , KC_WH_L , KC_WH_R , KC_MS_U , XXXXXXX , KC_WH_U , KC_WFWD ,                          XXXXXXX , KC_PGUP , KC_HOME , KC_UP   , KC_END  , KC_MYCM , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , KC_MS_L , KC_MS_D , KC_MS_R , KC_WH_D , KC_WBAK ,                          XXXXXXX , KC_PGDN , KC_LEFT , KC_DOWN , KC_RGHT , KC_MYCM , _______ ,
+            _______ , XXXXXXX , KC_MS_L , KC_MS_D , KC_MS_R , KC_WH_D , KC_WBAK ,                          CA_DEL  , KC_PGDN , KC_LEFT , KC_DOWN , KC_RGHT , OSM_GUI , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , KC_BTN5 , KC_BTN4 , KC_BTN3 , KC_BTN2 , KC_BTN1 , _______ , _______,       _______ , _______ , OSM_GUI , OSM_CA  , OSM_C   , OSM_CG  , XXXXXXX , _______ ,
+            _______ , KC_BTN5 , KC_BTN4 , KC_BTN3 , KC_BTN1 , KC_BTN2 , _______ , _______,       _______ , _______ , XXXXXXX , OSM_CA  , OSM_C   , OSM_CG  , XXXXXXX , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , _______ , _______ , _______ ,      _______ ,      KC_BTN2 , KC_BTN1,       _______ , _______ ,      _______ ,      XXXXXXX , XXXXXXX , _______ , _______
+            _______ , KC_BTN8 , KC_BTN7 , KC_BTN6 ,      _______ ,      KC_BTN2 , KC_BTN1,       KC_BTN1 , KC_BTN2 ,      _______ ,      XXXXXXX , XXXXXXX , _______ , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
