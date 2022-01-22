@@ -35,8 +35,8 @@ enum userspace_custom_keycodes {
     CU_LBRC,    // [ | {
     CU_RBRC,    // ] | }
     CU_BSLS,    // \ | |
+    CU_QUOT,    // ' | "
     CU_EXLM,    // !
-    CU_QUOT,    // '
     CU_HASH,    // #
     CU_TILD,    // ~
     CU_PERC,    // %

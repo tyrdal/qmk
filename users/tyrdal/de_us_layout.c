@@ -5,6 +5,7 @@
 #include "debug.h"
 #include "keycode.h"
 #include "keycode_legacy.h"
+#include "keymap_german.h"
 #include "quantum.h"
 #include "quantum_keycodes.h"
 #include "timer.h"
@@ -16,14 +17,7 @@
 #    pragma clang diagnostic ignored "-Wunknown-attributes"  // clangd does not know PROGMEM
 #endif
 
-uint8_t def_layer = 0;
-// TODO check if this actually works
-__attribute__((constructor)) void init_def_layer(void) {
-    def_layer = eeconfig_read_default_layer();
-#ifdef CONSOLE_ENABLE
-    xprintf("%s %d", "Initial default layer: ", def_layer);
-#endif
-}
+uint8_t def_layer;
 
 __attribute__((weak)) bool process_record_keymap(uint16_t keycode, keyrecord_t* record) { return true; }
 
@@ -34,7 +28,7 @@ __attribute__((weak)) bool process_record_keymap(uint16_t keycode, keyrecord_t* 
             send_custom_keycode(&kc, pressed, shift_pressed, normal, shifted); \
         }
 
-inline void send_custom_keycode(uint16_t* kc, bool pressed, bool shift_pressed, uint16_t normal, uint16_t shifted) {
+void send_custom_keycode(uint16_t* kc, bool pressed, bool shift_pressed, uint16_t normal, uint16_t shifted) {
     if (pressed) {
         if (shift_pressed) {
             del_mods(MOD_MASK_SHIFT);
@@ -51,7 +45,21 @@ inline void send_custom_keycode(uint16_t* kc, bool pressed, bool shift_pressed, 
     }
 }
 
-#    define SPACE_CADET_CODE(x)                             \
+void send_custom_symbol(bool pressed, bool shift_pressed, uint16_t kc) {
+    if (pressed) {
+        if (shift_pressed) {
+            del_mods(MOD_MASK_SHIFT);
+        }
+        register_code16(kc);
+        if (shift_pressed) {
+            register_code(KC_LSHIFT);
+        }
+    } else {
+        unregister_code16(kc);
+    }
+}
+
+#    define SPACE_CADET_CODE(kc)                            \
         {                                                   \
             static uint16_t timer;                          \
             if (record->event.pressed) {                    \
@@ -60,7 +68,7 @@ inline void send_custom_keycode(uint16_t* kc, bool pressed, bool shift_pressed, 
             } else {                                        \
                 unregister_code(KC_LEFT_SHIFT);             \
                 if (timer_elapsed(timer) <= TAPPING_TERM) { \
-                    SEND_STRING(x);                         \
+                    tap_code16(kc);                         \
                 }                                           \
             }                                               \
         }
@@ -71,55 +79,46 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     bool pressed          = record->event.pressed;
 
     switch (keycode) {
-            // leader based key codes
         case CU_FIRST:
-            if (record->event.pressed) {
-                SEND_STRING("René");
+            if (!record->event.pressed) {
+                SEND_STRING("Ren");
+                tap_code(KC_EQUAL);
+                tap_code(KC_E);
             }
             break;
         case CU_LAST:
-            if (record->event.pressed) {
-                SEND_STRING("Möhring");
+            if (!record->event.pressed) {
+                SEND_STRING("M;hring");
             }
             break;
         case CU_MAIL:
-            if (record->event.pressed) {
-                SEND_STRING("rene_moehring@gmx.de");
-            }
-            break;
-        case CU_AE:
-            if (record->event.pressed) {
-                send_string(is_shift_pressed ? "Ä" : "ä");
-            }
-            break;
-        case CU_UE:
-            if (record->event.pressed) {
-                send_string(is_shift_pressed ? "Ü" : "ü");
-            }
-            break;
-        case CU_OE:
-            if (record->event.pressed) {
-                send_string(is_shift_pressed ? "Ö" : "ö");
+            if (!record->event.pressed) {
+                SEND_STRING("rene");
+                tap_code16(S(KC_SLASH));
+                SEND_STRING("moehring");
+                tap_code16(ALGR(KC_Q));
+                SEND_STRING("gmx.de");
             }
             break;
         case CU_EACUT:
-            if (record->event.pressed) {
-                send_string(is_shift_pressed ? "É" : "é");
+            if (!record->event.pressed) {
+                tap_code(KC_EQUAL);
+                tap_code(KC_E);
             }
             break;
         case CU_SZ:
-            if (record->event.pressed) {
-                SEND_STRING("ß");
+            if (!record->event.pressed) {
+                tap_code(KC_MINUS);
             }
             break;
         case CU_EURO:
-            if (record->event.pressed) {
-                SEND_STRING("€");
+            if (!record->event.pressed) {
+                tap_code16(ALGR(KC_E));
             }
             break;
         case CU_DEG:
-            if (record->event.pressed) {
-                SEND_STRING("°");
+            if (!record->event.pressed) {
+                tap_code16(S(KC_GRAVE));
             }
             break;
 
@@ -177,74 +176,86 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             break;
         // Custom Symbolics
         case CU_EXLM:
-            SEND_STRING("!");
+            send_custom_symbol(pressed, is_shift_pressed, S(KC_1));
             break;
         case CU_HASH:
-            SEND_STRING("#");
+            send_custom_symbol(pressed, is_shift_pressed, KC_NONUS_HASH);
             break;
         case CU_TILD:
-            SEND_STRING("~");
+            send_custom_symbol(pressed, is_shift_pressed, ALGR(KC_RIGHT_BRACKET));
             break;
         case CU_PERC:
-            SEND_STRING("%");
+            send_custom_symbol(pressed, is_shift_pressed, S(KC_5));
             break;
         case CU_CIRC:  // DEAD
-            SEND_STRING("^");
+            if (pressed) {
+                if (is_shift_pressed) {
+                    del_mods(MOD_MASK_SHIFT);
+                }
+                tap_code(KC_GRAVE);
+                tap_code(KC_SPACE);
+                if (is_shift_pressed) {
+                    register_code(KC_LSHIFT);
+                }
+            }
             break;
         case CU_AMPR:
-            SEND_STRING("&");
+            send_custom_symbol(pressed, is_shift_pressed, S(KC_6));
             break;
         case CU_PIPE:
-            SEND_STRING("|");
+            send_custom_symbol(pressed, is_shift_pressed, ALGR(KC_NONUS_BACKSLASH));
             break;
         case CU_DLR:
-            SEND_STRING("$");
+            send_custom_symbol(pressed, is_shift_pressed, S(KC_4));
             break;
         case CU_DQUO:
-            SEND_STRING("\"");
+            send_custom_symbol(pressed, is_shift_pressed, S(KC_2));
             break;
         case CU_AT:
-            SEND_STRING("@");
+            send_custom_symbol(pressed, is_shift_pressed, ALGR(KC_Q));
             break;
         case CU_UNDS:
-            SEND_STRING("_");
+            send_custom_symbol(pressed, is_shift_pressed, S(KC_SLASH));
             break;
         case CU_LT:
-            SEND_STRING("<");
+            send_custom_symbol(pressed, is_shift_pressed, KC_NONUS_BACKSLASH);
             break;
         case CU_GT:
-            SEND_STRING(">");
+            send_custom_symbol(pressed, is_shift_pressed, S(KC_NONUS_BACKSLASH));
             break;
         case CU_COLN:
-            SEND_STRING(":");
+            send_custom_symbol(pressed, is_shift_pressed, S(KC_DOT));
             break;
         case CU_QUES:
-            SEND_STRING("?");
+            send_custom_symbol(pressed, is_shift_pressed, S(KC_MINUS));
             break;
         case CU_GRV_S:  // DEAD
-            SEND_STRING("`");
+            if (pressed) {
+                tap_code16(S(KC_EQUAL));
+                tap_code(KC_SPACE);
+            }
             break;
         case CU_SCLN_S:
-            SEND_STRING(";");
+            send_custom_symbol(pressed, is_shift_pressed, S(KC_COMMA));
             break;
         case CU_DOT_S:
-            SEND_STRING(".");
+            send_custom_symbol(pressed, is_shift_pressed, KC_DOT);
             break;
         case CU_COM_S:
-            SEND_STRING(",");
+            send_custom_symbol(pressed, is_shift_pressed, KC_COMMA);
             break;
         case CU_PO:
-            SEND_STRING("(");
+            send_custom_symbol(pressed, is_shift_pressed, S(KC_8));
             break;
         case CU_PC:
-            SEND_STRING(")");
+            send_custom_symbol(pressed, is_shift_pressed, S(KC_9));
             break;
         // space cadet shift
         case CU_LSPO:
-            SPACE_CADET_CODE("(");
+            SPACE_CADET_CODE(S(KC_8));
             break;
         case CU_RSPC:
-            SPACE_CADET_CODE(")");
+            SPACE_CADET_CODE(S(KC_9));
             break;
         // numpad  - arrow keys when shifted
         case CU_P4:
@@ -268,12 +279,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             break;
         // VIM
         case CU_FUZZ:
-            tap_code(KC_SPACE);
-            tap_code(KC_F);
+            if (!pressed) {
+                tap_code(KC_SPACE);
+                tap_code(KC_F);
+            }
             break;
         case CU_HOP:
-            tap_code(KC_SPACE);
-            tap_code(KC_H);
+            if (!pressed) {
+                tap_code(KC_SPACE);
+                tap_code(KC_H);
+            }
             break;
 
 #endif
