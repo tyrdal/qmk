@@ -229,7 +229,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #undef red_led_off
 #undef red_led_on
 #define red_led_off PORTD |= (1 << 1)
-#define red_led_on PORTF &= ~(1 << 1)
+#define red_led_on PORTD &= ~(1 << 1)
 #define blue_led_off PORTF |= (1 << 5)
 #define blue_led_on PORTF &= ~(1 << 5)
 #define yellow_led_off PORTF |= (1 << 4)
