@@ -6,17 +6,6 @@ enum userspace_custom_keycodes {
     CU_FIRST = SAFE_RANGE,  // start of the customizable number SAFE_RANGE - First name
     CU_LAST,                // Last name
     CU_MAIL,                // email address
-    CU_AE,                  // ä | Ä
-    CU_UE,                  // ü | Ü
-    CU_OE,                  // ö | Ö
-    CU_EACUT,               // é | É
-    CU_SZ,                  // ß
-    CU_EURO,                // €
-    CU_DEG,                 // °
-    CU_VOL,                 // Volume
-    CU_TRCK,                // Skip Track
-    CU_FUZZ,                // Vim FuzzyFinder Leader
-    CU_HOP,                 // Vim Hop Leader
 
 #ifdef GERMAN_ENABLE
     CU_COMM,    // , | <
@@ -36,6 +25,7 @@ enum userspace_custom_keycodes {
     CU_RBRC,    // ] | }
     CU_BSLS,    // \ | |
     CU_QUOT,    // ' | "
+    CU_DQUO,    // " | ' -> inverse of us since i need " more often
     CU_EXLM,    // !
     CU_HASH,    // #
     CU_TILD,    // ~
@@ -44,7 +34,7 @@ enum userspace_custom_keycodes {
     CU_AMPR,    // &
     CU_PIPE,    // |
     CU_DLR,     // $
-    CU_DQUO,    // "
+    CU_DQUO_S,  // "
     CU_AT,      // @
     CU_UNDS,    // _
     CU_LT,      // <
@@ -73,6 +63,9 @@ enum userspace_custom_keycodes {
 #    define CU_4 KC_4
 #    define CU_5 KC_5
 #    define CU_MINS KC_SLSH
+#    define CU_SZ KC_MINUS
+#    define CU_EURO ALGR(KC_E);
+#    define CU_DEG S(KC_GRAVE);
 
 void send_custom_keycode(uint16_t* kc, bool pressed, bool shift_pressed, uint16_t normal, uint16_t shifted);
 #endif

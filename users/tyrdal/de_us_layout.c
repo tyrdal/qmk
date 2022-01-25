@@ -59,24 +59,21 @@ void send_custom_symbol(bool pressed, bool shift_pressed, uint16_t kc) {
     }
 }
 
-#    define SPACE_CADET_CODE(kc)                            \
-        {                                                   \
-            static uint16_t timer;                          \
-            if (record->event.pressed) {                    \
-                timer = timer_read();                       \
-                register_code(KC_LEFT_SHIFT);               \
-            } else {                                        \
-                unregister_code(KC_LEFT_SHIFT);             \
-                if (timer_elapsed(timer) <= TAPPING_TERM) { \
-                    tap_code16(kc);                         \
-                }                                           \
-            }                                               \
-        }
 #endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     bool is_shift_pressed = get_mods() & MOD_MASK_SHIFT;
     bool pressed          = record->event.pressed;
+
+    // uint8_t mods      = get_mods();
+    // uint8_t osm_mods  = get_oneshot_mods();
+    // uint8_t weak_mods = get_oneshot_mods();
+
+    // TODO handle one shot and weak mods for custom codes
+
+    // if (!record->event.pressed) {
+    //     xprintf("Mods %d %d OSM %d %d Weak %d %d\n", mods, (int)is_shift_pressed, osm_mods, (int)(osm_mods & MOD_MASK_SHIFT), weak_mods, (int)(weak_mods & weak_mods & MOD_MASK_SHIFT));
+    // }
 
     switch (keycode) {
         case CU_FIRST:
@@ -98,27 +95,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 SEND_STRING("moehring");
                 tap_code16(ALGR(KC_Q));
                 SEND_STRING("gmx.de");
-            }
-            break;
-        case CU_EACUT:
-            if (!record->event.pressed) {
-                tap_code(KC_EQUAL);
-                tap_code(KC_E);
-            }
-            break;
-        case CU_SZ:
-            if (!record->event.pressed) {
-                tap_code(KC_MINUS);
-            }
-            break;
-        case CU_EURO:
-            if (!record->event.pressed) {
-                tap_code16(ALGR(KC_E));
-            }
-            break;
-        case CU_DEG:
-            if (!record->event.pressed) {
-                tap_code16(S(KC_GRAVE));
             }
             break;
 
@@ -158,6 +134,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             break;
         case CU_QUOT:
             MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_NONUS_HASH), S(KC_2));
+            break;
+        case CU_DQUO:
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, S(KC_2), S(KC_NONUS_HASH));
             break;
         case CU_GRV:
             MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, CU_GRV_S, S(KC_RIGHT_BRACKET));
@@ -208,7 +187,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         case CU_DLR:
             send_custom_symbol(pressed, is_shift_pressed, S(KC_4));
             break;
-        case CU_DQUO:
+        case CU_DQUO_S:
             send_custom_symbol(pressed, is_shift_pressed, S(KC_2));
             break;
         case CU_AT:
@@ -250,13 +229,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         case CU_PC:
             send_custom_symbol(pressed, is_shift_pressed, S(KC_9));
             break;
-        // space cadet shift
-        case CU_LSPO:
-            SPACE_CADET_CODE(S(KC_8));
-            break;
-        case CU_RSPC:
-            SPACE_CADET_CODE(S(KC_9));
-            break;
         // numpad  - arrow keys when shifted
         case CU_P4:
             MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_KP_4, KC_LEFT);
@@ -269,26 +241,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             break;
         case CU_P8:
             MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_KP_8, KC_UP);
-            break;
-        // Multimedia
-        case CU_VOL:
-            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_VOLU, KC_VOLD);
-            break;
-        case CU_TRCK:
-            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, KC_MNXT, KC_MPRV);
-            break;
-        // VIM
-        case CU_FUZZ:
-            if (!pressed) {
-                tap_code(KC_SPACE);
-                tap_code(KC_F);
-            }
-            break;
-        case CU_HOP:
-            if (!pressed) {
-                tap_code(KC_SPACE);
-                tap_code(KC_H);
-            }
             break;
 
 #endif
