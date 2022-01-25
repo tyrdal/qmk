@@ -31,6 +31,7 @@ enum Layers {
 enum custom_keycodes {
     CU_CODE = NEW_SAFE_RANGE,
 };
+#define CU_ACC KC_EQL  // use german dead keys for accents
 
 // Shortcut to make keymap more readable
 #define LCTL_ESC LCTL_T(KC_ESC)
@@ -164,7 +165,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             XXXXXXX , XXXXXXX  , XXXXXXX, XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , CU_DQUO , CU_AT   , CU_PERC , CU_COLN , CU_PO   , CU_TILD ,                          KC_GRV  , CU_PC   , CU_BSLS , CU_AMPR , CU_UNDS , KC_EQL  , XXXXXXX ,
+            _______ , CU_DQUO , CU_AT   , CU_PERC , CU_COLN , CU_PO   , CU_TILD ,                          KC_GRV  , CU_UNDS , CU_BSLS , CU_SLSH , CU_AMPR , CU_ACC  , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , CU_SCLN , CU_LT   , CU_GT   , CU_HASH , CU_EXLM , _______ ,                          _______ , CU_CIRC , CU_QUES , CU_EQL  , CU_DLR  , CU_PIPE , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
@@ -192,11 +193,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              KC_CALC , CU_PO   , CU_PC   , CU_LBRC , CU_RBRC , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_AGAIN, XXXXXXX , KC_WFWD ,                          KC_NLCK , KC_PSLS , KC_P7   , CU_P8   , KC_P9   , KC_PMNS , XXXXXXX ,
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_WFWD ,                          KC_NLCK , KC_PSLS , KC_P7   , CU_P8   , KC_P9   , KC_PMNS , KC_PMNS,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            LCTL_ESC, XXXXXXX , XXXXXXX , XXXXXXX , KC_UNDO , XXXXXXX , KC_WBAK ,                          XXXXXXX , KC_PAST , CU_P4   , CU_P5   , CU_P6   , KC_PPLS , _______ ,
+            LCTL_ESC, XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_WBAK ,                          KC_PSLS , KC_PAST , CU_P4   , CU_P5   , CU_P6   , KC_PPLS , KC_PPLS,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            OSL_NUM , OSM_SHFT, OSM_SHFT, OSM_SHFT, OSM_SHFT, XXXXXXX , XXXXXXX , XXXXXXX ,      KC_DEL  , KC_BSPC , CU_COM_S, KC_P1   , KC_P2   , KC_P3   , KC_PENT , _______ ,
+            OSL_NUM , OSM_SHFT, OSM_SHFT, OSM_SHFT, OSM_SHFT, XXXXXXX , XXXXXXX , XXXXXXX ,      KC_DEL  , KC_BSPC , CU_COM_S, KC_P1   , KC_P2   , KC_P3   , KC_PENT , KC_PENT ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
             _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      _______ ,      KC_P0   , CU_DOT_S, KC_PENT , XXXXXXX
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
