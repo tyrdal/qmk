@@ -10,5 +10,5 @@
 #define ONESHOT_TAP_TOGGLE 3  // Tapping this number of times holds the key until tapped once again.
 
 #undef LEADER_TIMEOUT
-#define LEADER_TIMEOUT 300
-#define LEADER_PER_KEY_TIMEOUT
+#define LEADER_TIMEOUT 400
+#define LEADER_PER_KEY_TIMING

@@ -1,15 +1,3 @@
-#include "action.h"
-#include "action_code.h"
-#include "action_layer.h"
-#include "action_util.h"
-#include "eeconfig.h"
-#include "keycode.h"
-#include "keycode_legacy.h"
-#include "process_leader.h"
-#include "process_tap_dance.h"
-#include "quantum.h"
-#include "quantum_keycodes.h"
-// #include "xprintf.h"
 #include QMK_KEYBOARD_H
 #include "de_us_layout.h"
 #include "keymap_german.h"
@@ -85,6 +73,34 @@ enum TAP_DOUBLE_KEYCODES {
     TD_LBRC
 };
 
+// create tap dance keycodes
+#define TD_GA_1 TD(TD_1_6)
+#define TD_GA_2 TD(TD_2_7)
+#define TD_GA_3 TD(TD_3_8)
+#define TD_GA_4 TD(TD_4_9)
+#define TD_GA_5 TD(TD_5_0)
+#define TD_GA_F1 TD(TD_F1_F6)
+#define TD_GA_F2 TD(TD_F2_F7)
+#define TD_GA_F3 TD(TD_F3_F8)
+#define TD_GA_F4 TD(TD_F4_F9)
+#define TD_GA_F5 TD(TD_F5_F0)
+#define TD_Q TD(TD_Q_PO)  // Q - (
+#define TD_Y TD(TD_Y_PC)  // Y - )
+#define TD_F1 TD(TD_F1_13)
+#define TD_F2 TD(TD_F2_14)
+#define TD_F3 TD(TD_F3_15)
+#define TD_F4 TD(TD_F4_16)
+#define TD_F5 TD(TD_F5_17)
+#define TD_F6 TD(TD_F6_18)
+#define TD_F7 TD(TD_F7_19)
+#define TD_F8 TD(TD_F8_20)
+#define TD_F9 TD(TD_F9_21)
+#define TD_F10 TD(TD_F10_22)
+#define TD_F11 TD(TD_F11_23)
+#define TD_F12 TD(TD_F12_24)
+// #define TD_PO TD(TD_PRNSO)
+// #define TD_PC TD(TD_PRNSC)
+
 // clang-format off
 qk_tap_dance_action_t tap_dance_actions[] = {
 	[TD_1_6]   = ACTION_TAP_DANCE_DOUBLE(KC_1,KC_6),
@@ -117,34 +133,6 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 	// [TD_PRNSC] = ACTION_TAP_DANCE_FN(on_parens_close_tap),
 };
 
-// create tap dance keycodes
-#define TD_GA_1 TD(TD_1_6)
-#define TD_GA_2 TD(TD_2_7)
-#define TD_GA_3 TD(TD_3_8)
-#define TD_GA_4 TD(TD_4_9)
-#define TD_GA_5 TD(TD_5_0)
-#define TD_GA_F1 TD(TD_F1_F6)
-#define TD_GA_F2 TD(TD_F2_F7)
-#define TD_GA_F3 TD(TD_F3_F8)
-#define TD_GA_F4 TD(TD_F4_F9)
-#define TD_GA_F5 TD(TD_F5_F0)
-#define TD_Q TD(TD_Q_PO)  // Q - (
-#define TD_Y TD(TD_Y_PC)  // Y - )
-#define TD_F1 TD(TD_F1_13)
-#define TD_F2 TD(TD_F2_14)
-#define TD_F3 TD(TD_F3_15)
-#define TD_F4 TD(TD_F4_16)
-#define TD_F5 TD(TD_F5_17)
-#define TD_F6 TD(TD_F6_18)
-#define TD_F7 TD(TD_F7_19)
-#define TD_F8 TD(TD_F8_20)
-#define TD_F9 TD(TD_F9_21)
-#define TD_F10 TD(TD_F10_22)
-#define TD_F11 TD(TD_F11_23)
-#define TD_F12 TD(TD_F12_24)
-// #define TD_PO TD(TD_PRNSO)
-// #define TD_PC TD(TD_PRNSC)
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [COLEMAK_DH_DE] = LAYOUT(
@@ -153,7 +141,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             KC_TAB  , TD_Q    , KC_W    , KC_F    , KC_P    , KC_B    , OSL_NAV ,                          OSL_NAV , KC_J    , KC_L    , KC_U    , TD_Y    , CU_MINS , TD_F12  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            LCTL_ESC, KC_A    , KC_R    , KC_S    , KC_T    , KC_G    , CU_LBRC ,                          CU_RBRC , KC_M    , KC_N    , KC_E    , KC_I    , KC_O    , OSM_C   ,
+            LCTL_ESC, KC_A    , KC_R    , KC_S    , KC_T    , KC_G    , CU_PO   ,                          CU_PC   , KC_M    , KC_N    , KC_E    , KC_I    , KC_O    , OSM_C   ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             OSL_NUM , DE_Z    , KC_X    , KC_C    , KC_D    , KC_V    , OSL_SYM , KC_HOME ,      KC_END  , OSL_SYM , KC_K    , KC_H    , KC_DOT  , KC_COMM , KC_UP   , OSM_SHFT,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
@@ -167,9 +155,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , CU_DQUO , CU_AT   , CU_PERC , CU_COLN , CU_PO   , CU_TILD ,                          KC_GRV  , CU_UNDS , CU_BSLS , CU_SLSH , CU_AMPR , CU_ACC  , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , CU_SCLN , CU_LT   , CU_GT   , CU_HASH , CU_EXLM , _______ ,                          _______ , CU_CIRC , CU_QUES , CU_EQL  , CU_DLR  , CU_PIPE , _______ ,
+            _______ , CU_SCLN , CU_HASH ,  CU_LT  , CU_GT   , CU_EXLM , CU_LCURL,                          CU_RCURL, CU_CIRC , CU_QUES , CU_EQL  , CU_DLR  , CU_PIPE , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , CU_GRV_S, CU_AT   , CU_UNDS , CU_LT   , CU_GT   , _______ , KC_PGUP ,      KC_PGDN , _______ , CU_COM_S, DE_ADIA , DE_ODIA , DE_UDIA , CU_SZ   , _______ ,
+            _______ , CU_GRV_S, CU_MAIL , CU_LAST , CU_FIRST, XXXXXXX , _______ , KC_PGUP ,      KC_PGDN , _______ , CU_COM_S, DE_ADIA , DE_ODIA , DE_UDIA , CU_SZ   , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
             _______ , _______ , _______ , _______ ,      _______ ,      KC_PPLS , KC_PMNS ,      KC_PSLS , KC_PAST ,      _______ ,      _______ , XXXXXXX , XXXXXXX , XXXXXXX
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
@@ -195,7 +183,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_WFWD ,                          KC_NLCK , KC_PSLS , KC_P7   , CU_P8   , KC_P9   , KC_PMNS , KC_PMNS,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            LCTL_ESC, XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_WBAK ,                          KC_PSLS , KC_PAST , CU_P4   , CU_P5   , CU_P6   , KC_PPLS , KC_PPLS,
+            LCTL_ESC, XXXXXXX , XXXXXXX , KC_CLEAR, XXXXXXX , XXXXXXX , KC_WBAK ,                          KC_PSLS , KC_PAST , CU_P4   , CU_P5   , CU_P6   , KC_PPLS , KC_PPLS,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             OSL_NUM , OSM_SHFT, OSM_SHFT, OSM_SHFT, OSM_SHFT, XXXXXXX , XXXXXXX , XXXXXXX ,      KC_DEL  , KC_BSPC , CU_COM_S, KC_P1   , KC_P2   , KC_P3   , KC_PENT , KC_PENT ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
@@ -256,6 +244,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     red_led_on;        \
     yellow_led_off;    \
     blue_led_on
+#define set_led_all \
+    red_led_on;     \
+    yellow_led_on;  \
+    blue_led_on
 
 void matrix_init_user(void) {
     set_led_off;
@@ -277,9 +269,7 @@ layer_state_t layer_state_set_user(layer_state_t state) {
             set_led_red;
             break;
         case GAMING:
-            red_led_on;
-            yellow_led_on;
-            blu_led_on;
+            set_led_all;
             break;
         default:
             break;
@@ -290,37 +280,77 @@ layer_state_t layer_state_set_user(layer_state_t state) {
 #ifdef LEADER_ENABLE
 LEADER_EXTERNS();
 
-void matrix_scan_user(void) {
+uint8_t leader_matched = 0;
+void    matrix_scan_user(void) {
     LEADER_DICTIONARY() {
-        leading = false;
+        leading        = false;
+        leader_matched = 0;
 
         // Sleep
-        SEQ_ONE_KEY(KC_S) { tap_code(KC_SLEP); }  // st -> standard
+        SEQ_ONE_KEY(KC_S) {
+            leader_matched = 1;
+            tap_code(KC_SLEP);
+        }  // st -> standard
 
         // Power
-        SEQ_THREE_KEYS(KC_P, KC_W, KC_R) { tap_code(KC_PWR); }
+        SEQ_THREE_KEYS(KC_P, KC_W, KC_R) {
+            leader_matched = 2;
+            tap_code(KC_PWR);
+        }
 
         // Wake
-        SEQ_ONE_KEY(KC_W) { tap_code(KC_WAKE); }
+        SEQ_ONE_KEY(KC_W) {
+            leader_matched = 3;
+            tap_code(KC_WAKE);
+        }
 
-        // debug
-        SEQ_THREE_KEYS(KC_D, KC_B, KC_G) { tap_code16(DEBUG); }
+        // nkro on
+        SEQ_TWO_KEYS(KC_N, KC_K) {
+            leader_matched = 4;
+            tap_code16(NK_ON);
+        }
 
-        // nkro toggle
-        SEQ_TWO_KEYS(KC_N, KC_K) { tap_code16(NK_TOGG); }
+        // nkro on
+        SEQ_TWO_KEYS(KC_K, KC_N) {
+            leader_matched = 5;
+            tap_code16(NK_OFF);
+        }
 
         // goto/turn on default layer
-        SEQ_TWO_KEYS(KC_D, KC_F) { layer_on(def_layer); }  // df -> default
+        SEQ_TWO_KEYS(KC_D, KC_F) {
+            leader_matched = 6;
+            layer_off(GAMING);
+        }  // df -> default
 
         // game mode
-        SEQ_TWO_KEYS(KC_G, KC_A) { layer_on(GAMING); }
+        SEQ_TWO_KEYS(KC_G, KC_A) {
+            leader_matched = 7;
+            layer_on(GAMING);
+        }
+
+        // debug
+        SEQ_THREE_KEYS(KC_D, KC_B, KC_G) {
+            leader_matched = 8;
+            tap_code16(DEBUG);
+        }
 
         // reset
-        SEQ_THREE_KEYS(KC_R, KC_S, KC_T) { reset_keyboard(); }
-    }
+        SEQ_THREE_KEYS(KC_R, KC_S, KC_T) {
+            leader_matched = 9;
+            reset_keyboard();
+        }
 
-    leader_end();
+        leader_end();
+    }
 }
+
+void leader_end(void) {
+#    ifdef CONSOLE_ENABLE
+    xprintf("%d %d %d %d %d\n", leader_sequence[0], leader_sequence[1], leader_sequence[2], leader_sequence[3], leader_sequence[4]);
+    xprintf("m %d\n", leader_matched);
+#    endif
+}
+
 #endif
 
 // void on_parens_open_tap(qk_tap_dance_state_t* state, void* user_data) {
@@ -337,7 +367,7 @@ void matrix_scan_user(void) {
 //         case 2:
 //             if (is_shift_pressed) {
 //                 del_weak_mods(MOD_MASK_SHIFT);
-//             }
+//
 //             register_code16(ALGR(KC_8));  // [
 //             break;
 //     }

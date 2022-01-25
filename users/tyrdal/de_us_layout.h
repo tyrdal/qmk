@@ -23,6 +23,8 @@ enum userspace_custom_keycodes {
     CU_EQL,     // = | +
     CU_LBRC,    // [ | {
     CU_RBRC,    // ] | }
+    CU_LCURL,   // { | [
+    CU_RCURL,   // } | ]
     CU_BSLS,    // \ | |
     CU_QUOT,    // ' | "
     CU_DQUO,    // " | ' -> inverse of us since i need " more often
