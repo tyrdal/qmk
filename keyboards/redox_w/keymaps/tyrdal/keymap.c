@@ -151,7 +151,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [SYMBOLS] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            XXXXXXX , XXXXXXX  , XXXXXXX, XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
+            XXXXXXX , KC_1    , KC_2    , KC_3    , KC_4    , KC_5    ,                                              KC_6    , KC_7    , KC_8    , KC_9    , KC_0    , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , CU_DQUO , CU_AT   , CU_PERC , CU_COLN , CU_PO   , CU_TILD ,                          KC_GRV  , CU_UNDS , CU_BSLS , CU_SLSH , CU_AMPR , CU_ACC  , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
