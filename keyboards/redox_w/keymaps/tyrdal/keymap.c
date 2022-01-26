@@ -191,9 +191,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_WFWD ,                          KC_NLCK , KC_PSLS , KC_P7   , CU_P8   , KC_P9   , KC_PMNS , KC_PMNS,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            LCTL_ESC, XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_WBAK ,                          KC_PSLS , KC_PAST , CU_P4   , CU_P5   , CU_P6   , KC_PPLS , KC_PPLS,
+            LCTL_ESC, KC_MPRV , KC_MSTP , KC_MPLY , KC_MNXT , KC_VOLU , KC_WBAK ,                          KC_PSLS , KC_PAST , CU_P4   , CU_P5   , CU_P6   , KC_PPLS , KC_PPLS,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            OSL_NUM , OSM_SHFT, OSM_SHFT, OSM_SHFT, OSM_SHFT, XXXXXXX , XXXXXXX , XXXXXXX ,      KC_DEL  , KC_BSPC , CU_COM_S, KC_P1   , KC_P2   , KC_P3   , KC_PENT , KC_PENT ,
+            OSL_NUM , OSM_SHFT, OSM_SHFT, OSM_SHFT, OSM_SHFT, KC_VOLD , XXXXXXX , XXXXXXX ,      KC_DEL  , KC_BSPC , CU_COM_S, KC_P1   , KC_P2   , KC_P3   , KC_PENT , KC_PENT ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
             _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      _______ ,      KC_P0   , CU_DOT_S, KC_PENT , XXXXXXX
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
