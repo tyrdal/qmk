@@ -5,7 +5,7 @@ endif
 
 LTO_ENABLE        = yes
 EXTRA_KEY_ENABLE  = yes
-MOPUSEKEY_ENABLE  = yes
+MOUSEKEY_ENABLE   = yes
 LEADER_ENABLE     = yes
 CONSOLE_ENABLE    = yes
 NKRO_ENABLE       = yes
