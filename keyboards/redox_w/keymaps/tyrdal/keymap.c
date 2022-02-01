@@ -147,25 +147,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             KC_MPLY , TD_F1   , TD_F2   , TD_F3   , TD_F4   , TD_F5   ,                                              TD_F6   , TD_F7   , TD_F8   , TD_F9   , TD_F10  , TD_F11  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_TAB  , TD_Q    , KC_W    , KC_F    , KC_P    , KC_B    , OSL_NAV ,                          OSL_NAV , KC_J    , KC_L    , KC_U    , TD_Y    , CU_MINS , TD_F12  ,
+            KC_TAB  , TD_Q    , KC_W    , KC_F    , KC_P    , KC_B    , KC_HOME ,                          KC_END  , KC_J    , KC_L    , KC_U    , TD_Y    , CU_DSLSH, TD_F12  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            LCTL_ESC, KC_A    , KC_R    , KC_S    , KC_T    , KC_G    , CU_PO   ,                          CU_PC   , KC_M    , KC_N    , KC_E    , KC_I    , KC_O    , OSM_C   ,
+            LCTL_ESC, KC_A    , KC_R    , KC_S    , KC_T    , KC_G    , CU_EQL  ,                          CU_MINS , KC_M    , KC_N    , KC_E    , KC_I    , KC_O    , OSM_C   ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            OSL_NUM , DE_Z    , KC_X    , KC_C    , KC_D    , KC_V    , OSL_SYM , KC_HOME ,      KC_END  , OSL_SYM , KC_K    , KC_H    , KC_DOT  , KC_COMM , KC_UP   , OSM_SHFT,
+            OSM_SHFT, DE_Z    , KC_X    , KC_C    , KC_D    , KC_V    , OSL_SYM , OSL_NAV ,      OSL_NAV , OSL_SYM , KC_K    , KC_H    , KC_DOT  , KC_COMM , KC_UP   , OSM_SHFT,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            KC_LEAD , OSM_GUI , OSM_MEH , OSM_HYP ,      OSM_LA  ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      OSM_RA  ,      CU_DQUO , KC_LEFT , KC_DOWN , KC_RIGHT
+            OSL_NUM, OSM_GUI , OSM_MEH , OSM_HYP ,      OSM_LA  ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      OSM_RA  ,      CU_DQUO , KC_LEFT , KC_DOWN , KC_RIGHT
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
     [SYMBOLS] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            XXXXXXX , KC_1    , KC_2    , KC_3    , KC_4    , KC_5    ,                                              KC_6    , KC_7    , KC_8    , KC_9    , KC_0    , XXXXXXX ,
+            XXXXXXX , CU_1    , CU_2    , CU_3    , CU_4    , CU_5    ,                                              CU_6    , CU_7    , CU_8    , CU_9    , CU_0    , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , CU_DQUO , CU_AT   , CU_PERC , CU_COLN , CU_PO   , CU_TILD ,                          KC_GRV  , CU_UNDS , CU_BSLS , CU_SLSH , CU_AMPR , CU_ACC  , XXXXXXX ,
+            _______ , KC_GRV  , CU_AT   , CU_PERC , CU_HASH , CU_LCURL, KC_HOME ,                          KC_END  , CU_RCURL, CU_EXLM , CU_AMPR , CU_DEG  , CU_ACC  , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , CU_SCLN , CU_HASH ,  CU_LT  , CU_GT   , CU_EXLM , CU_LCURL,                          CU_RCURL, CU_CIRC , CU_QUES , CU_EQL  , CU_DLR  , CU_PIPE , _______ ,
+            _______ , CU_GRV_S, CU_TILD ,  CU_LT  , CU_GT   , CU_LP   , KC_PGUP ,                          KC_PGDN , CU_RP   , CU_CIRC , KC_PPLS , CU_DLR  , CU_PIPE , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , CU_GRV_S, CU_MAIL , CU_LAST , CU_FIRST, XXXXXXX , _______ , KC_PGUP ,      KC_PGDN , _______ , CU_COM_S, DE_ADIA , DE_ODIA , DE_UDIA , CU_SZ   , _______ ,
+            _______ , XXXXXXX , CU_MAIL , CU_LAST , CU_FIRST, CU_QUES , _______ , _______ ,      _______ , _______ , CU_DQUO , DE_ADIA , DE_ODIA , DE_UDIA , CU_SZ   , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
             _______ , _______ , _______ , _______ ,      _______ ,      KC_PPLS , KC_PMNS ,      KC_PSLS , KC_PAST ,      _______ ,      _______ , XXXXXXX , XXXXXXX , XXXXXXX
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
@@ -175,7 +175,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             XXXXXXX , XXXXXXX , KC_ACL0 , KC_ACL1 , KC_ACL2 , XXXXXXX ,                                              XXXXXXX , KC_PSCR , KC_SLCK , KC_PAUS , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , KC_WH_L , KC_MS_U , KC_WH_R , KC_WH_U , OSL_NAV ,                          OSL_NAV , KC_PGUP , KC_HOME , KC_UP   , KC_END  , KC_MYCM , XXXXXXX ,
+            _______ , XXXXXXX , KC_WH_L , KC_MS_U , KC_WH_R , KC_WH_U , XXXXXXX ,                          XXXXXXX , KC_PGUP , KC_HOME , KC_UP   , KC_END  , KC_MYCM , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , XXXXXXX , KC_MS_L , KC_MS_D , KC_MS_R , KC_WH_D , XXXXXXX ,                          XXXXXXX , KC_PGDN , KC_LEFT , KC_DOWN , KC_RGHT , OSM_GUI , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
@@ -187,7 +187,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [NUMPAD] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            XXXXXXX , KC_SLEP , KC_PWR  , XXXXXXX , NK_ON   , NK_OFF  ,                                              KC_CALC , CU_PO   , CU_PC   , CU_LBRC , CU_RBRC , XXXXXXX ,
+            XXXXXXX , KC_SLEP , KC_PWR  , XXXXXXX , NK_ON   , NK_OFF  ,                                              KC_CALC , CU_LP   , CU_RP   , CU_LBRC , CU_RBRC , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_WFWD ,                          KC_NLCK , KC_PSLS , KC_P7   , CU_P8   , KC_P9   , KC_PMNS , KC_PMNS,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
@@ -313,54 +313,10 @@ void    matrix_scan_user(void) {
 }
 
 void leader_end(void) {
-#    ifdef CONSOLE_ENABLE
+#   ifdef CONSOLE_ENABLE
     xprintf("%d %d %d %d %d\n", leader_sequence[0], leader_sequence[1], leader_sequence[2], leader_sequence[3], leader_sequence[4]);
     xprintf("m %d\n", leader_matched);
-#    endif
+#   endif
 }
 
 #endif
-
-// void on_parens_open_tap(qk_tap_dance_state_t* state, void* user_data) {
-//     bool is_shift_pressed = get_mods() & MOD_MASK_SHIFT;
-//     switch (state->count) {
-//         case 1:
-//             if (is_shift_pressed) {
-//                 del_weak_mods(MOD_MASK_SHIFT);
-//                 tap_code16(ALGR(KC_7));  // {
-//             } else {
-//                 tap_code16(S(KC_8));  // (
-//             }
-//             break;
-//         case 2:
-//             if (is_shift_pressed) {
-//                 del_weak_mods(MOD_MASK_SHIFT);
-//
-//             register_code16(ALGR(KC_8));  // [
-//             break;
-//     }
-// }
-//
-// void on_parens_close_tap(qk_tap_dance_state_t* state, void* user_data) {
-//     bool is_shift_pressed = get_mods() & MOD_MASK_SHIFT;
-//     switch (state->count) {
-//         case 1:
-//             if (is_shift_pressed) {
-//                 unregister_code16(KC_LSFT | KC_RSFT);
-//                 tap_code16(ALGR(KC_0));  // }
-//                 register_code16(KC_LSFT);
-//             } else {
-//                 tap_code16(S(KC_9));  // )
-//             }
-//             break;
-//         case 2:
-//             if (is_shift_pressed) {
-//                 unregister_code16(KC_LSFT | KC_RSFT);
-//             }
-//             register_code16(ALGR(KC_9));  // ]
-//             if (is_shift_pressed) {
-//                 register_code16(KC_LSFT);
-//             }
-//             break;
-//     }
-// }
