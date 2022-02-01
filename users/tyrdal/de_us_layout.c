@@ -79,19 +79,19 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 
     switch (keycode) {
         case CU_FIRST:
-            if (!record->event.pressed) {
+            if (record->event.pressed) {
                 SEND_STRING("Ren");
                 tap_code(KC_EQUAL);
                 tap_code(KC_E);
             }
             break;
         case CU_LAST:
-            if (!record->event.pressed) {
+            if (record->event.pressed) {
                 SEND_STRING("M;hring");
             }
             break;
         case CU_MAIL:
-            if (!record->event.pressed) {
+            if (record->event.pressed) {
                 SEND_STRING("rene");
                 tap_code16(S(KC_SLASH));
                 SEND_STRING("moehring");
@@ -132,6 +132,8 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         case CU_SLSH:
             MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, is_osm_shift_pressed, KC_KP_SLASH, S(KC_MINUS));
             break;
+        case CU_DSLSH:
+            MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, is_osm_shift_pressed, KC_KP_SLASH, ALGR(KC_MINUS));
         case CU_SCLN:
             MAP_CUSTOM_KEYCODE(pressed, is_shift_pressed, is_osm_shift_pressed, S(KC_COMMA), S(KC_DOT));
             break;
@@ -227,10 +229,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
         case CU_COM_S:
             send_custom_symbol(pressed, is_shift_pressed, KC_COMMA);
             break;
-        case CU_PO:
+        case CU_LP:
             send_custom_symbol(pressed, is_shift_pressed, S(KC_8));
             break;
-        case CU_PC:
+        case CU_RP:
             send_custom_symbol(pressed, is_shift_pressed, S(KC_9));
             break;
 #endif
@@ -245,6 +247,7 @@ bool get_custom_auto_shifted_key(uint16_t keycode, keyrecord_t* record) {
         case CU_COMM:
         case CU_DOT:
         case CU_SLSH:
+        case CU_DSLSH:
         case CU_SCLN:
         case CU_GRV:
         case CU_2:
@@ -305,6 +308,9 @@ void autoshift_press_user(uint16_t keycode, bool shifted, keyrecord_t* record) {
             break;
         case CU_SLSH:
             register_code16(!shifted ? KC_KP_SLASH : S(KC_MINUS));
+            break;
+        case CU_DSLSH:
+            register_code16(!shifted ? KC_KP_SLASH : ALGR(KC_MINUS));
             break;
         case CU_SCLN:
             register_code16(!shifted ? S(KC_COMMA) : S(KC_DOT));
@@ -390,6 +396,9 @@ void autoshift_release_user(uint16_t keycode, bool shifted, keyrecord_t* record)
             break;
         case CU_SLSH:
             unregister_code16(!shifted ? KC_KP_SLASH : S(KC_MINUS));
+            break;
+        case CU_DSLSH:
+            unregister_code16(!shifted ? KC_KP_SLASH : ALGR(KC_MINUS));
             break;
         case CU_SCLN:
             unregister_code16(!shifted ? S(KC_COMMA) : S(KC_DOT));

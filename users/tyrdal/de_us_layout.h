@@ -28,6 +28,7 @@ enum userspace_custom_keycodes {
     CU_BSLS,    // \ | |
     CU_QUOT,    // ' | "
     CU_DQUO,    // " | ' -> inverse of us since i need " more often
+    CU_DSLSH,   // / | \ -> slash and backslash
     CU_EXLM,    // !
     CU_HASH,    // #
     CU_TILD,    // ~
@@ -45,8 +46,8 @@ enum userspace_custom_keycodes {
     CU_QUES,    // ?
     CU_GRV_S,   // `
     CU_SCLN_S,  // ;
-    CU_PO,      // (
-    CU_PC,      // )
+    CU_LP,      // (
+    CU_RP,      // )
     CU_DOT_S,   // .
     CU_COM_S,   // ,
     CU_LSPO,    // space cadet left shift | (
@@ -66,8 +67,8 @@ enum userspace_custom_keycodes {
 #    define CU_5 KC_5
 #    define CU_MINS KC_SLSH
 #    define CU_SZ KC_MINUS
-#    define CU_EURO ALGR(KC_E);
-#    define CU_DEG S(KC_GRAVE);
+#    define CU_EURO ALGR(KC_E)
+#    define CU_DEG S(KC_GRAVE)
 
 void send_custom_keycode(uint16_t* kc, bool pressed, bool shift_pressed, uint16_t normal, uint16_t shifted);
 #endif
