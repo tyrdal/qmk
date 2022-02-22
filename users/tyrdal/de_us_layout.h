@@ -61,6 +61,7 @@ enum userspace_custom_keycodes {
 };
 
 #ifdef GERMAN_ENABLE
+
 // Those are identical in de and us and are only provided to have a consistent look in the keymap
 #    define CU_1 KC_1
 #    define CU_4 KC_4
