@@ -5,6 +5,9 @@
 .DS_Store
 ._*
 
+# my password must not go to github
+keyboards/redox_w/keymaps/tyrdal/passwords.h
+
 # Merge files
 *.orig
 *.rej
