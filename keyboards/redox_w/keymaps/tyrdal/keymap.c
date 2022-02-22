@@ -1,9 +1,14 @@
 #include "action_layer.h"
+#include "action_util.h"
 #include "eeconfig.h"
 #include "keycode.h"
 #include "keycode_config.h"
 #include "process_auto_shift.h"
+#include "quantum_keycodes.h"
 #include "report.h"
+#ifdef CONSOLE_ENABLE
+#    include "xprintf.h"
+#endif
 #include QMK_KEYBOARD_H
 #include "de_us_layout.h"
 #include "keymap_german.h"
@@ -22,9 +27,7 @@ enum Layers {
     GAMING,
 };
 
-enum custom_keycodes {
-    CU_CODE = NEW_SAFE_RANGE,
-};
+enum custom_keycodes { CU_HOP = NEW_SAFE_RANGE, CU_FUZZY, CU_CIW, CU_DIW, CU_YIW, CU_WQ };
 #define CU_ACC KC_EQL  // use german dead keys for accents
 
 // Shortcut to make keymap more readable
@@ -47,9 +50,6 @@ enum custom_keycodes {
 
 #define TG_GAME TG(GAMING)
 
-void on_parens_open_tap(qk_tap_dance_state_t* state, void* data);
-void on_parens_close_tap(qk_tap_dance_state_t* state, void* data);
-
 enum TAP_DOUBLE_KEYCODES {
     TD_1_6,
     TD_2_7,
@@ -61,8 +61,6 @@ enum TAP_DOUBLE_KEYCODES {
     TD_F3_F8,
     TD_F4_F9,
     TD_F5_F0,
-    TD_Q_PO,  // Q - (
-    TD_Y_PC,  // Y - )
     TD_F1_13,
     TD_F2_14,
     TD_F3_15,
@@ -75,10 +73,6 @@ enum TAP_DOUBLE_KEYCODES {
     TD_F10_22,
     TD_F11_23,
     TD_F12_24,
-    // TD_PRNSO,
-    // TD_PRNSC,
-    TD_RBRC,
-    TD_LBRC
 };
 
 // create tap dance keycodes
@@ -92,8 +86,6 @@ enum TAP_DOUBLE_KEYCODES {
 #define TD_GA_F3 TD(TD_F3_F8)
 #define TD_GA_F4 TD(TD_F4_F9)
 #define TD_GA_F5 TD(TD_F5_F0)
-#define TD_Q TD(TD_Q_PO)  // Q - (
-#define TD_Y TD(TD_Y_PC)  // Y - )
 #define TD_F1 TD(TD_F1_13)
 #define TD_F2 TD(TD_F2_14)
 #define TD_F3 TD(TD_F3_15)
@@ -106,8 +98,6 @@ enum TAP_DOUBLE_KEYCODES {
 #define TD_F10 TD(TD_F10_22)
 #define TD_F11 TD(TD_F11_23)
 #define TD_F12 TD(TD_F12_24)
-// #define TD_PO TD(TD_PRNSO)
-// #define TD_PC TD(TD_PRNSC)
 
 // clang-format off
 qk_tap_dance_action_t tap_dance_actions[] = {
@@ -121,8 +111,6 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 	[TD_F3_F8] = ACTION_TAP_DANCE_DOUBLE(KC_F3, KC_F8),
 	[TD_F4_F9] = ACTION_TAP_DANCE_DOUBLE(KC_F4, KC_F9),
 	[TD_F5_F0] = ACTION_TAP_DANCE_DOUBLE(KC_F5, KC_F10),
-	[TD_Q_PO] = ACTION_TAP_DANCE_DOUBLE(KC_Q, S(KC_8)),
-	[TD_Y_PC] = ACTION_TAP_DANCE_DOUBLE(DE_Y, S(KC_9)),
 	[TD_F1_13] = ACTION_TAP_DANCE_DOUBLE(KC_F1,KC_F13),
 	[TD_F2_14] = ACTION_TAP_DANCE_DOUBLE(KC_F2,KC_F14),
 	[TD_F3_15] = ACTION_TAP_DANCE_DOUBLE(KC_F3,KC_F15),
@@ -135,10 +123,6 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 	[TD_F10_22] = ACTION_TAP_DANCE_DOUBLE(KC_F10,KC_F22),
 	[TD_F11_23] = ACTION_TAP_DANCE_DOUBLE(KC_F11,KC_F23),
 	[TD_F12_24] = ACTION_TAP_DANCE_DOUBLE(KC_F12,KC_F24),
-	[TD_LBRC] = ACTION_TAP_DANCE_DOUBLE(ALGR(KC_8), ALGR(KC_7)),
-	[TD_RBRC] = ACTION_TAP_DANCE_DOUBLE(ALGR(KC_9), ALGR(KC_0)),
-	// [TD_PRNSO] = ACTION_TAP_DANCE_FN(on_parens_open_tap),
-	// [TD_PRNSC] = ACTION_TAP_DANCE_FN(on_parens_close_tap),
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -147,13 +131,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             KC_MPLY , TD_F1   , TD_F2   , TD_F3   , TD_F4   , TD_F5   ,                                              TD_F6   , TD_F7   , TD_F8   , TD_F9   , TD_F10  , TD_F11  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_TAB  , TD_Q    , KC_W    , KC_F    , KC_P    , KC_B    , KC_HOME ,                          KC_END  , KC_J    , KC_L    , KC_U    , TD_Y    , CU_DSLSH, TD_F12  ,
+            KC_TAB  , KC_Q    , KC_W    , KC_F    , KC_P    , KC_B    , CU_FUZZY,                          CU_HOP  , KC_J    , KC_L    , KC_U    , DE_Y    , CU_DSLSH, TD_F12  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             LCTL_ESC, KC_A    , KC_R    , KC_S    , KC_T    , KC_G    , CU_EQL  ,                          CU_MINS , KC_M    , KC_N    , KC_E    , KC_I    , KC_O    , OSM_C   ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            OSM_SHFT, DE_Z    , KC_X    , KC_C    , KC_D    , KC_V    , OSL_SYM , OSL_NAV ,      OSL_NAV , OSL_SYM , KC_K    , KC_H    , KC_DOT  , KC_COMM , KC_UP   , OSM_SHFT,
+            OSM_SHFT, DE_Z    , KC_X    , KC_C    , KC_D    , KC_V    , OSL_SYM , OSL_NAV ,      OSL_NAV , OSL_SYM , KC_K    , KC_H    , KC_DOT  , KC_COMM , CU_CIW  , OSM_SHFT,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            OSM_GUI , KC_LEAD , OSM_MEH , OSM_HYP ,      OSL_NUM ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      OSM_LA  ,      CU_DQUO , KC_LEFT , KC_DOWN , KC_RIGHT
+            OSM_GUI , KC_LEAD , OSM_MEH , OSM_HYP ,      OSL_NUM ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      OSM_LA  ,      CU_DQUO ,  CU_YIW , CU_YIW  , CU_WQ
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -163,21 +147,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , KC_GRV  , CU_AT   , CU_PERC , CU_HASH , CU_LCURL, KC_HOME ,                          KC_END  , CU_RCURL, CU_EXLM , CU_AMPR , CU_DEG  , CU_ACC  , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , CU_GRV_S, CU_TILD ,  CU_LT  , CU_GT   , CU_LP   , KC_PGUP ,                          KC_PGDN , CU_RP   , CU_CIRC , KC_PPLS , CU_DLR  , CU_PIPE , _______ ,
+            _______ , CU_GRV_S, CU_TILD ,  CU_LT  , CU_GT   , CU_LP   , KC_PGUP ,                          KC_PGDN , CU_RP   , CU_CIRC , CU_EQL  , CU_DLR  , CU_PIPE , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , XXXXXXX , CU_MAIL , CU_LAST , CU_FIRST, CU_QUES , _______ , _______ ,      _______ , _______ , CU_DQUO , DE_ADIA , DE_ODIA , DE_UDIA , CU_SZ   , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , _______ , _______ , _______ ,      _______ ,      KC_PPLS , KC_PMNS ,      KC_PSLS , KC_PAST ,      _______ ,      _______ , XXXXXXX , XXXXXXX , XXXXXXX
+            _______ , _______ , _______ , _______ ,      _______ ,      KC_PPLS , CU_MINS ,      CU_DSLSH, KC_PAST ,      _______ ,      _______ , XXXXXXX , XXXXXXX , XXXXXXX
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
     [NAVIGATION] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            XXXXXXX , XXXXXXX , KC_ACL0 , KC_ACL1 , KC_ACL2 , XXXXXXX ,                                              XXXXXXX , KC_PSCR , KC_SLCK , KC_PAUS , XXXXXXX , XXXXXXX ,
+            XXXXXXX , XXXXXXX , KC_ACL0 , KC_ACL1 , KC_ACL2 , XXXXXXX ,                                              XXXXXXX , KC_PSCR , KC_SLCK , KC_PAUS , XXXXXXX , XXXXXXX  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , KC_WH_L , KC_MS_U , KC_WH_R , KC_WH_U , XXXXXXX ,                          XXXXXXX , KC_PGUP , KC_HOME , KC_UP   , KC_END  , KC_MYCM , XXXXXXX ,
+            _______ , XXXXXXX , KC_WH_L , KC_MS_U , KC_WH_R , KC_WH_U , KC_WFWD ,                          XXXXXXX , KC_PGUP , KC_HOME , KC_UP   , KC_END  , KC_MYCM , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , KC_MS_L , KC_MS_D , KC_MS_R , KC_WH_D , XXXXXXX ,                          XXXXXXX , KC_PGDN , KC_LEFT , KC_DOWN , KC_RGHT , OSM_GUI , _______ ,
+            _______ , XXXXXXX , KC_MS_L , KC_MS_D , KC_MS_R , KC_WH_D , KC_WBAK ,                          XXXXXXX , KC_PGDN , KC_LEFT , KC_DOWN , KC_RGHT , OSM_GUI , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , KC_BTN5 , KC_BTN4 , KC_BTN3 , KC_BTN1 , KC_BTN2 , _______ , _______,       _______ , _______ , XXXXXXX , OSM_CA  , OSM_C   , OSM_CG  , XXXXXXX , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
@@ -189,11 +173,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             XXXXXXX , KC_SLEP , KC_PWR  , XXXXXXX , NK_ON   , NK_OFF  ,                                              KC_CALC , CU_LP   , CU_RP   , CU_LBRC , CU_RBRC , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , KC_WFWD ,                          KC_NLCK , KC_PSLS , KC_P7   , CU_P8   , KC_P9   , KC_PMNS , KC_PMNS,
+            XXXXXXX , OSM_SHFT, OSM_SHFT, OSM_SHFT, OSM_SHFT, OSM_SHFT, KC_WFWD ,                          KC_NLCK , KC_PSLS , KC_P7   , CU_P8   , KC_P9   , KC_PMNS , KC_PMNS,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             LCTL_ESC, KC_MPRV , KC_MSTP , KC_MPLY , KC_MNXT , KC_VOLU , KC_WBAK ,                          KC_PSLS , KC_PAST , CU_P4   , CU_P5   , CU_P6   , KC_PPLS , KC_PPLS,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            OSL_NUM , OSM_SHFT, OSM_SHFT, OSM_SHFT, OSM_SHFT, KC_VOLD , XXXXXXX , XXXXXXX ,      KC_DEL  , KC_BSPC , CU_COM_S, KC_P1   , KC_P2   , KC_P3   , KC_PENT , KC_PENT ,
+            _______ , OSM_SHFT, OSM_SHFT, OSM_SHFT, OSM_SHFT, KC_VOLD , XXXXXXX , XXXXXXX ,      KC_DEL  , KC_BSPC , CU_COM_S, KC_P1   , KC_P2   , KC_P3   , KC_PENT , KC_PENT ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
             _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      _______ ,      KC_P0   , CU_DOT_S, KC_PENT , XXXXXXX
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
@@ -213,12 +197,104 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         )
 };
-// clang-format os
+// clang-format on
+
+inline void del_all_mods(uint8_t mask) {
+    del_mods(mask);
+    del_oneshot_mods(mask);
+    del_weak_mods(mask);
+}
 
 // key code customization happens here
-// bool process_record_keymap(uint16_t keycode, keyrecord_t *record) { return true; }
+bool process_record_keymap(uint16_t keycode, keyrecord_t* record) {
+    uint8_t mods             = get_mods();
+    bool    is_ctrl_held     = mods & MOD_MASK_CTRL;
+    bool    is_alt_held      = mods & MOD_MASK_ALT;
+    bool    is_shift_held    = mods & MOD_MASK_SHIFT;
+    bool    is_ctrl_pressed  = is_ctrl_held || get_oneshot_mods() & MOD_MASK_CTRL || get_weak_mods() & MOD_MASK_CTRL;
+    bool    is_alt_pressed   = is_alt_held || get_oneshot_mods() & MOD_MASK_ALT || get_weak_mods() & MOD_MASK_ALT;
+    bool    is_shift_pressed = is_shift_held || get_oneshot_mods() & MOD_MASK_SHIFT || get_weak_mods() & MOD_MASK_SHIFT;
 
-// For some uknown reason the colors are garbled and I have a yellow instead of a green led
+    // xprintf("c %d %d | a %d %d | s %d %d\n", is_ctrl_held, is_ctrl_pressed, is_alt_held, is_alt_pressed, is_shift_held, is_shift_pressed);
+
+    switch (keycode) {
+        case CU_HOP:
+            if (!record->event.pressed) {
+                if (is_ctrl_pressed) {
+                    del_all_mods(MOD_MASK_CTRL);
+
+                    tap_code(KC_ESCAPE);
+                    SEND_STRING(" he");
+
+                    if (is_ctrl_held) {
+                        add_mods(MOD_MASK_CTRL);
+                    }
+                } else if (is_alt_pressed) {
+                    del_all_mods(MOD_MASK_ALT);
+
+                    tap_code(KC_ESCAPE);
+                    SEND_STRING(" hj");
+                    // FIXME: somehow alt gest stuck here (but not at the same place in CU_FUZZY)
+
+                    if (is_alt_held) {
+                        add_mods(MOD_MASK_ALT);
+                    }
+                } else if (is_shift_pressed) {
+                    del_all_mods(MOD_MASK_SHIFT);
+
+                    tap_code(KC_ESCAPE);
+                    SEND_STRING(" hG");
+
+                    if (is_shift_held) {
+                        add_mods(MOD_MASK_SHIFT);
+                    }
+                } else {
+                    tap_code(KC_ESCAPE);
+                    SEND_STRING(" hg");
+                }
+            }
+            break;
+        case CU_FUZZY:
+            if (!record->event.pressed) {
+                if (is_ctrl_pressed) {
+                    del_all_mods(MOD_MASK_CTRL);
+
+                    tap_code(KC_ESCAPE);
+                    SEND_STRING(" fr");
+
+                    if (is_ctrl_held) {
+                        add_mods(MOD_MASK_CTRL);
+                    }
+                } else if (is_alt_pressed) {
+                    del_all_mods(MOD_MASK_ALT);
+
+                    tap_code(KC_ESCAPE);
+                    SEND_STRING(" fb");
+
+                    if (is_alt_held) {
+                        add_mods(MOD_MASK_ALT);
+                    }
+                } else if (is_shift_pressed) {
+                    del_all_mods(MOD_MASK_SHIFT);
+
+                    tap_code(KC_ESCAPE);
+                    SEND_STRING(" fy");
+
+                    if (is_shift_held) {
+                        add_mods(MOD_MASK_SHIFT);
+                    }
+                } else {
+                    tap_code(KC_ESCAPE);
+                    SEND_STRING(" ff");
+                }
+            }
+            break;
+    }
+
+    return true;
+}
+
+// For some unknown reason the colors are garbled and I have a yellow instead of a green led
 #undef set_led_off
 #undef set_led_red
 #undef set_led_blue
