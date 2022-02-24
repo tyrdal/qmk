@@ -6,6 +6,7 @@
 #include "process_auto_shift.h"
 #include "quantum_keycodes.h"
 #include "report.h"
+#include "send_string_keycodes.h"
 #ifdef CONSOLE_ENABLE
 #    include "xprintf.h"
 #endif
@@ -27,7 +28,7 @@ enum Layers {
     GAMING,
 };
 
-enum custom_keycodes { CU_HOP = NEW_SAFE_RANGE, CU_FUZZY, CU_CIW, CU_DIW, CU_YIW, CU_WQ };
+enum custom_keycodes { CU_HOP = NEW_SAFE_RANGE, CU_FUZZY };
 #define CU_ACC KC_EQL  // use german dead keys for accents
 
 // Shortcut to make keymap more readable
@@ -41,6 +42,7 @@ enum custom_keycodes { CU_HOP = NEW_SAFE_RANGE, CU_FUZZY, CU_CIW, CU_DIW, CU_YIW
 #define OSM_CA OSM(MOD_LCTL | MOD_LALT)
 #define OSM_CG OSM(MOD_LCTL | MOD_LGUI)
 #define OSM_C OSM(MOD_LCTL)
+#define OSM_CS OSM(MOD_LCTL | MOD_LSFT)
 #define OSM_LA OSM(MOD_LALT)
 #define OSM_RA OSM(MOD_RALT)
 
@@ -128,16 +130,17 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [COLEMAK_DH_DE] = LAYOUT(
+
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             KC_MPLY , TD_F1   , TD_F2   , TD_F3   , TD_F4   , TD_F5   ,                                              TD_F6   , TD_F7   , TD_F8   , TD_F9   , TD_F10  , TD_F11  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_TAB  , KC_Q    , KC_W    , KC_F    , KC_P    , KC_B    , CU_FUZZY,                          CU_HOP  , KC_J    , KC_L    , KC_U    , DE_Y    , CU_DSLSH, TD_F12  ,
+            KC_TAB  , KC_Q    , KC_W    , KC_F    , KC_P    , KC_B    , CU_FUZZY,                          CU_HOP  , KC_J    , KC_L    , KC_U    , DE_Y    , CU_DQUO , TD_F12  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             LCTL_ESC, KC_A    , KC_R    , KC_S    , KC_T    , KC_G    , CU_EQL  ,                          CU_MINS , KC_M    , KC_N    , KC_E    , KC_I    , KC_O    , OSM_C   ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            OSM_SHFT, DE_Z    , KC_X    , KC_C    , KC_D    , KC_V    , OSL_SYM , OSL_NAV ,      OSL_NAV , OSL_SYM , KC_K    , KC_H    , KC_DOT  , KC_COMM , CU_CIW  , OSM_SHFT,
+            OSM_SHFT, DE_Z    , KC_X    , KC_C    , KC_D    , KC_V    , OSL_SYM , OSL_NAV ,      OSL_NAV , OSL_SYM , KC_K    , KC_H    , KC_DOT  , KC_COMM , KC_UP   , OSM_SHFT,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            OSM_GUI , KC_LEAD , OSM_MEH , OSM_HYP ,      OSL_NUM ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      OSM_LA  ,      CU_DQUO ,  CU_YIW , CU_YIW  , CU_WQ
+            OSM_GUI , KC_LEAD , OSM_MEH , OSM_HYP ,      OSL_NUM ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      OSM_LA  ,      CU_DSLSH, KC_LEFT , KC_DOWN , KC_RIGHT
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -163,7 +166,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , XXXXXXX , KC_MS_L , KC_MS_D , KC_MS_R , KC_WH_D , KC_WBAK ,                          XXXXXXX , KC_PGDN , KC_LEFT , KC_DOWN , KC_RGHT , OSM_GUI , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , KC_BTN5 , KC_BTN4 , KC_BTN3 , KC_BTN1 , KC_BTN2 , _______ , _______,       _______ , _______ , XXXXXXX , OSM_CA  , OSM_C   , OSM_CG  , XXXXXXX , _______ ,
+            _______ , KC_BTN5 , KC_BTN4 , KC_BTN3 , KC_BTN1 , KC_BTN2 , _______ , _______,       _______ , _______ , OSM_CS  , OSM_CA  , OSM_C   , OSM_CG  , XXXXXXX , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
             _______ , KC_BTN8 , KC_BTN7 , KC_BTN6 ,      _______ ,      KC_BTN2 , KC_BTN1,       KC_BTN1 , KC_BTN2 ,      _______ ,      XXXXXXX , XXXXXXX , _______ , TG_GAME
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
