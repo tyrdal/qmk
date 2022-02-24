@@ -199,97 +199,61 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
-inline void del_all_mods(uint8_t mask) {
-    del_mods(mask);
-    del_oneshot_mods(mask);
-    del_weak_mods(mask);
-}
-
 // key code customization happens here
 bool process_record_keymap(uint16_t keycode, keyrecord_t* record) {
     uint8_t mods             = get_mods();
-    bool    is_ctrl_held     = mods & MOD_MASK_CTRL;
-    bool    is_alt_held      = mods & MOD_MASK_ALT;
-    bool    is_shift_held    = mods & MOD_MASK_SHIFT;
-    bool    is_ctrl_pressed  = is_ctrl_held || get_oneshot_mods() & MOD_MASK_CTRL || get_weak_mods() & MOD_MASK_CTRL;
-    bool    is_alt_pressed   = is_alt_held || get_oneshot_mods() & MOD_MASK_ALT || get_weak_mods() & MOD_MASK_ALT;
-    bool    is_shift_pressed = is_shift_held || get_oneshot_mods() & MOD_MASK_SHIFT || get_weak_mods() & MOD_MASK_SHIFT;
+    uint8_t osm_mods         = get_oneshot_mods();
+    bool    is_ctrl_pressed  = (mods | osm_mods) & MOD_MASK_CTRL;
+    bool    is_alt_pressed   = (mods | osm_mods) & MOD_MASK_ALT;
+    bool    is_shift_pressed = (mods | osm_mods) & MOD_MASK_SHIFT;
+    bool    pressed          = record->event.pressed;
 
-    // xprintf("c %d %d | a %d %d | s %d %d\n", is_ctrl_held, is_ctrl_pressed, is_alt_held, is_alt_pressed, is_shift_held, is_shift_pressed);
+#ifdef CONSOLE_ENABLE
+    // xprintf("     c %d | a %d | s %d \n", is_ctrl_pressed, is_alt_pressed, is_shift_pressed);
+    // xprintf("hold c %d | a %d | s %d \n", mods & MOD_MASK_CTRL, mods & MOD_MASK_ALT, mods & MOD_MASK_SHIFT);
+    // xprintf("osm  c %d | a %d | s %d \n", osm_mods & MOD_MASK_CTRL, osm_mods & MOD_MASK_ALT, osm_mods & MOD_MASK_SHIFT);
+#endif
 
+    // Here we can clear all oneshot modifiers because only codes using SEND_STRING follow
+    // therefore this section needs to be the last
+    // should this change then modifier handling needs to be adjusted
+    // hold modifiers need to be reinstated though
+    clear_mods();
+    clear_oneshot_mods();
     switch (keycode) {
         case CU_HOP:
-            if (!record->event.pressed) {
+            if (pressed) {
                 if (is_ctrl_pressed) {
-                    del_all_mods(MOD_MASK_CTRL);
-
-                    tap_code(KC_ESCAPE);
-                    SEND_STRING(" he");
-
-                    if (is_ctrl_held) {
-                        add_mods(MOD_MASK_CTRL);
-                    }
+                    SEND_STRING(SS_TAP(X_ESCAPE) " he");
                 } else if (is_alt_pressed) {
-                    del_all_mods(MOD_MASK_ALT);
-
-                    tap_code(KC_ESCAPE);
-                    SEND_STRING(" hj");
-                    // FIXME: somehow alt gest stuck here (but not at the same place in CU_FUZZY)
-
-                    if (is_alt_held) {
-                        add_mods(MOD_MASK_ALT);
-                    }
+                    SEND_STRING(SS_TAP(X_ESCAPE) " hj");
+                    // FIXME rem: somehow alt gets stuck here (but not at the same place in CU_FUZZY)
+                    set_mods(mods);
                 } else if (is_shift_pressed) {
-                    del_all_mods(MOD_MASK_SHIFT);
-
-                    tap_code(KC_ESCAPE);
-                    SEND_STRING(" hG");
-
-                    if (is_shift_held) {
-                        add_mods(MOD_MASK_SHIFT);
-                    }
+                    SEND_STRING(SS_TAP(X_ESCAPE) " hG");
                 } else {
-                    tap_code(KC_ESCAPE);
-                    SEND_STRING(" hg");
+                    SEND_STRING(SS_TAP(X_ESCAPE) " hg");
                 }
             }
             break;
         case CU_FUZZY:
-            if (!record->event.pressed) {
+            if (pressed) {
                 if (is_ctrl_pressed) {
-                    del_all_mods(MOD_MASK_CTRL);
-
-                    tap_code(KC_ESCAPE);
-                    SEND_STRING(" fr");
-
-                    if (is_ctrl_held) {
-                        add_mods(MOD_MASK_CTRL);
-                    }
+                    SEND_STRING(SS_TAP(X_ESCAPE) " fr");
                 } else if (is_alt_pressed) {
-                    del_all_mods(MOD_MASK_ALT);
-
-                    tap_code(KC_ESCAPE);
-                    SEND_STRING(" fb");
-
-                    if (is_alt_held) {
-                        add_mods(MOD_MASK_ALT);
-                    }
+                    SEND_STRING(SS_TAP(X_ESCAPE) " fb");
                 } else if (is_shift_pressed) {
-                    del_all_mods(MOD_MASK_SHIFT);
-
-                    tap_code(KC_ESCAPE);
-                    SEND_STRING(" fy");
-
-                    if (is_shift_held) {
-                        add_mods(MOD_MASK_SHIFT);
-                    }
+                    SEND_STRING(SS_TAP(X_ESCAPE) " fy");
                 } else {
-                    tap_code(KC_ESCAPE);
-                    SEND_STRING(" ff");
+                    SEND_STRING(SS_TAP(X_ESCAPE) " ff");
                 }
             }
             break;
+        default:
+            // since none of our special codes was pressed we need to reinstate the oneshot modifiers
+            set_oneshot_mods(osm_mods);
     }
+    set_mods(mods);
 
     return true;
 }

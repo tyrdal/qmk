@@ -78,34 +78,23 @@ uint8_t NUM_SPECIAL_CODES = sizeof(special_codes) / sizeof(special_key_codes_t);
 #endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
-    bool is_shift_pressed = get_mods() & MOD_MASK_SHIFT;
-#ifndef AUTO_SHIFT_ENABLE
-    bool is_osm_shift_pressed = get_oneshot_mods() & MOD_MASK_SHIFT;
-#endif
-    bool pressed = record->event.pressed;
+    uint8_t mods     = get_mods();
+    uint8_t osm_mods = get_oneshot_mods();
+    bool    pressed  = record->event.pressed;
 
-    // uint8_t mods      = get_mods();
-    // uint8_t osm_mods  = get_oneshot_mods();
-    // uint8_t weak_mods = get_oneshot_mods();
-
-    // TODO handle one shot and weak mods for custom codes
-
+#ifdef CONSOLE_ENABLE
     // if (!record->event.pressed) {
-    //     xprintf("Mods %d %d OSM %d %d Weak %d %d\n", mods, (int)is_shift_pressed, osm_mods, (int)(osm_mods & MOD_MASK_SHIFT), weak_mods, (int)(weak_mods & weak_mods & MOD_MASK_SHIFT));
+    //     xprintf("Mods %d %d OSM %d %d\n", get_mods(), (int)get_mods() & MOD_MASK_SHIFT,
+    //     get_oneshot_mods(), (int)(get_oneshot_mods() & MOD_MASK_SHIFT));
     // }
+#endif
 
 #ifdef GERMAN_ENABLE
     // Symbols (without dead keys involved)
     for (uint16_t i = 0; i < NUM_SYMBOL_CODES; ++i) {
         if (keycode == symbol_codes[i].custom_code) {
             if (pressed) {
-                if (is_shift_pressed) {
-                    del_mods(MOD_MASK_SHIFT);
-                }
                 register_code16(symbol_codes[i].symbol_code);
-                if (is_shift_pressed) {
-                    register_code(KC_LSHIFT);
-                }
             } else {
                 unregister_code16(symbol_codes[i].symbol_code);
             }
@@ -118,19 +107,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     for (uint16_t i = 0; i < NUM_SPECIAL_CODES; ++i) {
         if (keycode == special_codes[i].custom_code) {
             if (pressed) {
-                if (is_shift_pressed) {
-                    del_mods(MOD_MASK_SHIFT);
-                    special_codes[i].current_code = shifted;
-                } else if (is_osm_shift_pressed) {
-                    del_one_shot_mods(MOD_MASK_SHIFT);
+                if ((mods | osm_mods) & MOD_MASK_SHIFT) {
                     special_codes[i].current_code = shifted;
                 } else {
                     special_codes[i].current_code = normal;
                 }
                 register_code16(special_codes[i].current_code);
-                if (is_shift_pressed) {
-                    register_code(KC_LSHIFT);
-                }
             } else {
                 unregister_code16(special_codes[i].current_code);
             }
@@ -140,27 +122,25 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
 #    endif
 #endif
 
+    // Modifiers are disabled for keycodes using SEND_STRING
+    // do not forget to set them back afterwards
+    clear_mods();
+    clear_oneshot_mods();
     switch (keycode) {
             // Strings on keypress
         case CU_FIRST:
-            if (record->event.pressed) {
-                SEND_STRING("Ren");
-                tap_code(KC_EQUAL);
-                tap_code(KC_E);
+            if (pressed) {
+                SEND_STRING("Ren" SS_TAP(X_EQUAL) SS_TAP(X_E));
             }
             break;
         case CU_LAST:
-            if (record->event.pressed) {
+            if (pressed) {
                 SEND_STRING("M;hring");
             }
             break;
         case CU_MAIL:
-            if (record->event.pressed) {
-                SEND_STRING("rene");
-                tap_code16(S(KC_SLASH));
-                SEND_STRING("moehring");
-                tap_code16(ALGR(KC_Q));
-                SEND_STRING("gmx.de");
+            if (pressed) {
+                SEND_STRING("rene" SS_LSFT(SS_TAP(X_SLASH)) "moehring" SS_ALGR(SS_TAP(X_Q)) "gmx.de");
             }
             break;
 
@@ -168,24 +148,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             // Custom Symbols ( with dead keys involved)
         case CU_CIRC:
             if (pressed) {
-                if (is_shift_pressed) {
-                    del_mods(MOD_MASK_SHIFT);
-                }
-                tap_code(KC_GRAVE);
-                tap_code(KC_SPACE);
-                if (is_shift_pressed) {
-                    register_code(KC_LSHIFT);
-                }
+                SEND_STRING(SS_TAP(X_GRAVE) SS_TAP(X_SPACE));
             }
             break;
         case CU_GRV_S:
             if (pressed) {
-                tap_code16(S(KC_EQUAL));
-                tap_code(KC_SPACE);
+                SEND_STRING(SS_LSFT(SS_TAP(X_EQUAL)) SS_TAP(X_SPACE));
             }
             break;
 #endif
+
+        default:
+            // since none of our special codes was pressed we need to reinstate the oneshot modifiers
+            set_oneshot_mods(osm_mods);
     }
+    // hold modifiers need to be reinstated in any case
+    set_mods(mods);
+
     return process_record_keymap(keycode, record);
 }
 
