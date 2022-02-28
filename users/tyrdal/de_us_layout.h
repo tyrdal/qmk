@@ -50,8 +50,6 @@ enum userspace_custom_keycodes {
     CU_RP,      // )
     CU_DOT_S,   // .
     CU_COM_S,   // ,
-    CU_LSPO,    // space cadet left shift | (
-    CU_RSPC,    // space cadet left shift | )
     CU_P4,      // numpad 4 | left
     CU_P5,      // numpad 5 | down
     CU_P6,      // numpad 6 | right
