@@ -39,9 +39,9 @@ enum custom_keycodes { CU_HOP = NEW_SAFE_RANGE, CU_FUZZY };
 #define OSM_HYP OSM(MOD_HYPR)
 #define OSM_MEH OSM(MOD_MEH)
 #define OSM_SHFT OSM(MOD_LSFT)
+#define OSM_C OSM(MOD_LCTL)
 #define OSM_CA OSM(MOD_LCTL | MOD_LALT)
 #define OSM_CG OSM(MOD_LCTL | MOD_LGUI)
-#define OSM_C OSM(MOD_LCTL)
 #define OSM_CS OSM(MOD_LCTL | MOD_LSFT)
 #define OSM_LA OSM(MOD_LALT)
 #define OSM_RA OSM(MOD_RALT)
@@ -51,6 +51,15 @@ enum custom_keycodes { CU_HOP = NEW_SAFE_RANGE, CU_FUZZY };
 #define OSL_NUM OSL(NUMPAD)
 
 #define TG_GAME TG(GAMING)
+
+#define LT_SYM_B LT(SYMBOLS, KC_BSPC)
+#define LT_SYM_P LT(SYMBOLS, KC_PPLS)
+#define LT_SYM_S LT(SYMBOLS, KC_SPC)
+#define LT_SYM_A LT(SYMBOLS, KC_PAST)
+#define LT_NAV_D LT(NAVIGATION, KC_DEL)
+#define LT_NAV_M LT(NAVIGATION, CU_MINS)
+#define LT_NAV_E LT(NAVIGATION, KC_ENT)
+#define LT_NAV_S LT(NAVIGATION, CU_DSLSH)
 
 enum TAP_DOUBLE_KEYCODES {
     TD_1_6,
@@ -140,7 +149,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             OSM_SHFT, DE_Z    , KC_X    , KC_C    , KC_D    , KC_V    , OSL_SYM , OSL_NAV ,      OSL_NAV , OSL_SYM , KC_K    , KC_H    , KC_DOT  , KC_COMM , KC_UP   , OSM_SHFT,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            OSM_GUI , KC_LEAD , OSM_MEH , OSM_HYP ,      OSL_NUM ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      OSM_LA  ,      CU_DSLSH, KC_LEFT , KC_DOWN , KC_RIGHT
+            OSM_GUI , KC_LEAD , OSM_MEH , OSM_HYP ,      OSL_NUM ,      LT_SYM_B, LT_NAV_D,      LT_NAV_E, LT_SYM_S,      OSM_LA  ,      CU_DSLSH, KC_LEFT , KC_DOWN , KC_RIGHT
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -154,7 +163,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , XXXXXXX , CU_MAIL , CU_LAST , CU_FIRST, CU_QUES , _______ , _______ ,      _______ , _______ , CU_DQUO , DE_ADIA , DE_ODIA , DE_UDIA , CU_SZ   , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , _______ , _______ , _______ ,      _______ ,      KC_PPLS , CU_MINS ,      CU_DSLSH, KC_PAST ,      _______ ,      _______ , XXXXXXX , XXXXXXX , XXXXXXX
+            _______ , _______ , _______ , _______ ,      _______ ,      LT_SYM_P, LT_NAV_M,      LT_NAV_S, LT_SYM_A,      _______ ,      _______ , XXXXXXX , XXXXXXX , XXXXXXX
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
