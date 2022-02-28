@@ -230,8 +230,6 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t* record) {
                     SEND_STRING(SS_TAP(X_ESCAPE) " he");
                 } else if (is_alt_pressed) {
                     SEND_STRING(SS_TAP(X_ESCAPE) " hj");
-                    // FIXME rem: somehow alt gets stuck here (but not at the same place in CU_FUZZY)
-                    set_mods(mods);
                 } else if (is_shift_pressed) {
                     SEND_STRING(SS_TAP(X_ESCAPE) " hG");
                 } else {
