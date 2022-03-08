@@ -18,7 +18,7 @@ typedef struct symbol_key_codes_t {
 } symbol_key_codes_t;
 
 // clang-format off
-symbol_key_codes_t symbol_codes[] = {
+const symbol_key_codes_t PROGMEM symbol_codes[] = {
   {CU_EXLM,   S(KC_1)},
   {CU_HASH,   KC_NONUS_HASH},
   {CU_TILD,   ALGR(KC_RIGHT_BRACKET)},
@@ -51,7 +51,7 @@ typedef struct special_key_codes_t {
 } special_key_codes_t;
 
 // clang-format off
-special_key_codes_t special_codes[] = {
+const special_key_codes_t PROGMEM special_codes[] = {
   {CU_2,     KC_2,             RALT(KC_Q)},
   {CU_3,     KC_3,             KC_NONUS_HASH},
   {CU_6,     KC_6,             CU_CIRC},
@@ -177,7 +177,7 @@ typedef struct autoshift_key_codes_t {
 } autoshift_key_codes_t;
 
 // clang-format off
-autoshift_key_codes_t autoshift_codes[] = {
+const autoshift_key_codes_t PROGMEM autoshift_codes[] = {
 	{CU_2,     KC_2,             RALT(KC_Q)},
 	{CU_3,     KC_3,             KC_NONUS_HASH},
 	{CU_6,     KC_6,             CU_CIRC},
