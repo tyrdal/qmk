@@ -46,10 +46,15 @@ enum userspace_custom_keycodes {
     CU_QUES,    // ?
     CU_GRV_S,   // `
     CU_SCLN_S,  // ;
-    CU_LP,      // (
-    CU_RP,      // )
+    CU_LP_S,    // (
+    CU_RP_S,    // )
+    CU_LCL_S,   // {
+    CU_RCL_S,   // ]
+    CU_LBC_S,   // [
+    CU_RBC_S,   // ]
     CU_DOT_S,   // .
     CU_COM_S,   // ,
+    CU_PARAG,   // §
     CU_P4,      // numpad 4 | left
     CU_P5,      // numpad 5 | down
     CU_P6,      // numpad 6 | right

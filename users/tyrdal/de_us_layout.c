@@ -18,7 +18,7 @@ typedef struct symbol_key_codes_t {
 } symbol_key_codes_t;
 
 // clang-format off
-const symbol_key_codes_t PROGMEM symbol_codes[] = {
+const symbol_key_codes_t  symbol_codes[] = {
   {CU_EXLM,   S(KC_1)},
   {CU_HASH,   KC_NONUS_HASH},
   {CU_TILD,   ALGR(KC_RIGHT_BRACKET)},
@@ -36,8 +36,13 @@ const symbol_key_codes_t PROGMEM symbol_codes[] = {
   {CU_SCLN_S, S(KC_COMMA)},
   {CU_DOT_S,  KC_DOT},
   {CU_COM_S,  KC_COMMA},
-  {CU_LP,     S(KC_8)},
-  {CU_RP,     S(KC_9)},
+  {CU_PARAG,  S(KC_3)},
+  {CU_LP_S,   S(KC_8)},
+  {CU_RP_S,   S(KC_9)},
+  {CU_LCL_S,  RALT(KC_7)},
+  {CU_RCL_S,  RALT(KC_0)},
+  {CU_LBC_S,  RALT(KC_8)},
+  {CU_RBC_S,  RALT(KC_9)},
 };
 uint8_t NUM_SYMBOL_CODES = sizeof(symbol_codes) / sizeof(symbol_key_codes_t);
 // clang-format on
@@ -51,7 +56,7 @@ typedef struct special_key_codes_t {
 } special_key_codes_t;
 
 // clang-format off
-const special_key_codes_t PROGMEM special_codes[] = {
+const special_key_codes_t  special_codes[] = {
   {CU_2,     KC_2,             RALT(KC_Q)},
   {CU_3,     KC_3,             KC_NONUS_HASH},
   {CU_6,     KC_6,             CU_CIRC},
@@ -68,6 +73,8 @@ const special_key_codes_t PROGMEM special_codes[] = {
   {CU_DQUO,  S(KC_2),          S(KC_NONUS_HASH)},
   {CU_GRV,   CU_GRV_S,         S(KC_RIGHT_BRACKET)},
   {CU_EQL,   S(KC_0),          S(KC_KP_PLUS)},
+  {CU_LCURL, RALT(KC_7),       RALT(KC_9)},
+  {CU_RCURL, RALT(KC_0),       RALT(KC_9)},
   {CU_LBRC,  RALT(KC_8),       RALT(KC_7)},
   {CU_RBRC,  RALT(KC_9),       RALT(KC_0)},
   {CU_BSLS,  RALT(KC_MINUS),   RALT(KC_NONUS_BACKSLASH) }
@@ -83,10 +90,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     bool    pressed  = record->event.pressed;
 
 #ifdef CONSOLE_ENABLE
-    // if (!record->event.pressed) {
-    //     xprintf("Mods %d %d OSM %d %d\n", get_mods(), (int)get_mods() & MOD_MASK_SHIFT,
-    //     get_oneshot_mods(), (int)(get_oneshot_mods() & MOD_MASK_SHIFT));
-    // }
+    if (!record->event.pressed) {
+        xprintf("Key %d Mods %d %d OSM %d %d\n", keycode, get_mods(), (int)get_mods() & MOD_MASK_SHIFT, get_oneshot_mods(), (int)(get_oneshot_mods() & MOD_MASK_SHIFT));
+    }
 #endif
 
 #ifdef GERMAN_ENABLE
@@ -177,7 +183,7 @@ typedef struct autoshift_key_codes_t {
 } autoshift_key_codes_t;
 
 // clang-format off
-const autoshift_key_codes_t PROGMEM autoshift_codes[] = {
+const autoshift_key_codes_t autoshift_codes[] = {
 	{CU_2,     KC_2,             RALT(KC_Q)},
 	{CU_3,     KC_3,             KC_NONUS_HASH},
 	{CU_6,     KC_6,             CU_CIRC},
