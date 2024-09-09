@@ -6,10 +6,12 @@
 #endif
 
 #ifdef __clang__
-#    pragma clang diagnostic ignored "-Wunknown-attributes"  // clangd does not know PROGMEM
+#    define PROGMEM // clangd does not know PROGMEM
 #endif
 
-__attribute__((weak)) bool process_record_keymap(uint16_t keycode, keyrecord_t* record) { return true; }
+__attribute__((weak)) bool process_record_keymap(uint16_t keycode, keyrecord_t* record) {
+    return true;
+}
 
 #ifdef GERMAN_ENABLE
 typedef struct symbol_key_codes_t {
@@ -64,7 +66,7 @@ const special_key_codes_t  special_codes[] = {
   {CU_8,     KC_8,             S(KC_RIGHT_BRACKET)},
   {CU_9,     KC_9,             S(KC_8)},
   {CU_0,     KC_0,             S(KC_9)},
-  {CU_COMM,  KC_COMMA,         KC_NONUS_BACKSLASH},
+  {CU_COMM,  KC_COMMA,         KC_SCLN},
   {CU_DOT,   KC_DOT,           S(KC_NONUS_BACKSLASH)},
   {CU_SLSH,  KC_KP_SLASH,      S(KC_MINUS)},
   {CU_DSLSH, KC_KP_SLASH,      ALGR(KC_MINUS)},
@@ -73,11 +75,13 @@ const special_key_codes_t  special_codes[] = {
   {CU_DQUO,  S(KC_2),          S(KC_NONUS_HASH)},
   {CU_GRV,   CU_GRV_S,         S(KC_RIGHT_BRACKET)},
   {CU_EQL,   S(KC_0),          S(KC_KP_PLUS)},
+  {CU_PLUS,  S(KC_KP_PLUS),    S(KC_0)},
   {CU_LCURL, RALT(KC_7),       RALT(KC_9)},
   {CU_RCURL, RALT(KC_0),       RALT(KC_9)},
   {CU_LBRC,  RALT(KC_8),       RALT(KC_7)},
   {CU_RBRC,  RALT(KC_9),       RALT(KC_0)},
   {CU_BSLS,  RALT(KC_MINUS),   RALT(KC_NONUS_BACKSLASH) }
+  {CU_PDOT,  KC_DOT,           RALT(KC_COMMA) }
 };
 uint8_t NUM_SPECIAL_CODES = sizeof(special_codes) / sizeof(special_key_codes_t);
 // clang-format on
@@ -191,7 +195,7 @@ const autoshift_key_codes_t autoshift_codes[] = {
 	{CU_8,     KC_8,             S(KC_RIGHT_BRACKET)},
 	{CU_9,     KC_9,             S(KC_8)},
 	{CU_0,     KC_0,             S(KC_9)},
-	{CU_COMM,  KC_COMMA,         KC_NONUS_BACKSLASH},
+	{CU_COMM,  KC_COMMA,         S(KC_COMMA)},
 	{CU_DOT,   KC_DOT,           S(KC_NONUS_BACKSLASH)},
 	{CU_SLSH,  KC_KP_SLASH,      S(KC_MINUS)},
 	{CU_DSLSH, KC_KP_SLASH,      ALGR(KC_MINUS)},
@@ -200,11 +204,13 @@ const autoshift_key_codes_t autoshift_codes[] = {
 	{CU_DQUO,  S(KC_2),          S(KC_NONUS_HASH)},
 	{CU_GRV,   CU_GRV_S,         S(KC_RIGHT_BRACKET)},
 	{CU_EQL,   S(KC_0),          S(KC_KP_PLUS)},
+  {CU_PLUS,  S(KC_KP_PLUS),    S(KC_0)},
 	{CU_LBRC,  RALT(KC_8),       RALT(KC_7)},
 	{CU_RBRC,  RALT(KC_9),       RALT(KC_0)},
 	{CU_LCURL, RALT(KC_7),       RALT(KC_8)},
 	{CU_RCURL, RALT(KC_0),       RALT(KC_9)},
 	{CU_BSLS,  RALT(KC_MINUS),   RALT(KC_NONUS_BACKSLASH)},
+  {CU_PDOT,  KC_DOT,           RALT(KC_COMMA) },
 	{CU_P4,    KC_KP_4,          KC_LEFT},
 	{CU_P5,    KC_KP_5,          KC_DOWN},
 	{CU_P6,    KC_KP_6,          KC_RIGHT},

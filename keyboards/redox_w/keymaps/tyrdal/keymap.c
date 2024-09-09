@@ -13,67 +13,44 @@
 #include QMK_KEYBOARD_H
 #include "de_us_layout.h"
 #include "keymap_german.h"
+#if __has_include("passwords.h")
+#    include "passwords.h"
+#endif
 
 #ifdef __clang__
-#    pragma clang diagnostic ignored "-Wunknown-attributes"  // clangd does not know PROGMEM
+#    define PROGMEM // clangd does not know PROGMEM
 #endif
 
 extern uint8_t def_layer;
 
 enum Layers {
-    COLEMAK_DH_DE,
+    BASE,
     SYMBOLS,
-    NAVIGATION,
     NUMPAD,
-    GAMING,
+    FKEYS,
 };
 
-enum custom_keycodes { CU_HOP = NEW_SAFE_RANGE, CU_FUZZY };
-#define CU_ACC KC_EQL  // use german dead keys for accents
+enum custom_keycodes { CU_NAMES = NEW_SAFE_RANGE, CU_N_BIL, CU_N_WRD, CU_N_LN, CU_N_CL, CU_N_BIF, CU_D_LN };
+
+#define CU_ACC KC_EQL // use german dead keys for accents
 
 // Shortcut to make keymap more readable
 #define LCTL_ESC LCTL_T(KC_ESC)
-#define RCTL_ESC RCTL_T(KC_ESC)
 
 #define OSM_GUI OSM(MOD_LGUI)
 #define OSM_HYP OSM(MOD_HYPR)
 #define OSM_MEH OSM(MOD_MEH)
 #define OSM_SHFT OSM(MOD_LSFT)
-#define OSM_LC OSM(MOD_LCTL)
 #define OSM_RC OSM(MOD_RCTL)
-#define OSM_CA OSM(MOD_LCTL | MOD_LALT)
-#define OSM_CG OSM(MOD_LCTL | MOD_LGUI)
-#define OSM_CS OSM(MOD_LCTL | MOD_LSFT)
-#define OSM_SG OSM(MOD_LSFT | MOD_LGUI)
-#define OSM_LA OSM(MOD_LALT)
-#define OSM_RA OSM(MOD_RALT)
-
-#define OSL_SYM OSL(SYMBOLS)
-#define OSL_NAV OSL(NAVIGATION)
-#define OSL_NUM OSL(NUMPAD)
-
-#define TG_GAME TG(GAMING)
 
 #define LT_SYM_B LT(SYMBOLS, KC_BSPC)
-#define LT_SYM_P LT(SYMBOLS, KC_PPLS)
 #define LT_SYM_S LT(SYMBOLS, KC_SPC)
-#define LT_SYM_A LT(SYMBOLS, KC_PAST)
-#define LT_NAV_D LT(NAVIGATION, KC_DEL)
-#define LT_NAV_M LT(NAVIGATION, CU_MINS)
-#define LT_NAV_E LT(NAVIGATION, KC_ENT)
-#define LT_NAV_S LT(NAVIGATION, KC_PSLS)
+#define LT_NUM_D LT(NUMPAD, KC_DEL)
+#define LT_NUM_E LT(NUMPAD, KC_ENT)
+#define LT_FKEY_C OSL(FKEYS)
+#define OSM_LA OSM(MOD_LALT)
 
 enum TAP_DOUBLE_KEYCODES {
-    TD_1_6,
-    TD_2_7,
-    TD_3_8,
-    TD_4_9,
-    TD_5_0,
-    TD_F1_F6,
-    TD_F2_F7,
-    TD_F3_F8,
-    TD_F4_F9,
-    TD_F5_F0,
     TD_F1_13,
     TD_F2_14,
     TD_F3_15,
@@ -88,17 +65,22 @@ enum TAP_DOUBLE_KEYCODES {
     TD_F12_24,
 };
 
-// create tap dance keycodes
-#define TD_GA_1 TD(TD_1_6)
-#define TD_GA_2 TD(TD_2_7)
-#define TD_GA_3 TD(TD_3_8)
-#define TD_GA_4 TD(TD_4_9)
-#define TD_GA_5 TD(TD_5_0)
-#define TD_GA_F1 TD(TD_F1_F6)
-#define TD_GA_F2 TD(TD_F2_F7)
-#define TD_GA_F3 TD(TD_F3_F8)
-#define TD_GA_F4 TD(TD_F4_F9)
-#define TD_GA_F5 TD(TD_F5_F0)
+// clang-format off
+qk_tap_dance_action_t tap_dance_actions[] = {
+  [TD_F1_13] = ACTION_TAP_DANCE_DOUBLE(KC_F1,KC_F13),
+  [TD_F2_14] = ACTION_TAP_DANCE_DOUBLE(KC_F2,KC_F14),
+  [TD_F3_15] = ACTION_TAP_DANCE_DOUBLE(KC_F3,KC_F15),
+  [TD_F4_16] = ACTION_TAP_DANCE_DOUBLE(KC_F4,KC_F16),
+  [TD_F5_17] = ACTION_TAP_DANCE_DOUBLE(KC_F5,KC_F17),
+  [TD_F6_18] = ACTION_TAP_DANCE_DOUBLE(KC_F6,KC_F18),
+  [TD_F7_19] = ACTION_TAP_DANCE_DOUBLE(KC_F7,KC_F19),
+  [TD_F8_20] = ACTION_TAP_DANCE_DOUBLE(KC_F8,KC_F20),
+  [TD_F9_21] = ACTION_TAP_DANCE_DOUBLE(KC_F9,KC_F21),
+  [TD_F10_22] = ACTION_TAP_DANCE_DOUBLE(KC_F10,KC_F22),
+  [TD_F11_23] = ACTION_TAP_DANCE_DOUBLE(KC_F11,KC_F23),
+  [TD_F12_24] = ACTION_TAP_DANCE_DOUBLE(KC_F12,KC_F24),
+};
+
 #define TD_F1 TD(TD_F1_13)
 #define TD_F2 TD(TD_F2_14)
 #define TD_F3 TD(TD_F3_15)
@@ -112,103 +94,64 @@ enum TAP_DOUBLE_KEYCODES {
 #define TD_F11 TD(TD_F11_23)
 #define TD_F12 TD(TD_F12_24)
 
-// clang-format off
-qk_tap_dance_action_t tap_dance_actions[] = {
-	[TD_1_6]   = ACTION_TAP_DANCE_DOUBLE(KC_1,KC_6),
-	[TD_2_7]   = ACTION_TAP_DANCE_DOUBLE(KC_2, KC_7),
-	[TD_3_8]   = ACTION_TAP_DANCE_DOUBLE(KC_3, KC_8),
-	[TD_4_9]   = ACTION_TAP_DANCE_DOUBLE(KC_4, KC_9),
-	[TD_5_0]   = ACTION_TAP_DANCE_DOUBLE(KC_5, KC_0),
-	[TD_F1_F6] = ACTION_TAP_DANCE_DOUBLE(KC_F1,KC_6),
-	[TD_F2_F7] = ACTION_TAP_DANCE_DOUBLE(KC_F2, KC_F7),
-	[TD_F3_F8] = ACTION_TAP_DANCE_DOUBLE(KC_F3, KC_F8),
-	[TD_F4_F9] = ACTION_TAP_DANCE_DOUBLE(KC_F4, KC_F9),
-	[TD_F5_F0] = ACTION_TAP_DANCE_DOUBLE(KC_F5, KC_F10),
-	[TD_F1_13] = ACTION_TAP_DANCE_DOUBLE(KC_F1,KC_F13),
-	[TD_F2_14] = ACTION_TAP_DANCE_DOUBLE(KC_F2,KC_F14),
-	[TD_F3_15] = ACTION_TAP_DANCE_DOUBLE(KC_F3,KC_F15),
-	[TD_F4_16] = ACTION_TAP_DANCE_DOUBLE(KC_F4,KC_F16),
-	[TD_F5_17] = ACTION_TAP_DANCE_DOUBLE(KC_F5,KC_F17),
-	[TD_F6_18] = ACTION_TAP_DANCE_DOUBLE(KC_F6,KC_F18),
-	[TD_F7_19] = ACTION_TAP_DANCE_DOUBLE(KC_F7,KC_F19),
-	[TD_F8_20] = ACTION_TAP_DANCE_DOUBLE(KC_F8,KC_F20),
-	[TD_F9_21] = ACTION_TAP_DANCE_DOUBLE(KC_F9,KC_F21),
-	[TD_F10_22] = ACTION_TAP_DANCE_DOUBLE(KC_F10,KC_F22),
-	[TD_F11_23] = ACTION_TAP_DANCE_DOUBLE(KC_F11,KC_F23),
-	[TD_F12_24] = ACTION_TAP_DANCE_DOUBLE(KC_F12,KC_F24),
-};
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-    [COLEMAK_DH_DE] = LAYOUT(
+    [BASE] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            KC_MPLY , TD_F1   , TD_F2   , TD_F3   , TD_F4   , TD_F5   ,                                              TD_F6   , TD_F7   , TD_F8   , TD_F9   , TD_F10  , TD_F11  ,
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_TAB  , KC_Q    , KC_W    , KC_F    , KC_P    , KC_B    , CU_FUZZY,                          CU_HOP  , KC_J    , KC_L    , KC_U    , DE_Y    , CU_DQUO , TD_F12  ,
+            KC_TAB  , KC_Q    , KC_W    , KC_F    , KC_P    , KC_B    , XXXXXXX,                           XXXXXXX  , KC_J    , KC_L   , KC_U    , DE_Y    , KC_SLSH , OSM_GUI ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            LCTL_ESC, KC_A    , KC_R    , KC_S    , KC_T    , KC_G    , CU_EQL  ,                          CU_MINS , KC_M    , KC_N    , KC_E    , KC_I    , KC_O    , OSM_LC  ,
+            LCTL_ESC, KC_A    , KC_R    , KC_S    , KC_T    , KC_G    , XXXXXXX  ,                         XXXXXXX , KC_M    , KC_N    , KC_E    , KC_I    , KC_O    , OSM_RC  ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            OSM_SHFT, DE_Z    , KC_X    , KC_C    , KC_D    , KC_V    , OSL_SYM , OSL_NAV ,      OSL_NAV , OSL_SYM , KC_K    , KC_H    , KC_DOT  , KC_COMM , KC_UP   , OSM_SHFT,
+            OSM_SHFT, DE_Z    , KC_X    , KC_C    , KC_D    , KC_V    , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , KC_K    , KC_H    , KC_DOT  , CU_COMM , CU_DSLSH, OSM_SHFT,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            OSM_GUI , KC_LEAD , OSM_MEH , OSM_HYP ,      OSL_NUM ,      LT_SYM_B, LT_NAV_D,      LT_NAV_E, LT_SYM_S,      OSM_LA  ,      CU_DSLSH, KC_LEFT , KC_DOWN , KC_RIGHT
+            XXXXXXX , XXXXXXX , XXXXXXX , KC_LEAD ,     LT_FKEY_C,      LT_SYM_B, LT_NUM_D,      LT_NUM_E, LT_SYM_S,      OSM_LA  ,      XXXXXXX, XXXXXXX , XXXXXXX , XXXXXXX
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
     [SYMBOLS] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            XXXXXXX , CU_1    , CU_2    , CU_3    , CU_4    , CU_5    ,                                              CU_6    , CU_7    , CU_8    , CU_9    , CU_0    , XXXXXXX ,
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , KC_GRV  , CU_AT   , CU_PERC , CU_HASH , CU_LCL_S, KC_HOME ,                          KC_END  , CU_RCL_S, CU_EXLM , CU_AMPR , CU_QUES , CU_ACC  , XXXXXXX ,
+            _______ , CU_GRV_S, CU_EURO , CU_QUES , CU_LBC_S, CU_EXLM , XXXXXXX ,                          XXXXXXX , CU_TILD , CU_RBC_S, CU_PERC , CU_PARAG, CU_DEG  , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , CU_GRV_S, CU_TILD ,  CU_LT  , CU_GT   , CU_LP_S , KC_PGUP ,                          KC_PGDN , CU_RP_S , CU_CIRC , CU_EQL  , CU_DLR  , CU_PIPE , _______ ,
+            _______ , CU_HASH , CU_PIPE , CU_AMPR , CU_LP_S , CU_UNDS , XXXXXXX ,                          XXXXXXX , CU_CIRC , CU_RP_S ,CU_DQUO_S, CU_QUOT , CU_DLR  , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌────────-┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , CU_DEG  , CU_MAIL , CU_LAST , CU_FIRST, CU_LBC_S, _______ , _______ ,      _______ , _______ , CU_RBC_S, DE_ADIA , DE_ODIA , DE_UDIA , CU_SZ   , _______ ,
+            _______ , DE_ADIA , CU_LT   , CU_SZ   , CU_LCL_S, CU_EQL  , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , CU_AT   , CU_RCL_S, DE_UDIA , CU_GT   , DE_ODIA , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , _______ , _______ , _______ ,      _______ ,      KC_PPLS , KC_PMNS ,      KC_PSLS , KC_PAST ,      _______ ,      _______ , CU_PARAG, XXXXXXX , XXXXXXX
-        //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
-        ),
-
-    [NAVIGATION] = LAYOUT(
-        //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , KC_PSCR , KC_SLCK , KC_PAUS , XXXXXXX , XXXXXXX  ,
-        //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , KC_WH_L , KC_MS_U , KC_WH_R , KC_WH_U , KC_WFWD ,                          KC_MSEL , KC_PGUP , KC_HOME , KC_UP   , KC_END  , KC_MYCM , XXXXXXX ,
-        //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , KC_MS_L , KC_MS_D , KC_MS_R , KC_WH_D , KC_WBAK ,                          KC_MAIL , KC_PGDN , KC_LEFT , KC_DOWN , KC_RGHT , OSM_GUI , _______ ,
-        //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , KC_BTN5 , KC_BTN4 , KC_BTN3 , KC_BTN1 , KC_BTN2 , _______ , _______,       _______ , _______ , OSM_CS  , OSM_CA  , OSM_LC  , OSM_CG  , OSM_SG  , _______ ,
-        //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , KC_BTN8 , KC_BTN7 , KC_BTN6 ,      _______ ,      KC_BTN2 , KC_BTN1,       XXXXXXX , XXXXXXX ,      _______ ,      KC_ACL0 , KC_ACL1 , KC_ACL2 , TG_GAME
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      _______ , _______ ,      _______ , _______ ,      _______ ,      XXXXXXX , XXXXXXX, XXXXXXX , XXXXXXX
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
     [NUMPAD] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            XXXXXXX , KC_SLEP , KC_PWR  , XXXXXXX , NK_ON   , NK_OFF  ,                                              KC_CALC , CU_LP_S , CU_RP_S , CU_LBRC , CU_RBRC , XXXXXXX ,
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , KC_PSCR , KC_SLCK , KC_PAUS , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            XXXXXXX , OSM_SHFT, OSM_SHFT, OSM_SHFT, OSM_SHFT, OSM_SHFT, KC_WFWD ,                          KC_NLCK , KC_PSLS , KC_P7   , CU_P8   , KC_P9   , KC_PMNS , KC_PMNS,
+            _______ , KC_PGUP , KC_WH_L , KC_UP   , KC_WH_R , KC_WH_U , XXXXXXX ,                          XXXXXXX , KC_PSLS , KC_P7   , KC_P8   , KC_P9   , KC_PMNS , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            LCTL_ESC, KC_MPRV , KC_MSTP , KC_MPLY , KC_MNXT , KC_VOLU , KC_WBAK ,                          KC_PSLS , KC_PAST , CU_P4   , CU_P5   , CU_P6   , KC_PPLS , KC_PPLS,
+            _______ , KC_PGDN , KC_LEFT , KC_DOWN , KC_RIGHT, KC_WH_D , XXXXXXX ,                          XXXXXXX , KC_PAST , KC_P4   , KC_P5   , KC_P6   , CU_PLUS , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , OSM_LC  , OSM_GUI , OSM_LA  , OSM_SHFT, KC_VOLD , XXXXXXX , XXXXXXX ,      KC_DEL  , KC_BSPC , CU_COM_S, KC_P1   , KC_P2   , KC_P3   , KC_PENT , KC_PENT ,
+            _______ , KC_END  , XXXXXXX , OSM_HYP , OSM_MEH , KC_HOME , XXXXXXX , XXXXXXX,       XXXXXXX , XXXXXXX , CU_PDOT , KC_P1   , KC_P2   , KC_P3   , KC_P0   , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      KC_BSPC , KC_DEL  ,      KC_ENT  , KC_SPC  ,      _______ ,      KC_P0   , CU_DOT_S, KC_PENT , XXXXXXX
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      _______ , _______,       _______ , _______ ,      _______ ,      XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
-    [GAMING] = LAYOUT(
+    [FKEYS] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            OSM_SHFT, TD_GA_1 , TD_GA_2 , TD_GA_3 , TD_GA_4 , TD_GA_5 ,                                              KC_6    , KC_7    , KC_8    , KC_9    , KC_0    , KC_VOLU ,
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_TAB  , KC_Q    , KC_W    , KC_E    , KC_R    , KC_T    , KC_ESC  ,                          KC_BSPC , DE_Y    , KC_I    , KC_O    , KC_P    , KC_MPLY , KC_VOLD ,
+            KC_PSCR , XXXXXXX , XXXXXXX , CU_N_BIL, XXXXXXX , KC_MNXT , XXXXXXX ,                          XXXXXXX , KC_VOLU , TD_F1   , TD_F2   , TD_F3   , TD_F4   , CU_NAMES,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_LSFT , KC_A    , KC_S    , KC_D    , KC_F    , KC_G    , TD_GA_F5,                          OSM_GUI , KC_H    , KC_J    , KC_K    , KC_UP   , KC_L    , KC_RSFT ,
+            KC_SLCK , CU_N_WRD, CU_N_LN , CU_N_CL , CU_N_BIF, KC_MUTE , XXXXXXX ,                          XXXXXXX , KC_MPLY , TD_F5   , TD_F6   , TD_F7   , TD_F8   , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            OSM_LC  , DE_Y    , KC_X    , KC_C    , KC_V    , KC_B    , KC_PGUP , KC_HOME ,      KC_END  , KC_PGDN , KC_N    , KC_M    , KC_LEFT , KC_DOWN , KC_RGHT , OSM_RC  ,
+            KC_BRK  , XXXXXXX , XXXXXXX , XXXXXXX , CU_D_LN , KC_MPRV , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , KC_VOLD , TD_F9   , TD_F10  , TD_F11  , TD_F12  , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            TD_GA_F1, TD_GA_F2, TD_GA_F3, TD_GA_F4,      OSM_LA  ,      KC_SPC  , KC_ENT  ,      KC_DEL  , KC_BSPC ,      OSM_RA  ,      XXXXXXX , XXXXXXX , KC_LEAD , TG_GAME
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      XXXXXXX , XXXXXXX ,      KC_PWR  , KC_SLEP ,      _______ ,      XXXXXXX   , XXXXXXX, XXXXXXX , XXXXXXX
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
-        )
+        ),
+
 };
 // clang-format on
 
@@ -216,8 +159,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 bool process_record_keymap(uint16_t keycode, keyrecord_t* record) {
     uint8_t mods             = get_mods();
     uint8_t osm_mods         = get_oneshot_mods();
-    bool    is_ctrl_pressed  = (mods | osm_mods) & MOD_MASK_CTRL;
-    bool    is_alt_pressed   = (mods | osm_mods) & MOD_MASK_ALT;
     bool    is_shift_pressed = (mods | osm_mods) & MOD_MASK_SHIFT;
     bool    pressed          = record->event.pressed;
 
@@ -234,30 +175,45 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t* record) {
     clear_mods();
     clear_oneshot_mods();
     switch (keycode) {
-        case CU_HOP:
+        case CU_NAMES:
             if (pressed) {
-                if (is_ctrl_pressed) {
-                    SEND_STRING(SS_TAP(X_ESCAPE) " he");
-                } else if (is_alt_pressed) {
-                    SEND_STRING(SS_TAP(X_ESCAPE) " hj");
-                } else if (is_shift_pressed) {
-                    SEND_STRING(SS_TAP(X_ESCAPE) " hG");
+                if (is_shift_pressed) {
+                    SEND_STRING("Ren" SS_TAP(X_EQUAL) SS_TAP(X_E) " M;hring");
                 } else {
-                    SEND_STRING(SS_TAP(X_ESCAPE) " hg");
+                    SEND_STRING("rene" SS_LSFT(SS_TAP(X_SLASH)) "moehring" SS_ALGR(SS_TAP(X_Q)) "gmx.de");
                 }
             }
             break;
-        case CU_FUZZY:
+
+        case CU_N_BIF:
             if (pressed) {
-                if (is_ctrl_pressed) {
-                    SEND_STRING(SS_TAP(X_ESCAPE) " fr");
-                } else if (is_alt_pressed) {
-                    SEND_STRING(SS_TAP(X_ESCAPE) " fb");
-                } else if (is_shift_pressed) {
-                    SEND_STRING(SS_TAP(X_ESCAPE) " fy");
-                } else {
-                    SEND_STRING(SS_TAP(X_ESCAPE) " ff");
-                }
+                SEND_STRING(SS_TAP(X_ESC) " nf");
+            }
+            break;
+        case CU_N_WRD:
+            if (pressed) {
+                SEND_STRING(SS_TAP(X_ESC) " nb");
+            }
+            break;
+        case CU_N_CL:
+            if (pressed) {
+                SEND_STRING(SS_TAP(X_ESC) " nf");
+            }
+            break;
+        case CU_N_LN:
+            if (pressed) {
+                SEND_STRING(SS_TAP(X_ESC) " nj");
+            }
+            break;
+        case CU_N_BIL:
+            if (pressed) {
+                SEND_STRING(SS_TAP(X_ESC) " nJ");
+            }
+            break;
+
+        case CU_D_LN:
+            if (pressed) {
+                SEND_STRING(SS_TAP(X_ESC) "/dl");
             }
             break;
         default:
@@ -310,27 +266,23 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t* record) {
 
 void matrix_init_user(void) {
     set_led_off;
-    def_layer = eeconfig_read_default_layer();
+    // def_layer = eeconfig_read_default_layer();
 }
 
 layer_state_t layer_state_set_user(layer_state_t state) {
     switch (get_highest_layer(state)) {
-        case COLEMAK_DH_DE:
+        case BASE:
             set_led_off;
             autoshift_enable();
             break;
         case SYMBOLS:
             set_led_blue;
             break;
-        case NAVIGATION:
+        case NUMPAD:
             set_led_yellow;
             break;
-        case NUMPAD:
+        case FKEYS:
             set_led_red;
-            break;
-        case GAMING:
-            set_led_all;
-            autoshift_disable();
             break;
         default:
             break;
@@ -343,20 +295,32 @@ LEADER_EXTERNS();
 
 uint8_t leader_matched = 0;
 void    matrix_scan_user(void) {
-    LEADER_DICTIONARY() {
-        leading        = false;
-        leader_matched = 0;
+       LEADER_DICTIONARY() {
+           leading        = false;
+           leader_matched = 0;
+
+   #    if __has_include("passwords.h")
+        SEQ_ONE_KEY(KC_U) {
+               leader_matched = 1;
+               SEND_STRING(ROOT);
+        }
+
+        SEQ_ONE_KEY(KC_E) {
+               leader_matched = 2;
+               SEND_STRING(USER);
+        }
+   #    endif
 
         // debug
         SEQ_THREE_KEYS(KC_D, KC_B, KC_G) {
-            leader_matched = 1;
-            tap_code16(DEBUG);
+               leader_matched = 3;
+               tap_code16(DEBUG);
         }
 
         // reset
         SEQ_THREE_KEYS(KC_R, KC_S, KC_T) {
-            leader_matched = 2;
-            reset_keyboard();
+               leader_matched = 4;
+               reset_keyboard();
         }
 
         leader_end();
@@ -364,13 +328,15 @@ void    matrix_scan_user(void) {
 }
 
 void leader_end(void) {
-#   ifdef CONSOLE_ENABLE
+#    ifdef CONSOLE_ENABLE
     xprintf("%d %d %d %d %d\n", leader_sequence[0], leader_sequence[1], leader_sequence[2], leader_sequence[3], leader_sequence[4]);
     xprintf("m %d\n", leader_matched);
-#   endif
+#    endif
 }
 
 #endif
 
 // TODO
 // - Timeouts for leader key
+
+// vim :set expandtab :set ts=2
