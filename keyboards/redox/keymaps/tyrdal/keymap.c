@@ -66,7 +66,7 @@ enum TAP_DOUBLE_KEYCODES {
 };
 
 // clang-format off
-qk_tap_dance_action_t tap_dance_actions[] = {
+tap_dance_action_t tap_dance_actions[] = {
   [TD_F1_13] = ACTION_TAP_DANCE_DOUBLE(KC_F1,KC_F13),
   [TD_F2_14] = ACTION_TAP_DANCE_DOUBLE(KC_F2,KC_F14),
   [TD_F3_15] = ACTION_TAP_DANCE_DOUBLE(KC_F3,KC_F15),
@@ -106,7 +106,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             OSM_SHFT, DE_Z    , KC_X    , KC_C    , KC_D    , KC_V    , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , KC_K    , KC_H    , KC_DOT  , CU_COMM , CU_DSLSH, OSM_SHFT,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            XXXXXXX , XXXXXXX , XXXXXXX , KC_LEAD ,     LT_FKEY_C,      LT_SYM_B, LT_NUM_D,      LT_NUM_E, LT_SYM_S,      OSM_LA  ,      XXXXXXX, XXXXXXX , XXXXXXX , XXXXXXX
+            XXXXXXX , XXXXXXX , XXXXXXX , QK_LEAD ,     LT_FKEY_C,      LT_SYM_B, LT_NUM_D,      LT_NUM_E, LT_SYM_S,      OSM_LA  ,      XXXXXXX, XXXXXXX , XXXXXXX , XXXXXXX
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -126,7 +126,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [NUMPAD] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , KC_PSCR , KC_SLCK , KC_PAUS , XXXXXXX , XXXXXXX ,
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , KC_PSCR , KC_SCRL , KC_PAUS , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , KC_PGUP , KC_WH_L , KC_UP   , KC_WH_R , KC_WH_U , XXXXXXX ,                          XXXXXXX , KC_PSLS , KC_P7   , KC_P8   , KC_P9   , KC_PMNS , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
@@ -144,7 +144,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             KC_PSCR , XXXXXXX , XXXXXXX , CU_N_BIL, XXXXXXX , KC_MNXT , XXXXXXX ,                          XXXXXXX , KC_VOLU , TD_F1   , TD_F2   , TD_F3   , TD_F4   , CU_NAMES,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_SLCK , CU_N_WRD, CU_N_LN , CU_N_CL , CU_N_BIF, KC_MUTE , XXXXXXX ,                          XXXXXXX , KC_MPLY , TD_F5   , TD_F6   , TD_F7   , TD_F8   , _______ ,
+            KC_SCRL , CU_N_WRD, CU_N_LN , CU_N_CL , CU_N_BIF, KC_MUTE , XXXXXXX ,                          XXXXXXX , KC_MPLY , TD_F5   , TD_F6   , TD_F7   , TD_F8   , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             KC_BRK  , XXXXXXX , XXXXXXX , XXXXXXX , CU_D_LN , KC_MPRV , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , KC_VOLD , TD_F9   , TD_F10  , TD_F11  , TD_F12  , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
@@ -290,37 +290,38 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     return state;
 }
 
-#ifdef LEADER_ENABLE
+#if 0
+#    ifdef LEADER_ENABLE
 LEADER_EXTERNS();
 
 uint8_t leader_matched = 0;
 void    matrix_scan_user(void) {
-       LEADER_DICTIONARY() {
-           leading        = false;
-           leader_matched = 0;
+    LEADER_DICTIONARY() {
+        leading        = false;
+        leader_matched = 0;
 
-   #    if __has_include("passwords.h")
+#        if __has_include("passwords.h")
         SEQ_ONE_KEY(KC_U) {
-               leader_matched = 1;
-               SEND_STRING(ROOT);
+            leader_matched = 1;
+            SEND_STRING(ROOT);
         }
 
         SEQ_ONE_KEY(KC_E) {
-               leader_matched = 2;
-               SEND_STRING(USER);
+            leader_matched = 2;
+            SEND_STRING(USER);
         }
-   #    endif
+#        endif
 
         // debug
         SEQ_THREE_KEYS(KC_D, KC_B, KC_G) {
-               leader_matched = 3;
-               tap_code16(DEBUG);
+            leader_matched = 3;
+            tap_code16(DEBUG);
         }
 
         // reset
         SEQ_THREE_KEYS(KC_R, KC_S, KC_T) {
-               leader_matched = 4;
-               reset_keyboard();
+            leader_matched = 4;
+            reset_keyboard();
         }
 
         leader_end();
@@ -328,12 +329,13 @@ void    matrix_scan_user(void) {
 }
 
 void leader_end(void) {
-#    ifdef CONSOLE_ENABLE
+#        ifdef CONSOLE_ENABLE
     xprintf("%d %d %d %d %d\n", leader_sequence[0], leader_sequence[1], leader_sequence[2], leader_sequence[3], leader_sequence[4]);
     xprintf("m %d\n", leader_matched);
-#    endif
+#        endif
 }
 
+#    endif
 #endif
 
 // TODO
