@@ -5,10 +5,12 @@ endif
 
 LTO_ENABLE        = yes
 EXTRA_KEY_ENABLE  = yes
-MOUSEKEY_ENABLE   = yes
 LEADER_ENABLE     = yes
 CONSOLE_ENABLE    = no
 NKRO_ENABLE       = yes
 BOOTMAGIC_ENABLE  = no
 COMMAND_ENBALE    = no
 SWAP_HANDS_ENABLE = no
+MUSIC_ENABLE      = no
+MAGIC_ENABLE      = no
+RGB_ENABLE        = no
