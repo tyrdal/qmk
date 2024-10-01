@@ -81,7 +81,7 @@ const special_key_codes_t  special_codes[] = {
   {CU_LBRC,  RALT(KC_8),       RALT(KC_7)},
   {CU_RBRC,  RALT(KC_9),       RALT(KC_0)},
   {CU_BSLS,  RALT(KC_MINUS),   RALT(KC_NONUS_BACKSLASH) }
-  {CU_PDOT,  KC_DOT,           RALT(KC_COMMA) }
+  {CU_PDOT,  KC_DOT,           KC_COMMA }
 };
 uint8_t NUM_SPECIAL_CODES = sizeof(special_codes) / sizeof(special_key_codes_t);
 // clang-format on
@@ -188,33 +188,33 @@ typedef struct autoshift_key_codes_t {
 
 // clang-format off
 const autoshift_key_codes_t autoshift_codes[] = {
-	{CU_2,     KC_2,             RALT(KC_Q)},
-	{CU_3,     KC_3,             KC_NONUS_HASH},
-	{CU_6,     KC_6,             CU_CIRC},
-	{CU_7,     KC_7,             S(KC_6)},
-	{CU_8,     KC_8,             S(KC_RIGHT_BRACKET)},
-	{CU_9,     KC_9,             S(KC_8)},
-	{CU_0,     KC_0,             S(KC_9)},
-	{CU_COMM,  KC_COMMA,         S(KC_COMMA)},
-	{CU_DOT,   KC_DOT,           S(KC_NONUS_BACKSLASH)},
-	{CU_SLSH,  KC_KP_SLASH,      S(KC_MINUS)},
-	{CU_DSLSH, KC_KP_SLASH,      ALGR(KC_MINUS)},
-	{CU_SCLN,  S(KC_COMMA),      S(KC_DOT)},
-	{CU_QUOT,  S(KC_NONUS_HASH), S(KC_2)},
-	{CU_DQUO,  S(KC_2),          S(KC_NONUS_HASH)},
-	{CU_GRV,   CU_GRV_S,         S(KC_RIGHT_BRACKET)},
-	{CU_EQL,   S(KC_0),          S(KC_KP_PLUS)},
-  {CU_PLUS,  S(KC_KP_PLUS),    S(KC_0)},
-	{CU_LBRC,  RALT(KC_8),       RALT(KC_7)},
-	{CU_RBRC,  RALT(KC_9),       RALT(KC_0)},
-	{CU_LCURL, RALT(KC_7),       RALT(KC_8)},
-	{CU_RCURL, RALT(KC_0),       RALT(KC_9)},
-	{CU_BSLS,  RALT(KC_MINUS),   RALT(KC_NONUS_BACKSLASH)},
-  {CU_PDOT,  KC_DOT,           RALT(KC_COMMA) },
-	{CU_P4,    KC_KP_4,          KC_LEFT},
-	{CU_P5,    KC_KP_5,          KC_DOWN},
-	{CU_P6,    KC_KP_6,          KC_RIGHT},
-	{CU_P8,    KC_KP_8,          KC_UP},
+    {CU_2,     KC_2,             RALT(KC_Q)},
+    {CU_3,     KC_3,             KC_NONUS_HASH},
+    {CU_6,     KC_6,             CU_CIRC},
+    {CU_7,     KC_7,             S(KC_6)},
+    {CU_8,     KC_8,             S(KC_RIGHT_BRACKET)},
+    {CU_9,     KC_9,             S(KC_8)},
+    {CU_0,     KC_0,             S(KC_9)},
+    {CU_COMM,  KC_COMMA,         S(KC_COMMA)},
+    {CU_DOT,   KC_DOT,           S(KC_NONUS_BACKSLASH)},
+    {CU_SLSH,  KC_KP_SLASH,      S(KC_MINUS)},
+    {CU_DSLSH, KC_KP_SLASH,      ALGR(KC_MINUS)},
+    {CU_SCLN,  S(KC_COMMA),      S(KC_DOT)},
+    {CU_QUOT,  S(KC_NONUS_HASH), S(KC_2)},
+    {CU_DQUO,  S(KC_2),          S(KC_NONUS_HASH)},
+    {CU_GRV,   CU_GRV_S,         S(KC_RIGHT_BRACKET)},
+    {CU_EQL,   S(KC_0),          S(KC_KP_PLUS)},
+    {CU_PLUS,  S(KC_KP_PLUS),    S(KC_0)},
+    {CU_LBRC,  RALT(KC_8),       RALT(KC_7)},
+    {CU_RBRC,  RALT(KC_9),       RALT(KC_0)},
+    {CU_LCURL, RALT(KC_7),       RALT(KC_8)},
+    {CU_RCURL, RALT(KC_0),       RALT(KC_9)},
+    {CU_BSLS,  RALT(KC_MINUS),   RALT(KC_NONUS_BACKSLASH)},
+    {CU_PDOT,  KC_DOT,           KC_COMMA },
+    {CU_P4,    KC_KP_4,          KC_LEFT},
+    {CU_P5,    KC_KP_5,          KC_DOWN},
+    {CU_P6,    KC_KP_6,          KC_RIGHT},
+    {CU_P8,    KC_KP_8,          KC_UP},
 };
 uint8_t NUM_AUTOSHIFT_CODES = sizeof(autoshift_codes) / sizeof(autoshift_key_codes_t);
 // clang-format on
