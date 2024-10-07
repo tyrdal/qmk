@@ -89,9 +89,15 @@ uint8_t NUM_SPECIAL_CODES = sizeof(special_codes) / sizeof(special_key_codes_t);
 #endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
-    uint8_t mods     = get_mods();
-    uint8_t osm_mods = get_oneshot_mods();
-    bool    pressed  = record->event.pressed;
+    uint8_t mods             = get_mods();
+    uint8_t osm_mods         = get_oneshot_mods();
+    bool    is_shift_pressed = (mods | osm_mods) & MOD_MASK_SHIFT;
+    bool    pressed          = record->event.pressed;
+
+#if MOUSEKEY_ENABLE
+    static bool accl0_locked = false;
+    static bool accl1_locked = false;
+#endif
 
 #ifdef CONSOLE_ENABLE
     if (!record->event.pressed) {
@@ -145,14 +151,45 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             break;
         case CU_LAST:
             if (pressed) {
-                SEND_STRING("M;hring");
+                if (is_shift_pressed) {
+                    SEND_STRING("Ren" SS_TAP(X_EQUAL) SS_TAP(X_E) " M;hring");
+                } else {
+                    SEND_STRING("M;hring");
+                }
             }
             break;
+
         case CU_MAIL:
             if (pressed) {
                 SEND_STRING("rene" SS_LSFT(SS_TAP(X_SLASH)) "moehring" SS_ALGR(SS_TAP(X_Q)) "gmx.de");
             }
             break;
+
+#if MOUSEKEY_ENABLE
+        case CU_ACL0:
+            if (pressed) {
+                if (!accl0_locked) {
+                    accl0_locked = true;
+                    register_code16(MS_ACL0);
+                } else {
+                    accl0_locked = false;
+                    unregister_code16(MS_ACL0);
+                }
+            }
+            break;
+
+        case CU_ACL1:
+            if (pressed) {
+                if (!accl1_locked) {
+                    accl1_locked = true;
+                    register_code16(MS_ACL1);
+                } else {
+                    accl1_locked = false;
+                    unregister_code16(MS_ACL1);
+                }
+            }
+            break;
+#endif
 
 #ifdef GERMAN_ENABLE
             // Custom Symbols ( with dead keys involved)

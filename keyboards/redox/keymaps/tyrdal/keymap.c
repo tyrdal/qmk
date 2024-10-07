@@ -32,7 +32,7 @@ enum Layers {
     MOUSE,
 };
 
-enum custom_keycodes { CU_NAMES = NEW_SAFE_RANGE, KC_BUF, CU_OLBUF, CU_GREP, CU_LGREP, CU_LDIAG, CU_FDIAG, CU_HELP, CU_GOTO, CU_CTRX, CU_CIW };
+enum custom_keycodes { CU_BUF = NEW_SAFE_RANGE, CU_OLBUF, CU_GREP, CU_LGREP, CU_LDIAG, CU_FDIAG, CU_HELP, CU_GOTO, CU_CTRX, CU_CIW };
 
 #define CU_ACC KC_EQL // use german dead keys for accents
 
@@ -63,6 +63,7 @@ enum custom_keycodes { CU_NAMES = NEW_SAFE_RANGE, KC_BUF, CU_OLBUF, CU_GREP, CU_
 #define KC_BUF LSFT(KC_SLASH)
 #define KC_VFWD LGUI(LCTL(KC_LEFT))
 #define KC_VBWD LGUI(LCTL(KC_RIGHT))
+#define CU_EQL_S S(KC_0)
 
 enum TAP_DOUBLE_KEYCODES {
     TD_F1_13,
@@ -132,9 +133,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , CU_HASH , CU_PIPE , CU_AMPR , CU_LP_S , CU_UNDS , XXXXXXX ,                          XXXXXXX , CU_CIRC , CU_RP_S ,CU_DQUO_S, CU_QUOT , CU_DLR  , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌────────-┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , DE_ADIA , CU_LT   , CU_SZ   , CU_LCL_S, KC_PPLS , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , CU_EQL  , CU_RCL_S, DE_UDIA , CU_GT   , DE_ODIA , _______ ,
+            _______ , DE_ADIA , CU_LT   , CU_SZ   , CU_LCL_S, KC_PPLS , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , CU_EQL_S, CU_RCL_S, DE_UDIA , CU_GT   , DE_ODIA , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      _______ , _______ ,      _______ , _______ ,      _______ ,      XXXXXXX , XXXXXXX, CU_DEG   , XXXXXXX
+            _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      _______ , _______ ,      _______ , _______ ,      _______ ,      XXXXXXX , XXXXXXX , CU_DEG   , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -142,13 +143,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              KC_NUM  , KC_PSCR , KC_SCRL , KC_PAUS , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , KC_PGUP , XXXXXXX , KC_UP   , XXXXXXX , XXXXXXX , XXXXXXX ,                          XXXXXXX , KC_PSLS , KC_P7   , KC_P8   , KC_P9   , KC_PMNS , _______ ,
+            _______ , XXXXXXX , XXXXXXX , KC_UP   , KC_PGUP , MS_WHLU , XXXXXXX ,                          XXXXXXX , KC_PSLS , KC_P7   , KC_P8   , KC_P9   , KC_PMNS , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , KC_PGDN , KC_LEFT , KC_DOWN , KC_RIGHT, XXXXXXX , XXXXXXX ,                          XXXXXXX , KC_PAST , KC_P4   , KC_P5   , KC_P6   , CU_PLUS , _______ ,
+            _______ , KC_HOME , KC_LEFT , KC_DOWN , KC_RIGHT, KC_END  , XXXXXXX ,                          XXXXXXX , KC_PAST , KC_P4   , KC_P5   , KC_P6   , CU_PLUS , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , KC_HOME , XXXXXXX , OSM_HYP , OSM_MEH , KC_END  , XXXXXXX , XXXXXXX,       XXXXXXX , XXXXXXX , CU_PDOT , KC_P1   , KC_P2   , KC_P3   , KC_P0   , _______ ,
+            _______ , XXXXXXX , XXXXXXX , XXXXXXX , KC_PGDN , MS_WHLD , XXXXXXX , XXXXXXX,       XXXXXXX , XXXXXXX , CU_PDOT , KC_P1   , KC_P2   , KC_P3   , KC_P0   , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      _______ , _______,       _______ , _______ ,      _______ ,      KC_P0   , XXXXXXX , XXXXXXX , XXXXXXX
+            _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      _______ , _______,       _______ , _______ ,      _______ ,      KC_P0   , XXXXXXX , XXXXXXX , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -156,42 +157,42 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_PSCR , XXXXXXX , CU_HELP , KC_BTOGG, CU_CTRX , KC_MNXT , XXXXXXX ,                          XXXXXXX , KC_VOLU , TD_F9   , TD_F10  , TD_F11  , TD_F12  , CU_NAMES,
+            _______ , XXXXXXX , CU_HELP , KC_BTOGG, CU_CTRX , KC_MNXT , XXXXXXX ,                          XXXXXXX , KC_VOLU , TD_F9   , TD_F10  , TD_F11  , TD_F12  , CU_FIRST,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_SCRL , CU_GREP , CU_LGREP, CU_CIW  , KC_BUF  , KC_MUTE , XXXXXXX ,                          XXXXXXX , KC_MPLY , TD_F5   , TD_F6   , TD_F7   , TD_F8   , _______ ,
+            _______ , CU_GREP , CU_LGREP, CU_CIW  , KC_BUF  , KC_MUTE , XXXXXXX ,                          XXXXXXX , KC_MPLY , TD_F5   , TD_F6   , TD_F7   , TD_F8   , CU_LAST ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_BRK  , XXXXXXX , CU_FDIAG, CU_GOTO , CU_LDIAG, KC_MPRV , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , KC_VOLD , TD_F1   , TD_F2   , TD_F3   , TD_F4   , XXXXXXX ,
+            _______ , XXXXXXX , CU_FDIAG, CU_GOTO , CU_LDIAG, KC_MPRV , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , KC_VOLD , TD_F1   , TD_F2   , TD_F3   , TD_F4   , CU_MAIL ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX ,      _______ ,      XXXXXXX   , XXXXXXX, XXXXXXX , XXXXXXX
+            _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX ,      _______ ,      XXXXXXX , XXXXXXX , XXXXXXX , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
     [MOUSE] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             XXXXXXX , KC_SLEP , XXXXXXX , XXXXXXX , XXXXXXX , KC_PWR  ,                                              XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            KC_TAB  , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                          XXXXXXX , XXXXXXX , MS_WHLU , MS_UP   , MS_BTN5 , MS_BTN7 , MS_ACL0 ,
+            _______ , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                          XXXXXXX , XXXXXXX , MS_WHLU , MS_UP   , MS_BTN5 , MS_BTN7 , CU_ACL1 ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            LCTL_ESC, XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                          XXXXXXX , MS_WHLL , MS_LEFT , MS_DOWN , MS_RGHT , MS_WHLR , MS_ACL1 ,
+            _______ , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                          XXXXXXX , MS_WHLL , MS_LEFT , MS_DOWN , MS_RGHT , MS_WHLR , CU_ACL0 ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            OSM_SHFT, XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , XXXXXXX , MS_WHLD , MS_BTN4 , MS_BTN6 , MS_BTN8 , MS_ACL2 ,
+            _______ , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , XXXXXXX , MS_WHLD , MS_BTN4 , MS_BTN6 , MS_BTN8 , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      XXXXXXX , XXXXXXX ,      MS_BTN1 , MS_BTN2 ,      MS_BTN3 ,      XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX
+            _______ , MS_ACL2 , MS_ACL1 , MS_ACL0 ,      _______ ,      XXXXXXX , XXXXXXX ,      MS_BTN1 , MS_BTN2 ,      MS_BTN3 ,      XXXXXXX , XXXXXXX , XXXXXXX , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
 };
 // clang-format on
 
-// key coe customization happens here
+// key customization happens here
 bool process_record_keymap(uint16_t keycode, keyrecord_t* record) {
-    uint8_t mods             = get_mods();
-    uint8_t osm_mods         = get_oneshot_mods();
-    bool    is_shift_pressed = (mods | osm_mods) & MOD_MASK_SHIFT;
-    bool    pressed          = record->event.pressed;
+    uint8_t mods     = get_mods();
+    uint8_t osm_mods = get_oneshot_mods();
+    bool    pressed  = record->event.pressed;
 
 #ifdef CONSOLE_ENABLE
-    bool is_ctrl_pressed = (mods | osm_mods) & MOD_MASK_CTRL;
-    bool is_alt_pressed  = (mods | osm_mods) & MOD_MASK_ALT;
+    bool is_ctrl_pressed  = (mods | osm_mods) & MOD_MASK_CTRL;
+    bool is_alt_pressed   = (mods | osm_mods) & MOD_MASK_ALT;
+    bool is_shift_pressed = (mods | osm_mods) & MOD_MASK_SHIFT;
     xprintf("     c %d | a %d | s %d \n", is_ctrl_pressed, is_alt_pressed, is_shift_pressed);
     xprintf("hold c %d | a %d | s %d \n", mods & MOD_MASK_CTRL, mods & MOD_MASK_ALT, mods & MOD_MASK_SHIFT);
     xprintf("osm  c %d | a %d | s %d \n", osm_mods & MOD_MASK_CTRL, osm_mods & MOD_MASK_ALT, osm_mods & MOD_MASK_SHIFT);
@@ -204,16 +205,6 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t* record) {
     clear_mods();
     clear_oneshot_mods();
     switch (keycode) {
-        case CU_NAMES:
-            if (pressed) {
-                if (is_shift_pressed) {
-                    SEND_STRING("Ren" SS_TAP(X_EQUAL) SS_TAP(X_E) " M;hring");
-                } else {
-                    SEND_STRING("rene" SS_LSFT(SS_TAP(X_SLASH)) "moehring" SS_ALGR(SS_TAP(X_Q)) "gmx.de");
-                }
-            }
-            break;
-
         case CU_CTRX:
             if (pressed) {
                 SEND_STRING(SS_LCTL(SS_LALT(SS_TAP(X_BRK))) SS_DELAY(300) SS_TAP(X_DOWN) SS_TAP(X_ENTER));

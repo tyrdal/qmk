@@ -61,6 +61,8 @@ enum userspace_custom_keycodes {
     CU_P5,     // numpad 5 | down
     CU_P6,     // numpad 6 | right
     CU_P8,     // numpad 8 | up
+    CU_ACL0,   // slowest constant mouse movement until tapped again
+    CU_ACL1,   // medium constant mouse movement until tapped again
 #endif
     NEW_SAFE_RANGE
 };
