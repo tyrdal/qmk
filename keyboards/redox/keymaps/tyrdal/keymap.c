@@ -32,7 +32,7 @@ enum Layers {
     MOUSE,
 };
 
-enum custom_keycodes { CU_BUF = NEW_SAFE_RANGE, CU_OLBUF, CU_GREP, CU_LGREP, CU_LDIAG, CU_FDIAG, CU_HELP, CU_GOTO, CU_CTRX, CU_CIW };
+enum custom_keycodes { CU_BUF = NEW_SAFE_RANGE, CU_OLBUF, CU_GREP, CU_LGREP, CU_LDIAG, CU_FDIAG, CU_HELP, CU_GOTO, CU_CTRX, CU_CIW, CU_BLCK, CU_SYS, CU_ZERO };
 
 #define CU_ACC KC_EQL // use german dead keys for accents
 
@@ -55,9 +55,6 @@ enum custom_keycodes { CU_BUF = NEW_SAFE_RANGE, CU_OLBUF, CU_GREP, CU_LGREP, CU_
 #define KC_SERCH LGUI(KC_S)
 #define KC_EXPLR LGUI(KC_E)
 #define KC_DESK LGUI(KC_D)
-#define KC_CUT LCTL(KC_X)
-#define KC_COPY LCTL(KC_C)
-#define KC_PASTE LCTL(KC_V)
 #define KC_ALTAB LCTL(LALT(KC_TAB))
 #define KC_BTOGG LCTL(KC_6)
 #define KC_BUF LSFT(KC_SLASH)
@@ -113,7 +110,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [BASE] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            KC_ALTAB, XXXXXXX , KC_CUT  , KC_COPY , KC_PASTE, OSM_HYP ,                                              OSM_MEH , KC_VFWD , KC_VBWD , XXXXXXX , XXXXXXX , KC_MPLY ,
+            KC_ALTAB, XXXXXXX , CU_BLCK , CU_ZERO , CU_SYS  , OSM_HYP ,                                              OSM_MEH , KC_VFWD , KC_VBWD , XXXXXXX , XXXXXXX , KC_MPLY ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             KC_TAB  , KC_Q    , KC_W    , KC_F    , KC_P    , KC_B    , DM_REC1 ,                          DM_REC2 , KC_J    , KC_L    , KC_U    , DE_Y    , KC_SLSH , OSM_GUI ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
@@ -256,6 +253,24 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t* record) {
         case CU_CIW:
             if (pressed) {
                 SEND_STRING("ciw");
+            }
+            break;
+
+        case CU_BLCK:
+            if (pressed) {
+                SEND_STRING("@?");
+            }
+            break;
+
+        case CU_SYS:
+            if (pressed) {
+                SEND_STRING("@}");
+            }
+            break;
+
+        case CU_ZERO:
+            if (pressed) {
+                SEND_STRING("@0p");
             }
             break;
 
