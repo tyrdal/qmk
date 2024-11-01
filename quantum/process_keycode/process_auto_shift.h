@@ -49,6 +49,7 @@ void retroshift_swap_times(void);
 void     autoshift_enable(void);
 void     autoshift_disable(void);
 void     autoshift_toggle(void);
+bool     autoshift_is_enabled(void);
 bool     get_autoshift_state(void);
 uint16_t get_generic_autoshift_timeout(void);
 // clang-format off

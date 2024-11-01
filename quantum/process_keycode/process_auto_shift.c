@@ -335,6 +335,10 @@ void autoshift_disable(void) {
     autoshift_flush_shift();
 }
 
+bool autoshift_is_enabled(void) {
+    return autoshift_flags.enabled;
+}
+
 #ifndef AUTO_SHIFT_NO_SETUP
 void autoshift_timer_report(void) {
 #    ifdef SEND_STRING_ENABLE

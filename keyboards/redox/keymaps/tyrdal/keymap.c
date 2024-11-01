@@ -22,6 +22,58 @@
 #    define PROGMEM // clangd does not know PROGMEM
 #endif
 
+enum custom_keycodes {
+    CU_BUF = NEW_SAFE_RANGE,
+    CU_OLBUF,
+    CU_GREP,
+    CU_LGREP,
+    CU_LDIAG,
+    CU_FDIAG,
+    CU_HELP,
+    CU_GOTO,
+    CU_CTRX,
+    CU_CIW,
+    CU_BLCK,
+    CU_SYS,
+    CU_ZERO,
+    CU_SEL_LINE,
+    CU_CLEAR_LINE,
+    CU_ARROW,
+    CU_SCOPE,
+};
+
+#ifdef COMBO_ENABLE
+enum COMBO_KEYCODES {
+    CB_SELWRD_R,
+    CB_SEL_LINE,
+    CB_SELWRD_L,
+    CB_CLR_LINE,
+    CB_CAPS_WORD,
+    CB_ARROW,
+    CB_SCOPE,
+};
+
+const uint16_t PROGMEM combo_select_word_right[] = {KC_U, KC_Z, COMBO_END};
+const uint16_t PROGMEM combo_select_word_left[]  = {KC_U, KC_L, COMBO_END};
+const uint16_t PROGMEM combo_select_line[]       = {KC_L, KC_U, KC_Z, COMBO_END};
+const uint16_t PROGMEM combo_clear_line[]        = {KC_C, KC_L, COMBO_END};
+const uint16_t PROGMEM combo_caps_word[]         = {KC_C, KC_DOT, COMBO_END};
+const uint16_t PROGMEM combo_arrow[]             = {KC_A, KC_O, COMBO_END};
+const uint16_t PROGMEM combo_scope[]             = {KC_DOT, CU_COMM, COMBO_END};
+
+// clang-format off
+combo_t key_combos[] = {
+    [CB_SELWRD_R]  = COMBO(combo_select_word_right, LCTL(LSFT(KC_RIGHT))),
+    [CB_SELWRD_L]  = COMBO(combo_select_word_left,  LCTL(LSFT(KC_LEFT))),
+    [CB_CLR_LINE]  = COMBO(combo_clear_line,        CU_CLEAR_LINE),
+    [CB_SEL_LINE]  = COMBO(combo_select_line,       CU_SEL_LINE),
+    [CB_CAPS_WORD] = COMBO(combo_caps_word,         QK_CAPS_WORD_TOGGLE),
+    [CB_ARROW]     = COMBO(combo_arrow,             CU_ARROW),
+    [CB_SCOPE]     = COMBO(combo_scope,             CU_SCOPE),
+};
+// clang-format on
+#endif
+
 extern uint8_t def_layer;
 
 enum Layers {
@@ -31,10 +83,6 @@ enum Layers {
     FKEYS,
     MOUSE,
 };
-
-enum custom_keycodes { CU_BUF = NEW_SAFE_RANGE, CU_OLBUF, CU_GREP, CU_LGREP, CU_LDIAG, CU_FDIAG, CU_HELP, CU_GOTO, CU_CTRX, CU_CIW, CU_BLCK, CU_SYS, CU_ZERO };
-
-#define CU_ACC KC_EQL // use german dead keys for accents
 
 // Shortcut to make keymap more readable
 #define LCTL_ESC LCTL_T(KC_ESC)
@@ -181,15 +229,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // clang-format on
 
 // key customization happens here
-bool process_record_keymap(uint16_t keycode, keyrecord_t* record) {
-    uint8_t mods     = get_mods();
-    uint8_t osm_mods = get_oneshot_mods();
-    bool    pressed  = record->event.pressed;
+bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
+    uint8_t mods             = get_mods();
+    uint8_t osm_mods         = get_oneshot_mods();
+    bool    is_shift_pressed = (mods | osm_mods) & MOD_MASK_SHIFT;
+    bool    pressed          = record->event.pressed;
 
 #ifdef CONSOLE_ENABLE
-    bool is_ctrl_pressed  = (mods | osm_mods) & MOD_MASK_CTRL;
-    bool is_alt_pressed   = (mods | osm_mods) & MOD_MASK_ALT;
-    bool is_shift_pressed = (mods | osm_mods) & MOD_MASK_SHIFT;
+    bool is_ctrl_pressed = (mods | osm_mods) & MOD_MASK_CTRL;
+    bool is_alt_pressed  = (mods | osm_mods) & MOD_MASK_ALT;
     xprintf("     c %d | a %d | s %d \n", is_ctrl_pressed, is_alt_pressed, is_shift_pressed);
     xprintf("hold c %d | a %d | s %d \n", mods & MOD_MASK_CTRL, mods & MOD_MASK_ALT, mods & MOD_MASK_SHIFT);
     xprintf("osm  c %d | a %d | s %d \n", osm_mods & MOD_MASK_CTRL, osm_mods & MOD_MASK_ALT, osm_mods & MOD_MASK_SHIFT);
@@ -258,21 +306,61 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t* record) {
 
         case CU_BLCK:
             if (pressed) {
+                // use black hole register
                 SEND_STRING("@?");
             }
             break;
 
         case CU_SYS:
             if (pressed) {
-                SEND_STRING("@}");
+                // use the + system register
+                SEND_STRING("@]");
             }
             break;
 
         case CU_ZERO:
             if (pressed) {
-                SEND_STRING("@0p");
+                // "0 use last inserted text for pasting
+                SEND_STRING("@0");
             }
             break;
+
+#ifdef COMBO_ENABLE
+        case CU_SEL_LINE:
+            if (pressed) {
+                tap_code16(KC_END);
+                tap_code16(LSFT(KC_HOME));
+                break;
+            }
+
+        case CU_CLEAR_LINE:
+            if (pressed) {
+                tap_code16(KC_END);
+                tap_code16(LSFT(KC_HOME));
+                tap_code16(KC_BSPC);
+            }
+            break;
+
+        case CU_ARROW: // Arrow macro, types -> or =>.
+            if (record->event.pressed) {
+                if (is_shift_pressed) {
+                    // Temporarily delete shift.
+                    del_oneshot_mods(MOD_MASK_SHIFT);
+                    unregister_mods(MOD_MASK_SHIFT);
+                    SEND_STRING(SS_LSFT(SS_TAP(X_0)) SS_LSFT(SS_TAP(X_NUBS)));
+                    register_mods(mods); // Restore mods.
+                } else {
+                    SEND_STRING(SS_TAP(X_SLASH) SS_LSFT(SS_TAP(X_NUBS)));
+                }
+            }
+            break;
+
+        case CU_SCOPE:
+            if (pressed) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_DOT)) SS_LSFT(SS_TAP(X_DOT)));
+            }
+            break;
+#endif
 
         default:
             // since none of our special codes was pressed we need to reinstate the oneshot modifiers
@@ -283,28 +371,56 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t* record) {
     return true;
 }
 
+bool caps_word_press_user(uint16_t keycode) {
+    switch (keycode) {
+        // Keycodes that continue Caps Word, with shift applied.
+        case KC_A ... KC_Z:
+        case KC_SLASH:
+            add_weak_mods(MOD_BIT(KC_LSFT)); // Apply shift to next key.
+            return true;
+
+        // Keycodes that continue Caps Word, without shifting.
+        case KC_1 ... KC_0:
+        case KC_BSPC:
+        case KC_DEL:
+        case LSFT(KC_SLASH):
+            return true;
+
+        default:
+            return false; // Deactivate Caps Word.
+    }
+}
+
 // For some unknown reason the colors are garbled and I have a yellow instead of a green led
 #undef set_led_off
 #undef set_led_red
 #undef set_led_blue
 #undef set_led_yellow
+#undef set_led_green
 #undef red_led_off
 #undef red_led_on
+
 #define red_led_off PORTD |= (1 << 1)
 #define red_led_on PORTD &= ~(1 << 1)
 #define blue_led_off PORTF |= (1 << 5)
 #define blue_led_on PORTF &= ~(1 << 5)
 #define yellow_led_off PORTF |= (1 << 4)
 #define yellow_led_on PORTF &= ~(1 << 4)
+#define green_led_off PORTD |= (1 << 0)
+#define green_led_on PORTD &= ~(1 << 0)
 
 #define set_led_off \
     red_led_off;    \
     yellow_led_off; \
-    blue_led_off
+    blue_led_off;   \
+    green_led_off;
+
 #define set_led_red \
     red_led_on;     \
     yellow_led_off; \
-    blue_led_off
+    blue_led_off;   \
+    green_led_off;
+
 #define set_led_blue \
     red_led_off;     \
     yellow_led_off;  \
@@ -312,15 +428,26 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t* record) {
 #define set_led_yellow \
     red_led_off;       \
     yellow_led_on;     \
-    blue_led_off
+    blue_led_off;      \
+    green_led_off;
+
+#define set_led_green \
+    red_led_off;      \
+    yellow_led_off;   \
+    blue_led_off;     \
+    green_led_on;
+
 #define set_led_violet \
     red_led_on;        \
     yellow_led_off;    \
-    blue_led_on
+    blue_led_on;       \
+    green_led_off;
+
 #define set_led_all \
     red_led_on;     \
     yellow_led_on;  \
-    blue_led_on
+    blue_led_on;    \
+    green_led_on;
 
 void matrix_init_user(void) {
     set_led_off;
@@ -336,13 +463,13 @@ layer_state_t layer_state_set_user(layer_state_t state) {
             set_led_blue;
             break;
         case NUMPAD:
-            set_led_yellow;
+            set_led_green;
             break;
         case FKEYS:
             set_led_red;
             break;
         case MOUSE:
-            set_led_violet;
+            set_led_yellow;
         default:
             break;
     }
@@ -372,6 +499,7 @@ void leader_end_user(void) {
     } else if (leader_sequence_two_keys(KC_A, KC_S)) {
 #    ifdef CONSOLE_ENABLE
         leader_matched = 3;
+        // TODO print autoshift_is_enabled();
 #    endif
         autoshift_toggle();
     } else if (leader_sequence_three_keys(KC_N, KC_K, KC_R)) {
