@@ -22,6 +22,8 @@
 #    define PROGMEM // clangd does not know PROGMEM
 #endif
 
+// TODO split into different parts that can be included/linked
+
 enum custom_keycodes {
     CU_BUF = NEW_SAFE_RANGE,
     CU_OLBUF,
@@ -228,20 +230,144 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 // clang-format on
 
+// For some unknown reason the colors are garbled and I have a yellow instead of a green led
+#undef set_led_off
+#undef set_led_red
+#undef set_led_blue
+#undef set_led_yellow
+#undef set_led_green
+#undef red_led_off
+#undef red_led_on
+
+#define red_led_off PORTD |= (1 << 1)
+#define red_led_on PORTD &= ~(1 << 1)
+#define blue_led_off PORTF |= (1 << 5)
+#define blue_led_on PORTF &= ~(1 << 5)
+#define yellow_led_off PORTF |= (1 << 4)
+#define yellow_led_on PORTF &= ~(1 << 4)
+#define green_led_off PORTD |= (1 << 0)
+#define green_led_on PORTD &= ~(1 << 0)
+
+#define set_led_off \
+    red_led_off;    \
+    yellow_led_off; \
+    blue_led_off;   \
+    green_led_off;
+
+#define set_led_red \
+    red_led_on;     \
+    yellow_led_off; \
+    blue_led_off;   \
+    green_led_off;
+
+#define set_led_blue \
+    red_led_off;     \
+    yellow_led_off;  \
+    blue_led_on
+#define set_led_yellow \
+    red_led_off;       \
+    yellow_led_on;     \
+    blue_led_off;      \
+    green_led_off;
+
+#define set_led_green \
+    red_led_off;      \
+    yellow_led_off;   \
+    blue_led_off;     \
+    green_led_on;
+
+#define set_led_violet \
+    red_led_on;        \
+    yellow_led_off;    \
+    blue_led_on;       \
+    green_led_off;
+
+#define set_led_all \
+    red_led_on;     \
+    yellow_led_on;  \
+    blue_led_on;    \
+    green_led_on;
+
+void enable_red_led(bool enable) {
+    if (enable) {
+        red_led_on;
+    } else {
+        red_led_off;
+    }
+}
+
+void enable_green(bool enable) {
+    if (enable) {
+        green_led_on;
+    } else {
+        green_led_off;
+    }
+}
+void enable_blue_led(bool enable) {
+    if (enable) {
+        blue_led_on;
+    } else {
+        blue_led_off;
+    }
+}
+void enable_yellow_led(bool enable) {
+    if (enable) {
+        yellow_led_on;
+    } else {
+        yellow_led_off;
+    }
+}
+void matrix_init_user(void) {
+    set_led_off;
+    // def_layer = eeconfig_read_default_layer();
+}
+
+void matrix_scan_user(void) {
+    uint8_t mods          = get_mods();
+    uint8_t osm_mods      = get_oneshot_mods();
+    uint8_t combined_mods = osm_mods | mods;
+
+    bool is_ctrl_pressed  = combined_mods & MOD_MASK_CTRL;
+    bool is_alt_pressed   = combined_mods & MOD_MASK_ALT;
+    bool is_shift_pressed = combined_mods & MOD_MASK_SHIFT;
+    bool is_gui_pressed   = combined_mods & MOD_MASK_GUI;
+
+    enable_red_led(is_gui_pressed);
+    enable_green(is_shift_pressed);
+    enable_blue_led(is_ctrl_pressed);
+    enable_yellow_led(is_alt_pressed);
+}
+
+// layer_state_t layer_state_set_user(layer_state_t state) {
+//     switch (get_highest_layer(state)) {
+//         case BASE:
+//             set_led_off;
+//             break;
+//         case SYMBOLS:
+//             set_led_blue;
+//             break;
+//         case NUMPAD:
+//             set_led_green;
+//             break;
+//         case FKEYS:
+//             set_led_red;
+//             break;
+//         case MOUSE:
+//             set_led_yellow;
+//         default:
+//             break;
+//     }
+//     return state;
+// }
+
 // key customization happens here
 bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
-    uint8_t mods             = get_mods();
-    uint8_t osm_mods         = get_oneshot_mods();
-    bool    is_shift_pressed = (mods | osm_mods) & MOD_MASK_SHIFT;
-    bool    pressed          = record->event.pressed;
+    uint8_t mods          = get_mods();
+    uint8_t osm_mods      = get_oneshot_mods();
+    uint8_t combined_mods = osm_mods | mods;
 
-#ifdef CONSOLE_ENABLE
-    bool is_ctrl_pressed = (mods | osm_mods) & MOD_MASK_CTRL;
-    bool is_alt_pressed  = (mods | osm_mods) & MOD_MASK_ALT;
-    xprintf("     c %d | a %d | s %d \n", is_ctrl_pressed, is_alt_pressed, is_shift_pressed);
-    xprintf("hold c %d | a %d | s %d \n", mods & MOD_MASK_CTRL, mods & MOD_MASK_ALT, mods & MOD_MASK_SHIFT);
-    xprintf("osm  c %d | a %d | s %d \n", osm_mods & MOD_MASK_CTRL, osm_mods & MOD_MASK_ALT, osm_mods & MOD_MASK_SHIFT);
-#endif
+    bool pressed          = record->event.pressed;
+    bool is_shift_pressed = combined_mods & MOD_MASK_SHIFT;
 
     // Here we can clear all oneshot modifiers because only codes using SEND_STRING follow
     // therefore this section needs to be the last
@@ -391,91 +517,6 @@ bool caps_word_press_user(uint16_t keycode) {
     }
 }
 
-// For some unknown reason the colors are garbled and I have a yellow instead of a green led
-#undef set_led_off
-#undef set_led_red
-#undef set_led_blue
-#undef set_led_yellow
-#undef set_led_green
-#undef red_led_off
-#undef red_led_on
-
-#define red_led_off PORTD |= (1 << 1)
-#define red_led_on PORTD &= ~(1 << 1)
-#define blue_led_off PORTF |= (1 << 5)
-#define blue_led_on PORTF &= ~(1 << 5)
-#define yellow_led_off PORTF |= (1 << 4)
-#define yellow_led_on PORTF &= ~(1 << 4)
-#define green_led_off PORTD |= (1 << 0)
-#define green_led_on PORTD &= ~(1 << 0)
-
-#define set_led_off \
-    red_led_off;    \
-    yellow_led_off; \
-    blue_led_off;   \
-    green_led_off;
-
-#define set_led_red \
-    red_led_on;     \
-    yellow_led_off; \
-    blue_led_off;   \
-    green_led_off;
-
-#define set_led_blue \
-    red_led_off;     \
-    yellow_led_off;  \
-    blue_led_on
-#define set_led_yellow \
-    red_led_off;       \
-    yellow_led_on;     \
-    blue_led_off;      \
-    green_led_off;
-
-#define set_led_green \
-    red_led_off;      \
-    yellow_led_off;   \
-    blue_led_off;     \
-    green_led_on;
-
-#define set_led_violet \
-    red_led_on;        \
-    yellow_led_off;    \
-    blue_led_on;       \
-    green_led_off;
-
-#define set_led_all \
-    red_led_on;     \
-    yellow_led_on;  \
-    blue_led_on;    \
-    green_led_on;
-
-void matrix_init_user(void) {
-    set_led_off;
-    // def_layer = eeconfig_read_default_layer();
-}
-
-layer_state_t layer_state_set_user(layer_state_t state) {
-    switch (get_highest_layer(state)) {
-        case BASE:
-            set_led_off;
-            break;
-        case SYMBOLS:
-            set_led_blue;
-            break;
-        case NUMPAD:
-            set_led_green;
-            break;
-        case FKEYS:
-            set_led_red;
-            break;
-        case MOUSE:
-            set_led_yellow;
-        default:
-            break;
-    }
-    return state;
-}
-
 #ifdef LEADER_ENABLE
 
 void leader_end_user(void) {
@@ -556,8 +597,5 @@ uint8_t mod_config(uint8_t mod) {
     return mod;
 }
 #endif
-
-// TODO
-// - Timeouts for leader key
 
 // vim :set expandtab :set ts=2
