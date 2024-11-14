@@ -1,4 +1,7 @@
-#include "action_layer.h"
+#if __has_include("passwords.h")
+#    define HAS_PASSWORDS
+#endif
+
 #include "action_util.h"
 // #include "eeconfig.h"
 // #include "keycode.h"
@@ -13,8 +16,8 @@
 #include QMK_KEYBOARD_H
 #include "de_us_layout.h"
 #include "keymap_german.h"
-#if __has_include("passwords.h")
-// #    include "passwords.h"
+#ifdef HAS_PASSWORDS
+#    include "passwords.h"
 #endif
 
 #ifdef __clang__
@@ -51,6 +54,13 @@ enum custom_keycodes {
     CU_JUMP,
     CU_IN_W,
     CU_IN_WW,
+    CU_AS,
+    CU_RESET,
+    CU_ROOT,
+    CU_USER,
+    CU_GIT,
+    CU_EW,
+    CU_BK,
 };
 
 #ifdef COMBO_ENABLE
@@ -106,8 +116,8 @@ combo_t key_combos[] = {
     [CB_DQUOTES]   = COMBO(combo_double_quote,      CU_DQUOTES),
     [CB_SQUOTES]   = COMBO(combo_single_quote,      CU_SQUOTES),
     [CB_JUMP]      = COMBO(combo_jump,              CU_JUMP),
-    [CB_IN_WORD]      = COMBO(combo_jump,              CU_IN_W),
-    [CB_IN_WWORD]     = COMBO(combo_jump,              CU_IN_WW),
+    [CB_IN_WORD]   = COMBO(combo_in_word,           CU_IN_W),
+    [CB_IN_WWORD]  = COMBO(combo_in_WORD,           CU_IN_WW),
 };
 // clang-format on
 #endif
@@ -119,7 +129,10 @@ enum Layers {
     SYMBOLS,
     NUMPAD,
     FKEYS,
+#ifdef MOUSE_ENABLE
     MOUSE,
+#endif
+    UTIL,
 };
 
 // Shortcut to make keymap more readable
@@ -137,6 +150,7 @@ enum Layers {
 #define LT_NUM_E LT(NUMPAD, KC_ENT)
 #define LT_FKEY_C OSL(FKEYS)
 #define OSL_MOUS OSL(MOUSE)
+#define OSL_UTIL OSL(UTIL)
 #define OSM_LA OSM(MOD_LALT)
 #define KC_SERCH LGUI(KC_S)
 #define KC_EXPLR LGUI(KC_E)
@@ -205,7 +219,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             OSM_SHFT, DE_Z    , KC_X    , KC_C    , KC_D    , KC_V    , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , KC_K    , KC_H    , KC_DOT  , CU_COMM , CU_DSLSH, OSM_SHFT,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            OSL_MOUS, XXXXXXX , XXXXXXX , QK_LEAD ,     LT_FKEY_C,      LT_SYM_B, LT_NUM_D,      LT_NUM_E, LT_SYM_S,      OSM_LA  ,      QK_REP  , QK_AREP , XXXXXXX , OSL_MOUS
+            OSL_MOUS, XXXXXXX , XXXXXXX , OSL_UTIL,     LT_FKEY_C,      LT_SYM_B, LT_NUM_D,      LT_NUM_E, LT_SYM_S,      OSM_LA  ,      QK_REP  , QK_AREP , XXXXXXX , OSL_MOUS
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -250,9 +264,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
             _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX ,      _______ ,      XXXXXXX , XXXXXXX , XXXXXXX , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
+#ifdef MOUSEKEY_ENABLE
     [MOUSE] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            XXXXXXX , KC_SLEP , XXXXXXX , XXXXXXX , XXXXXXX , KC_PWR  ,                                              XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                          XXXXXXX , XXXXXXX , MS_WHLU , MS_UP   , MS_BTN5 , MS_BTN7 , CU_ACL1 ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
@@ -263,7 +278,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
             _______ , MS_ACL2 , MS_ACL1 , MS_ACL0 ,      _______ ,      XXXXXXX , XXXXXXX ,      MS_BTN1 , MS_BTN2 ,      MS_BTN3 ,      XXXXXXX , XXXXXXX , XXXXXXX , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
-
+#endif
+    [UTIL] = LAYOUT(
+        //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
+        //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
+            _______ , XXXXXXX , XXXXXXX , XXXXXXX , KC_PWR  , XXXXXXX , XXXXXXX ,                          XXXXXXX , XXXXXXX , XXXXXXX , CU_ROOT , XXXXXXX , XXXXXXX , XXXXXXX ,
+        //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
+            _______ , CU_AS   , CU_RESET, KC_SLEP , NK_TOGG , XXXXXXX , XXXXXXX ,                          XXXXXXX , XXXXXXX , CU_GIT  , CU_USER , XXXXXXX , XXXXXXX , XXXXXXX ,
+        //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
+            _______ , XXXXXXX , XXXXXXX , XXXXXXX , DB_TOGG , XXXXXXX , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , XXXXXXX , CU_EW   , CU_BK   , XXXXXXX , XXXXXXX , XXXXXXX ,
+        //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
+            _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX ,      XXXXXXX ,      XXXXXXX , XXXXXXX , XXXXXXX , _______
+        //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
+        ),
 };
 // clang-format on
 
@@ -488,6 +516,51 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
             }
             break;
 
+        case CU_RESET:
+            if (pressed) {
+                reset_keyboard();
+            }
+            break;
+
+        case CU_AS:
+#ifdef CONSOLE_ENABLE
+            // TODO print autoshift_is_enabled();
+#endif
+            autoshift_toggle();
+            break;
+
+#ifdef HAS_PASSWORDS
+        case CU_ROOT:
+            if (pressed) {
+                SEND_STRING(ROOT);
+            }
+            break;
+
+        case CU_USER:
+            if (pressed) {
+                SEND_STRING(USER);
+            }
+            break;
+
+        case CU_GIT:
+            if (pressed) {
+                SEND_STRING(GITHUB);
+            }
+            break;
+
+        case CU_EW:
+            if (pressed) {
+                SEND_STRING(BDR_EW);
+            }
+            break;
+
+        case CU_BK:
+            if (pressed) {
+                SEND_STRING(BDR_BK);
+            }
+            break;
+#endif
+
 #ifdef COMBO_ENABLE
         case CU_SEL_LINE:
             if (pressed) {
@@ -607,77 +680,6 @@ bool caps_word_press_user(uint16_t keycode) {
             return false; // Deactivate Caps Word.
     }
 }
-
-#ifdef LEADER_ENABLE
-
-void leader_end_user(void) {
-#    ifdef CONSOLE_ENABLE
-    int leader_matched = 0;
-#    endif
-
-    // debug
-    if (leader_sequence_three_keys(KC_D, KC_B, KC_G)) {
-#    ifdef CONSOLE_ENABLE
-        leader_matched = 1;
-#    endif
-        tap_code16(DB_TOGG);
-    }
-    // reset
-    else if (leader_sequence_three_keys(KC_R, KC_S, KC_T)) {
-#    ifdef CONSOLE_ENABLE
-        leader_matched = 2;
-#    endif
-        reset_keyboard();
-    } else if (leader_sequence_two_keys(KC_A, KC_S)) {
-#    ifdef CONSOLE_ENABLE
-        leader_matched = 3;
-        // TODO print autoshift_is_enabled();
-#    endif
-        autoshift_toggle();
-    } else if (leader_sequence_three_keys(KC_N, KC_K, KC_R)) {
-#    ifdef CONSOLE_ENABLE
-        leader_matched = 4;
-#    endif
-        tap_code16(NK_TOGG);
-    }
-#    if __has_include("passwords.h")
-#        include "passwords.h"
-    else if (leader_sequence_one_key(KC_U)) {
-#        ifdef CONSOLE_ENABLE
-        leader_matched = 5;
-#        endif
-        SEND_STRING(ROOT);
-    } else if (leader_sequence_one_key(KC_E)) {
-#        ifdef CONSOLE_ENABLE
-        leader_matched = 6;
-#        endif
-        SEND_STRING(USER);
-    } else if (leader_sequence_one_key(KC_N)) {
-#        ifdef CONSOLE_ENABLE
-        leader_matched = 7;
-#        endif
-        SEND_STRING(GITHUB);
-    } else if (leader_sequence_one_key(KC_DOT)) {
-#        ifdef CONSOLE_ENABLE
-        leader_matched = 8;
-#        endif
-        SEND_STRING(BDR_EW);
-    } else if (leader_sequence_one_key(KC_H)) {
-#        ifdef CONSOLE_ENABLE
-        leader_matched = 9;
-#        endif
-        SEND_STRING(BDR_BK);
-    }
-#    endif
-
-#    ifdef CONSOLE_ENABLE
-    extern uint16_t leader_sequence[5];
-    xprintf("%d %d %d %d %d\n", leader_sequence[0], leader_sequence[1], leader_sequence[2], leader_sequence[3], leader_sequence[4]);
-    xprintf("m %d\n", leader_matched);
-#    endif
-}
-
-#endif
 
 #ifndef MAGIC_ENABLE
 // reduce firmware size by replacing magic functions with empty functions

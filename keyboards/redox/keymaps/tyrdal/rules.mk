@@ -8,5 +8,5 @@ MOUSEKEY_ENABLE       = yes
 REPEAT_KEY_ENABLE     = yes
 # needs to be off to use console, maybe reduce macro size
 COMBO_ENABLE          = yes
-LEADER_ENABLE         = yes
+LEADER_ENABLE         = no
 CAPS_WORD_ENABLE      = yes
