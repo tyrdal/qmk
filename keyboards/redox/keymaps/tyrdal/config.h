@@ -23,8 +23,9 @@
 #define MOUSEKEY_WHEEL_TIME_TO_MAX 40 // Time until maximum scroll speed is reached
 
 #define DYNAMIC_MACRO_NO_NESTING
-#define DYNAMIC_MACRO_SIZE 112 // the defaulf of 128 is too large for the config
+#define DYNAMIC_MACRO_SIZE 112 // the default of 128 is too large for the config
 #define DYNAMIC_MACRO_DELAY 20 // delay after echa key in ms
+#define EXTRA_SHORT_COMBOS
 
 #define CAPS_WORD_INVERT_ON_SHIFT   // invert the behavior of the caps word feature when shift is pressed
 #define CAPS_WORD_IDLE_TIMEOUT 3000 // 3 seconds.

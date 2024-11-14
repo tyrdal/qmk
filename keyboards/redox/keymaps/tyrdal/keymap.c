@@ -42,6 +42,15 @@ enum custom_keycodes {
     CU_CLEAR_LINE,
     CU_ARROW,
     CU_SCOPE,
+    CU_PARENS,
+    CU_BRACKETS,
+    CU_BRACES,
+    CU_LTGT,
+    CU_DQUOTES,
+    CU_SQUOTES,
+    CU_JUMP,
+    CU_IN_W,
+    CU_IN_WW,
 };
 
 #ifdef COMBO_ENABLE
@@ -53,6 +62,15 @@ enum COMBO_KEYCODES {
     CB_CAPS_WORD,
     CB_ARROW,
     CB_SCOPE,
+    CB_PARENS,
+    CB_BRACKETS,
+    CB_BRACES,
+    CB_LTGT,
+    CB_DQUOTES,
+    CB_SQUOTES,
+    CB_JUMP,
+    CB_IN_WORD,
+    CB_IN_WWORD,
 };
 
 const uint16_t PROGMEM combo_select_word_right[] = {KC_U, KC_Z, COMBO_END};
@@ -60,8 +78,17 @@ const uint16_t PROGMEM combo_select_word_left[]  = {KC_U, KC_L, COMBO_END};
 const uint16_t PROGMEM combo_select_line[]       = {KC_L, KC_U, KC_Z, COMBO_END};
 const uint16_t PROGMEM combo_clear_line[]        = {KC_C, KC_L, COMBO_END};
 const uint16_t PROGMEM combo_caps_word[]         = {KC_C, KC_DOT, COMBO_END};
-const uint16_t PROGMEM combo_arrow[]             = {KC_A, KC_O, COMBO_END};
+const uint16_t PROGMEM combo_arrow[]             = {KC_H, KC_DOT, COMBO_END};
 const uint16_t PROGMEM combo_scope[]             = {KC_DOT, CU_COMM, COMBO_END};
+const uint16_t PROGMEM combo_parens[]            = {KC_T, KC_N, COMBO_END};
+const uint16_t PROGMEM combo_brackets[]          = {KC_P, KC_L, COMBO_END};
+const uint16_t PROGMEM combo_braces[]            = {KC_D, KC_H, COMBO_END};
+const uint16_t PROGMEM combo_ltgt[]              = {KC_X, CU_COMM, COMBO_END};
+const uint16_t PROGMEM combo_double_quote[]      = {KC_E, KC_N, COMBO_END};
+const uint16_t PROGMEM combo_single_quote[]      = {KC_E, KC_I, KC_N, COMBO_END};
+const uint16_t PROGMEM combo_jump[]              = {KC_E, KC_N, KC_S, KC_T, COMBO_END};
+const uint16_t PROGMEM combo_in_word[]           = {KC_S, KC_T, COMBO_END};
+const uint16_t PROGMEM combo_in_WORD[]           = {KC_R, KC_S, KC_T, COMBO_END};
 
 // clang-format off
 combo_t key_combos[] = {
@@ -72,6 +99,15 @@ combo_t key_combos[] = {
     [CB_CAPS_WORD] = COMBO(combo_caps_word,         QK_CAPS_WORD_TOGGLE),
     [CB_ARROW]     = COMBO(combo_arrow,             CU_ARROW),
     [CB_SCOPE]     = COMBO(combo_scope,             CU_SCOPE),
+    [CB_PARENS]    = COMBO(combo_parens,            CU_PARENS),
+    [CB_BRACKETS]  = COMBO(combo_brackets,          CU_BRACKETS),
+    [CB_BRACES]    = COMBO(combo_braces,            CU_BRACES),
+    [CB_LTGT]      = COMBO(combo_ltgt,              CU_LTGT),
+    [CB_DQUOTES]   = COMBO(combo_double_quote,      CU_DQUOTES),
+    [CB_SQUOTES]   = COMBO(combo_single_quote,      CU_SQUOTES),
+    [CB_JUMP]      = COMBO(combo_jump,              CU_JUMP),
+    [CB_IN_WORD]      = COMBO(combo_jump,              CU_IN_W),
+    [CB_IN_WWORD]     = COMBO(combo_jump,              CU_IN_WW),
 };
 // clang-format on
 #endif
@@ -125,19 +161,20 @@ enum TAP_DOUBLE_KEYCODES {
     TD_F10_22,
     TD_F11_23,
     TD_F12_24,
+    TD_CW_CIW,
 };
 
 // clang-format off
 tap_dance_action_t tap_dance_actions[] = {
-  [TD_F1_13] = ACTION_TAP_DANCE_DOUBLE(KC_F1,KC_F13),
-  [TD_F2_14] = ACTION_TAP_DANCE_DOUBLE(KC_F2,KC_F14),
-  [TD_F3_15] = ACTION_TAP_DANCE_DOUBLE(KC_F3,KC_F15),
-  [TD_F4_16] = ACTION_TAP_DANCE_DOUBLE(KC_F4,KC_F16),
-  [TD_F5_17] = ACTION_TAP_DANCE_DOUBLE(KC_F5,KC_F17),
-  [TD_F6_18] = ACTION_TAP_DANCE_DOUBLE(KC_F6,KC_F18),
-  [TD_F7_19] = ACTION_TAP_DANCE_DOUBLE(KC_F7,KC_F19),
-  [TD_F8_20] = ACTION_TAP_DANCE_DOUBLE(KC_F8,KC_F20),
-  [TD_F9_21] = ACTION_TAP_DANCE_DOUBLE(KC_F9,KC_F21),
+  [TD_F1_13]  = ACTION_TAP_DANCE_DOUBLE(KC_F1,KC_F13),
+  [TD_F2_14]  = ACTION_TAP_DANCE_DOUBLE(KC_F2,KC_F14),
+  [TD_F3_15]  = ACTION_TAP_DANCE_DOUBLE(KC_F3,KC_F15),
+  [TD_F4_16]  = ACTION_TAP_DANCE_DOUBLE(KC_F4,KC_F16),
+  [TD_F5_17]  = ACTION_TAP_DANCE_DOUBLE(KC_F5,KC_F17),
+  [TD_F6_18]  = ACTION_TAP_DANCE_DOUBLE(KC_F6,KC_F18),
+  [TD_F7_19]  = ACTION_TAP_DANCE_DOUBLE(KC_F7,KC_F19),
+  [TD_F8_20]  = ACTION_TAP_DANCE_DOUBLE(KC_F8,KC_F20),
+  [TD_F9_21]  = ACTION_TAP_DANCE_DOUBLE(KC_F9,KC_F21),
   [TD_F10_22] = ACTION_TAP_DANCE_DOUBLE(KC_F10,KC_F22),
   [TD_F11_23] = ACTION_TAP_DANCE_DOUBLE(KC_F11,KC_F23),
   [TD_F12_24] = ACTION_TAP_DANCE_DOUBLE(KC_F12,KC_F24),
@@ -484,6 +521,60 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
         case CU_SCOPE:
             if (pressed) {
                 SEND_STRING(SS_LSFT(SS_TAP(X_DOT)) SS_LSFT(SS_TAP(X_DOT)));
+            }
+            break;
+
+        case CU_PARENS:
+            if (pressed) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_8)) SS_LSFT(SS_TAP(X_9)) SS_TAP(X_LEFT));
+            }
+            break;
+
+        case CU_BRACKETS:
+            if (pressed) {
+                SEND_STRING(SS_LCTL(SS_LALT(SS_TAP(X_8))) SS_LCTL(SS_LALT(SS_TAP(X_9))) SS_TAP(X_LEFT));
+            }
+            break;
+
+        case CU_BRACES:
+            if (pressed) {
+                SEND_STRING(SS_LCTL(SS_LALT(SS_TAP(X_7))) SS_LCTL(SS_LALT(SS_TAP(X_0))) SS_TAP(X_LEFT));
+            }
+            break;
+
+        case CU_LTGT:
+            if (pressed) {
+                SEND_STRING(SS_TAP(X_NONUS_BACKSLASH) SS_LSFT(SS_TAP(X_NONUS_BACKSLASH)) SS_TAP(X_LEFT));
+            }
+            break;
+
+        case CU_DQUOTES:
+            if (pressed) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_2)) SS_LSFT(SS_TAP(X_2)) SS_TAP(X_LEFT));
+            }
+            break;
+
+        case CU_SQUOTES:
+            if (pressed) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_NONUS_HASH)) SS_LSFT(SS_TAP(X_NONUS_HASH)) SS_TAP(X_LEFT));
+            }
+            break;
+
+        case CU_JUMP:
+            if (pressed) {
+                tap_code16(LCTL(LALT(KC_J)));
+            }
+            break;
+
+        case CU_IN_W:
+            if (pressed) {
+                SEND_STRING("iw");
+            }
+            break;
+
+        case CU_IN_WW:
+            if (pressed) {
+                SEND_STRING("iW");
             }
             break;
 #endif
