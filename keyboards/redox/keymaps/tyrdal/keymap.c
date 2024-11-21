@@ -287,7 +287,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , CU_AS   , CU_RESET, KC_SLEP , NK_TOGG , XXXXXXX , XXXXXXX ,                          XXXXXXX , XXXXXXX , CU_GIT  , CU_USER , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , XXXXXXX , XXXXXXX , DB_TOGG , XXXXXXX , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , XXXXXXX , CU_EW   , CU_BK   , XXXXXXX , XXXXXXX , XXXXXXX ,
+            _______ , XXXXXXX , XXXXXXX , CM_TOGG , DB_TOGG , XXXXXXX , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , XXXXXXX , CU_EW   , CU_BK   , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
             _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX ,      XXXXXXX ,      XXXXXXX , XXXXXXX , XXXXXXX , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
@@ -605,13 +605,13 @@ bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {
 
         case CU_BRACKETS:
             if (pressed) {
-                SEND_STRING(SS_LCTL(SS_LALT(SS_TAP(X_8))) SS_LCTL(SS_LALT(SS_TAP(X_9))) SS_TAP(X_LEFT));
+                SEND_STRING(SS_ALGR(SS_TAP(X_8)) SS_ALGR(SS_TAP(X_9)) SS_TAP(X_LEFT));
             }
             break;
 
         case CU_BRACES:
             if (pressed) {
-                SEND_STRING(SS_LCTL(SS_LALT(SS_TAP(X_7))) SS_LCTL(SS_LALT(SS_TAP(X_0))) SS_TAP(X_LEFT));
+                SEND_STRING(SS_ALGR(SS_TAP(X_7)) SS_ALGR(SS_TAP(X_0)) SS_TAP(X_LEFT));
             }
             break;
 
