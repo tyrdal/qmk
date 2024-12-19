@@ -81,6 +81,10 @@ enum COMBO_KEYCODES {
     CB_JUMP,
     CB_IN_WORD,
     CB_IN_WWORD,
+    CB_AE,
+    CB_UE,
+    CB_OE,
+    CB_SZ,
 };
 
 const uint16_t PROGMEM combo_select_word_right[] = {KC_U, KC_Z, COMBO_END};
@@ -91,33 +95,41 @@ const uint16_t PROGMEM combo_caps_word[]         = {KC_C, KC_DOT, COMBO_END};
 const uint16_t PROGMEM combo_arrow[]             = {KC_H, KC_DOT, COMBO_END};
 const uint16_t PROGMEM combo_scope[]             = {KC_DOT, CU_COMM, COMBO_END};
 const uint16_t PROGMEM combo_parens[]            = {KC_T, KC_N, COMBO_END};
-const uint16_t PROGMEM combo_brackets[]          = {KC_P, KC_L, COMBO_END};
-const uint16_t PROGMEM combo_braces[]            = {KC_D, KC_H, COMBO_END};
+const uint16_t PROGMEM combo_brackets[]          = {KC_P, KC_N, COMBO_END};
+const uint16_t PROGMEM combo_braces[]            = {KC_D, KC_N, COMBO_END};
 const uint16_t PROGMEM combo_ltgt[]              = {KC_X, CU_COMM, COMBO_END};
 const uint16_t PROGMEM combo_double_quote[]      = {KC_E, KC_N, COMBO_END};
 const uint16_t PROGMEM combo_single_quote[]      = {KC_E, KC_I, KC_N, COMBO_END};
 const uint16_t PROGMEM combo_jump[]              = {KC_E, KC_N, KC_S, KC_T, COMBO_END};
 const uint16_t PROGMEM combo_in_word[]           = {KC_S, KC_T, COMBO_END};
 const uint16_t PROGMEM combo_in_WORD[]           = {KC_R, KC_S, KC_T, COMBO_END};
+const uint16_t PROGMEM combo_ae[]                = {KC_A, KC_E, COMBO_END};
+const uint16_t PROGMEM combo_ue[]                = {KC_U, KC_S, COMBO_END};
+const uint16_t PROGMEM combo_oe[]                = {KC_O, KC_S, COMBO_END};
+const uint16_t PROGMEM combo_sz[]                = {KC_S, KC_E, COMBO_END};
 
 // clang-format off
 combo_t key_combos[] = {
-    [CB_SELWRD_R]  = COMBO(combo_select_word_right, LCTL(LSFT(KC_RIGHT))),
-    [CB_SELWRD_L]  = COMBO(combo_select_word_left,  LCTL(LSFT(KC_LEFT))),
-    [CB_CLR_LINE]  = COMBO(combo_clear_line,        CU_CLEAR_LINE),
-    [CB_SEL_LINE]  = COMBO(combo_select_line,       CU_SEL_LINE),
-    [CB_CAPS_WORD] = COMBO(combo_caps_word,         QK_CAPS_WORD_TOGGLE),
-    [CB_ARROW]     = COMBO(combo_arrow,             CU_ARROW),
-    [CB_SCOPE]     = COMBO(combo_scope,             CU_SCOPE),
-    [CB_PARENS]    = COMBO(combo_parens,            CU_PARENS),
-    [CB_BRACKETS]  = COMBO(combo_brackets,          CU_BRACKETS),
-    [CB_BRACES]    = COMBO(combo_braces,            CU_BRACES),
-    [CB_LTGT]      = COMBO(combo_ltgt,              CU_LTGT),
-    [CB_DQUOTES]   = COMBO(combo_double_quote,      CU_DQUOTES),
-    [CB_SQUOTES]   = COMBO(combo_single_quote,      CU_SQUOTES),
-    [CB_JUMP]      = COMBO(combo_jump,              CU_JUMP),
-    [CB_IN_WORD]   = COMBO(combo_in_word,           CU_IN_W),
-    [CB_IN_WWORD]  = COMBO(combo_in_WORD,           CU_IN_WW),
+[CB_SELWRD_R]  = COMBO(combo_select_word_right, LCTL(LSFT(KC_RIGHT))),
+[CB_SELWRD_L]  = COMBO(combo_select_word_left,  LCTL(LSFT(KC_LEFT))),
+[CB_CLR_LINE]  = COMBO(combo_clear_line,        CU_CLEAR_LINE),
+[CB_SEL_LINE]  = COMBO(combo_select_line,       CU_SEL_LINE),
+[CB_CAPS_WORD] = COMBO(combo_caps_word,         QK_CAPS_WORD_TOGGLE),
+[CB_ARROW]     = COMBO(combo_arrow,             CU_ARROW),
+[CB_SCOPE]     = COMBO(combo_scope,             CU_SCOPE),
+[CB_PARENS]    = COMBO(combo_parens,            CU_PARENS),
+[CB_BRACKETS]  = COMBO(combo_brackets,          CU_BRACKETS),
+[CB_BRACES]    = COMBO(combo_braces,            CU_BRACES),
+[CB_LTGT]      = COMBO(combo_ltgt,              CU_LTGT),
+[CB_DQUOTES]   = COMBO(combo_double_quote,      CU_DQUOTES),
+[CB_SQUOTES]   = COMBO(combo_single_quote,      CU_SQUOTES),
+[CB_JUMP]      = COMBO(combo_jump,              CU_JUMP),
+[CB_IN_WORD]   = COMBO(combo_in_word,           CU_IN_W),
+[CB_IN_WWORD]  = COMBO(combo_in_WORD,           CU_IN_WW),
+[CB_AE]        = COMBO(combo_ae,                DE_ADIA),
+[CB_UE]        = COMBO(combo_ue,                DE_UDIA),
+[CB_OE]        = COMBO(combo_oe,                DE_ODIA),
+[CB_SZ]        = COMBO(combo_sz,                CU_SZ),
 };
 // clang-format on
 #endif
@@ -207,6 +219,7 @@ tap_dance_action_t tap_dance_actions[] = {
 #define TD_F11 TD(TD_F11_23)
 #define TD_F12 TD(TD_F12_24)
 
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [BASE] = LAYOUT(
@@ -227,11 +240,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             KC_SYRQ , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , KC_WREF , KC_WBAK , KC_WFWD , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , CU_GRV_S, CU_EURO , CU_QUES , CU_LBC_S, CU_EXLM , XXXXXXX ,                          XXXXXXX , CU_TILD , CU_RBC_S, CU_PERC , CU_PARAG, CU_AT   , _______ ,
+            _______ , CU_GRV  , CU_EURO , CU_QUES , CU_LBC_S, CU_EXLM , XXXXXXX ,                          XXXXXXX , CU_TILD , CU_RBC_S, CU_PERC , CU_PARAG, CU_AT   , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , CU_HASH , CU_PIPE , CU_AMPR , CU_LP_S , CU_UNDS , XXXXXXX ,                          XXXXXXX , CU_CIRC , CU_RP_S ,CU_DQUO_S, CU_QUOT , CU_DLR  , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌────────-┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , DE_ADIA , CU_LT   , CU_SZ   , CU_LCL_S, KC_PPLS , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , CU_EQL_S, CU_RCL_S, DE_UDIA , CU_GT   , DE_ODIA , _______ ,
+            _______ , QK_LLCK , CU_LT   , CU_SZ   , CU_LCL_S, KC_PPLS , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , CU_EQL_S, CU_RCL_S, DE_UDIA , CU_GT   , DE_ODIA , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
             _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      _______ , _______ ,      _______ , _______ ,      _______ ,      XXXXXXX , XXXXXXX , CU_DEG   , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
@@ -283,7 +296,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , XXXXXXX , XXXXXXX , KC_PWR  , XXXXXXX , XXXXXXX ,                          XXXXXXX , XXXXXXX , XXXXXXX , CU_ROOT , XXXXXXX , XXXXXXX , XXXXXXX ,
+            _______ , XXXXXXX , KC_WAKE , XXXXXXX , KC_PWR  , XXXXXXX , XXXXXXX ,                          XXXXXXX , XXXXXXX , XXXXXXX , CU_ROOT , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , CU_AS   , CU_RESET, KC_SLEP , NK_TOGG , XXXXXXX , XXXXXXX ,                          XXXXXXX , XXXXXXX , CU_GIT  , CU_USER , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤

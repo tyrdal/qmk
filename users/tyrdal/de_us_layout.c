@@ -59,7 +59,7 @@ typedef struct special_key_codes_t {
 
 // clang-format off
 const special_key_codes_t  special_codes[] = {
-  {CU_2,     KC_2,             RALT(KC_Q)},
+  {CU_2,     KC_2,             ALGR(KC_Q)},
   {CU_3,     KC_3,             KC_NONUS_HASH},
   {CU_6,     KC_6,             CU_CIRC},
   {CU_7,     KC_7,             S(KC_6)},
@@ -76,12 +76,13 @@ const special_key_codes_t  special_codes[] = {
   {CU_GRV,   CU_GRV_S,         S(KC_RIGHT_BRACKET)},
   {CU_EQL,   S(KC_0),          S(KC_KP_PLUS)},
   {CU_PLUS,  S(KC_KP_PLUS),    S(KC_0)},
-  {CU_LCURL, RALT(KC_7),       RALT(KC_9)},
-  {CU_RCURL, RALT(KC_0),       RALT(KC_9)},
-  {CU_LBRC,  RALT(KC_8),       RALT(KC_7)},
-  {CU_RBRC,  RALT(KC_9),       RALT(KC_0)},
-  {CU_BSLS,  RALT(KC_MINUS),   RALT(KC_NONUS_BACKSLASH) }
+  {CU_LCURL, ALGR(KC_7),       ALGR(KC_9)},
+  {CU_RCURL, ALGR(KC_0),       ALGR(KC_9)},
+  {CU_LBRC,  ALGR(KC_8),       ALGR(KC_7)},
+  {CU_RBRC,  ALGR(KC_9),       ALGR(KC_0)},
+  {CU_BSLS,  ALGR(KC_MINUS),   ALGR(KC_NONUS_BACKSLASH) }
   {CU_PDOT,  KC_DOT,           KC_COMMA }
+  {CU_SZ,    KC_MINUS,         ALGR(S(KC_MINUS)) }
 };
 uint8_t NUM_SPECIAL_CODES = sizeof(special_codes) / sizeof(special_key_codes_t);
 // clang-format on
@@ -225,7 +226,7 @@ typedef struct autoshift_key_codes_t {
 
 // clang-format off
 const autoshift_key_codes_t autoshift_codes[] = {
-    {CU_2,     KC_2,             RALT(KC_Q)},
+    {CU_2,     KC_2,             ALGR(KC_Q)},
     {CU_3,     KC_3,             KC_NONUS_HASH},
     {CU_6,     KC_6,             CU_CIRC},
     {CU_7,     KC_7,             S(KC_6)},
@@ -242,16 +243,17 @@ const autoshift_key_codes_t autoshift_codes[] = {
     {CU_GRV,   CU_GRV_S,         S(KC_RIGHT_BRACKET)},
     {CU_EQL,   S(KC_0),          S(KC_KP_PLUS)},
     {CU_PLUS,  S(KC_KP_PLUS),    S(KC_0)},
-    {CU_LBRC,  RALT(KC_8),       RALT(KC_7)},
-    {CU_RBRC,  RALT(KC_9),       RALT(KC_0)},
-    {CU_LCURL, RALT(KC_7),       RALT(KC_8)},
-    {CU_RCURL, RALT(KC_0),       RALT(KC_9)},
-    {CU_BSLS,  RALT(KC_MINUS),   RALT(KC_NONUS_BACKSLASH)},
+    {CU_LBRC,  ALGR(KC_8),       ALGR(KC_7)},
+    {CU_RBRC,  ALGR(KC_9),       ALGR(KC_0)},
+    {CU_LCURL, ALGR(KC_7),       ALGR(KC_8)},
+    {CU_RCURL, ALGR(KC_0),       ALGR(KC_9)},
+    {CU_BSLS,  ALGR(KC_MINUS),   ALGR(KC_NONUS_BACKSLASH)},
     {CU_PDOT,  KC_DOT,           KC_COMMA },
     {CU_P4,    KC_KP_4,          KC_LEFT},
     {CU_P5,    KC_KP_5,          KC_DOWN},
     {CU_P6,    KC_KP_6,          KC_RIGHT},
     {CU_P8,    KC_KP_8,          KC_UP},
+    {CU_SZ,    KC_MINUS,         ALGR(S(KC_MINUS))},
 };
 uint8_t NUM_AUTOSHIFT_CODES = sizeof(autoshift_codes) / sizeof(autoshift_key_codes_t);
 // clang-format on
