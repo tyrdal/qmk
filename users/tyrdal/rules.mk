@@ -12,3 +12,4 @@ SWAP_HANDS_ENABLE = no
 MUSIC_ENABLE      = no
 MAGIC_ENABLE      = yes
 RGB_ENABLE        = no
+LAYER_LOCK_ENABLE    = yes

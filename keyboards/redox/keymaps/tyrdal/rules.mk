@@ -10,4 +10,3 @@ REPEAT_KEY_ENABLE    = yes
 COMBO_ENABLE         = yes
 LEADER_ENABLE        = no
 CAPS_WORD_ENABLE     = yes
-LAYER_LOCK_ENABLE    = YES
