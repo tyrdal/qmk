@@ -6,6 +6,7 @@ enum userspace_custom_keycodes {
     CU_FIRST = SAFE_RANGE, // start of the customizable number SAFE_RANGE - First name
     CU_LAST,               // Last name
     CU_MAIL,               // email address
+    CU_ALT_MAIL,           // alternative email address
 
 #ifdef GERMAN_ENABLE
     CU_COMM,   // , | ;

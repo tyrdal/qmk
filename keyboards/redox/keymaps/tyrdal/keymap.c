@@ -1,3 +1,5 @@
+#include "action_layer.h"
+#include "keycodes.h"
 #if __has_include("passwords.h")
 #    define HAS_PASSWORDS
 #endif
@@ -26,6 +28,48 @@
 #endif
 
 // TODO split into different parts that can be included/linked
+
+extern uint8_t def_layer;
+
+enum Layers {
+    BASE,
+    SYMBOLS,
+    NUMPAD,
+    FKEYS,
+#ifdef MOUSE_ENABLE
+    MOUSE,
+#endif
+    UTIL,
+};
+static uint8_t current_layer = BASE;
+
+// Shortcut to make keymap more readable
+#define LCTL_ESC LCTL_T(KC_ESC)
+
+#define OSM_GUI OSM(MOD_LGUI)
+#define OSM_HYP OSM(MOD_HYPR)
+#define OSM_MEH OSM(MOD_MEH)
+#define OSM_SHFT OSM(MOD_LSFT)
+#define OSM_RC OSM(MOD_RCTL)
+
+#define LT_SYM_B LT(SYMBOLS, KC_BSPC)
+#define LT_SYM_S LT(SYMBOLS, KC_SPC)
+#define LT_NUM_D LT(NUMPAD, KC_DEL)
+#define LT_NUM_E LT(NUMPAD, KC_ENT)
+#define LT_FKEY_C OSL(FKEYS)
+#define OSL_MOUS OSL(MOUSE)
+#define OSL_UTIL OSL(UTIL)
+#define OSM_LA OSM(MOD_LALT)
+#define OSM_RA OSM(MOD_RALT)
+#define KC_SERCH LGUI(KC_S)
+#define KC_EXPLR LGUI(KC_E)
+#define KC_DESK LGUI(KC_D)
+#define KC_ALTAB LCTL(LALT(KC_TAB))
+#define KC_BTOGG LCTL(KC_6)
+#define KC_BUF LSFT(KC_SLASH)
+#define KC_VFWD LGUI(LCTL(KC_LEFT))
+#define KC_VBWD LGUI(LCTL(KC_RIGHT))
+#define CU_EQL_S S(KC_0)
 
 enum custom_keycodes {
     CU_BUF = NEW_SAFE_RANGE,
@@ -85,6 +129,15 @@ enum COMBO_KEYCODES {
     CB_UE,
     CB_OE,
     CB_SZ,
+    CB_MAIL,
+    CB_ALT_MAIL,
+    CB_FIRST_NAME,
+    CB_SURNAME,
+    CB_VD_LEFT,
+    CB_VD_RIGHT,
+    CB_UTIL_LAYER,
+    CB_MEH,
+    CB_HYPER,
 };
 
 const uint16_t PROGMEM combo_select_word_right[] = {KC_U, KC_Z, COMBO_END};
@@ -107,72 +160,50 @@ const uint16_t PROGMEM combo_ae[]                = {KC_A, KC_E, COMBO_END};
 const uint16_t PROGMEM combo_ue[]                = {KC_U, KC_S, COMBO_END};
 const uint16_t PROGMEM combo_oe[]                = {KC_O, KC_S, COMBO_END};
 const uint16_t PROGMEM combo_sz[]                = {KC_S, KC_E, COMBO_END};
+const uint16_t PROGMEM combo_mail[]              = {CU_RP_S, CU_DQUO_S, COMBO_END};
+const uint16_t PROGMEM combo_alt_mail[]          = {CU_CIRC, CU_DQUO_S, COMBO_END};
+const uint16_t PROGMEM combo_first_name[]        = {CU_RP_S, CU_QUES, COMBO_END};
+const uint16_t PROGMEM combo_surname[]           = {CU_RP_S, CU_AMPR, COMBO_END};
+const uint16_t PROGMEM combo_virt_desk_left[]    = {KC_LEFT, KC_DOWN, COMBO_END};
+const uint16_t PROGMEM combo_virt_desk_right[]   = {KC_RIGHT, KC_DOWN, COMBO_END};
+const uint16_t PROGMEM combo_util_layer[]        = {KC_C, KC_D, COMBO_END};
+const uint16_t PROGMEM combo_meh[]               = {KC_M, KC_N, KC_E, COMBO_END};
+const uint16_t PROGMEM combo_hyper[]             = {KC_S, KC_T, KC_G, COMBO_END};
 
 // clang-format off
 combo_t key_combos[] = {
-[CB_SELWRD_R]  = COMBO(combo_select_word_right, LCTL(LSFT(KC_RIGHT))),
-[CB_SELWRD_L]  = COMBO(combo_select_word_left,  LCTL(LSFT(KC_LEFT))),
-[CB_CLR_LINE]  = COMBO(combo_clear_line,        CU_CLEAR_LINE),
-[CB_SEL_LINE]  = COMBO(combo_select_line,       CU_SEL_LINE),
-[CB_CAPS_WORD] = COMBO(combo_caps_word,         QK_CAPS_WORD_TOGGLE),
-[CB_ARROW]     = COMBO(combo_arrow,             CU_ARROW),
-[CB_SCOPE]     = COMBO(combo_scope,             CU_SCOPE),
-[CB_PARENS]    = COMBO(combo_parens,            CU_PARENS),
-[CB_BRACKETS]  = COMBO(combo_brackets,          CU_BRACKETS),
-[CB_BRACES]    = COMBO(combo_braces,            CU_BRACES),
-[CB_LTGT]      = COMBO(combo_ltgt,              CU_LTGT),
-[CB_DQUOTES]   = COMBO(combo_double_quote,      CU_DQUOTES),
-[CB_SQUOTES]   = COMBO(combo_single_quote,      CU_SQUOTES),
-[CB_JUMP]      = COMBO(combo_jump,              CU_JUMP),
-[CB_IN_WORD]   = COMBO(combo_in_word,           CU_IN_W),
-[CB_IN_WWORD]  = COMBO(combo_in_WORD,           CU_IN_WW),
-[CB_AE]        = COMBO(combo_ae,                DE_ADIA),
-[CB_UE]        = COMBO(combo_ue,                DE_UDIA),
-[CB_OE]        = COMBO(combo_oe,                DE_ODIA),
-[CB_SZ]        = COMBO(combo_sz,                CU_SZ),
+[CB_SELWRD_R]        = COMBO(combo_select_word_right, LCTL(LSFT(KC_RIGHT))),
+[CB_SELWRD_L]        = COMBO(combo_select_word_left,  LCTL(LSFT(KC_LEFT))),
+[CB_CLR_LINE]        = COMBO(combo_clear_line,        CU_CLEAR_LINE),
+[CB_SEL_LINE]        = COMBO(combo_select_line,       CU_SEL_LINE),
+[CB_CAPS_WORD]       = COMBO(combo_caps_word,         QK_CAPS_WORD_TOGGLE),
+[CB_ARROW]           = COMBO(combo_arrow,             CU_ARROW),
+[CB_SCOPE]           = COMBO(combo_scope,             CU_SCOPE),
+[CB_PARENS]          = COMBO(combo_parens,            CU_PARENS),
+[CB_BRACKETS]        = COMBO(combo_brackets,          CU_BRACKETS),
+[CB_BRACES]          = COMBO(combo_braces,            CU_BRACES),
+[CB_LTGT]            = COMBO(combo_ltgt,              CU_LTGT),
+[CB_DQUOTES]         = COMBO(combo_double_quote,      CU_DQUOTES),
+[CB_SQUOTES]         = COMBO(combo_single_quote,      CU_SQUOTES),
+[CB_JUMP]            = COMBO(combo_jump,              CU_JUMP),
+[CB_IN_WORD]         = COMBO(combo_in_word,           CU_IN_W),
+[CB_IN_WWORD]        = COMBO(combo_in_WORD,           CU_IN_WW),
+[CB_AE]              = COMBO(combo_ae,                DE_ADIA),
+[CB_UE]              = COMBO(combo_ue,                DE_UDIA),
+[CB_OE]              = COMBO(combo_oe,                DE_ODIA),
+[CB_SZ]              = COMBO(combo_sz,                CU_SZ),
+[CB_MAIL]            = COMBO(combo_mail,              CU_MAIL),
+[CB_ALT_MAIL]        = COMBO(combo_alt_mail,          CU_ALT_MAIL),
+[CB_FIRST_NAME]      = COMBO(combo_first_name,        CU_FIRST),
+[CB_SURNAME]         = COMBO(combo_surname,           CU_LAST),
+[CB_VD_LEFT]         = COMBO(combo_virt_desk_left,    KC_VFWD),
+[CB_VD_RIGHT]        = COMBO(combo_virt_desk_right,   KC_VBWD),
+[CB_UTIL_LAYER]      = COMBO(combo_util_layer,        OSL_UTIL),
+[CB_MEH]             = COMBO(combo_meh,               OSM_MEH),
+[CB_HYPER]           = COMBO(combo_hyper,             OSM_HYP),
 };
 // clang-format on
 #endif
-
-extern uint8_t def_layer;
-
-enum Layers {
-    BASE,
-    SYMBOLS,
-    NUMPAD,
-    FKEYS,
-#ifdef MOUSE_ENABLE
-    MOUSE,
-#endif
-    UTIL,
-};
-
-// Shortcut to make keymap more readable
-#define LCTL_ESC LCTL_T(KC_ESC)
-
-#define OSM_GUI OSM(MOD_LGUI)
-#define OSM_HYP OSM(MOD_HYPR)
-#define OSM_MEH OSM(MOD_MEH)
-#define OSM_SHFT OSM(MOD_LSFT)
-#define OSM_RC OSM(MOD_RCTL)
-
-#define LT_SYM_B LT(SYMBOLS, KC_BSPC)
-#define LT_SYM_S LT(SYMBOLS, KC_SPC)
-#define LT_NUM_D LT(NUMPAD, KC_DEL)
-#define LT_NUM_E LT(NUMPAD, KC_ENT)
-#define LT_FKEY_C OSL(FKEYS)
-#define OSL_MOUS OSL(MOUSE)
-#define OSL_UTIL OSL(UTIL)
-#define OSM_LA OSM(MOD_LALT)
-#define KC_SERCH LGUI(KC_S)
-#define KC_EXPLR LGUI(KC_E)
-#define KC_DESK LGUI(KC_D)
-#define KC_ALTAB LCTL(LALT(KC_TAB))
-#define KC_BTOGG LCTL(KC_6)
-#define KC_BUF LSFT(KC_SLASH)
-#define KC_VFWD LGUI(LCTL(KC_LEFT))
-#define KC_VBWD LGUI(LCTL(KC_RIGHT))
-#define CU_EQL_S S(KC_0)
 
 enum TAP_DOUBLE_KEYCODES {
     TD_F1_13,
@@ -244,9 +275,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , CU_HASH , CU_PIPE , CU_AMPR , CU_LP_S , CU_UNDS , XXXXXXX ,                          XXXXXXX , CU_CIRC , CU_RP_S ,CU_DQUO_S, CU_QUOT , CU_DLR  , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌────────-┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , QK_LLCK , CU_LT   , CU_SZ   , CU_LCL_S, KC_PPLS , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , CU_EQL_S, CU_RCL_S, DE_UDIA , CU_GT   , DE_ODIA , _______ ,
+            _______ , QK_LLCK , CU_LT   , CU_SZ   , CU_LCL_S, KC_PPLS , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , CU_EQL_S, CU_RCL_S, QK_REP  , CU_GT   , DE_ODIA , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      _______ , _______ ,      _______ , _______ ,      _______ ,      XXXXXXX , XXXXXXX , CU_DEG   , _______
+            _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      _______ , _______ ,      _______ , _______ ,      OSM_RA  ,      XXXXXXX , XXXXXXX , CU_DEG   , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
@@ -254,11 +285,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              KC_NUM  , KC_PSCR , KC_SCRL , KC_PAUS , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , XXXXXXX , KC_UP   , KC_PGUP , MS_WHLU , XXXXXXX ,                          XXXXXXX , KC_PSLS , KC_P7   , KC_P8   , KC_P9   , KC_PMNS , _______ ,
+            _______ , KC_PSCR , KC_SCRL , KC_UP   , KC_PGUP , MS_WHLU , XXXXXXX ,                          XXXXXXX , KC_PSLS , KC_P7   , KC_P8   , KC_P9   , KC_PMNS , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , KC_HOME , KC_LEFT , KC_DOWN , KC_RIGHT, KC_END  , XXXXXXX ,                          XXXXXXX , KC_PAST , KC_P4   , KC_P5   , KC_P6   , CU_PLUS , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , QK_LLCK , XXXXXXX , XXXXXXX , KC_PGDN , MS_WHLD , XXXXXXX , XXXXXXX,       XXXXXXX , XXXXXXX , CU_PDOT , KC_P1   , KC_P2   , KC_P3   , KC_P0   , _______ ,
+            _______ , QK_LLCK , KC_NUM  , KC_BRK  , KC_PGDN , MS_WHLD , XXXXXXX , XXXXXXX,       XXXXXXX , XXXXXXX , CU_PDOT , KC_P1   , KC_P2   , KC_P3   , KC_P0   , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
             _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      _______ , _______,       _______ , _______ ,      _______ ,      KC_P0   , XXXXXXX , XXXXXXX , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
@@ -268,11 +299,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , CU_HELP , KC_BTOGG, CU_CTRX , KC_MNXT , XXXXXXX ,                          XXXXXXX , KC_VOLU , TD_F9   , TD_F10  , TD_F11  , TD_F12  , CU_FIRST,
+            _______ , XXXXXXX , CU_HELP , KC_BTOGG, CU_CTRX , KC_MNXT , XXXXXXX ,                          XXXXXXX , KC_VOLU , TD_F9   , TD_F10  , TD_F11  , TD_F12  , _______,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , CU_GREP , CU_LGREP, CU_CIW  , KC_BUF  , KC_MUTE , XXXXXXX ,                          XXXXXXX , KC_MPLY , TD_F5   , TD_F6   , TD_F7   , TD_F8   , CU_LAST ,
+            _______ , CU_GREP , CU_LGREP, CU_CIW  , KC_BUF  , KC_MUTE , XXXXXXX ,                          XXXXXXX , KC_MPLY , TD_F5   , TD_F6   , TD_F7   , TD_F8   , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , XXXXXXX , CU_FDIAG, CU_GOTO , CU_LDIAG, KC_MPRV , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , KC_VOLD , TD_F1   , TD_F2   , TD_F3   , TD_F4   , CU_MAIL ,
+            _______ , XXXXXXX , CU_FDIAG, CU_GOTO , CU_LDIAG, KC_MPRV , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , KC_VOLD , TD_F1   , TD_F2   , TD_F3   , TD_F4   , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
             _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX ,      _______ ,      XXXXXXX , XXXXXXX , XXXXXXX , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
@@ -416,27 +447,10 @@ void matrix_scan_user(void) {
     enable_yellow_led(is_alt_pressed);
 }
 
-// layer_state_t layer_state_set_user(layer_state_t state) {
-//     switch (get_highest_layer(state)) {
-//         case BASE:
-//             set_led_off;
-//             break;
-//         case SYMBOLS:
-//             set_led_blue;
-//             break;
-//         case NUMPAD:
-//             set_led_green;
-//             break;
-//         case FKEYS:
-//             set_led_red;
-//             break;
-//         case MOUSE:
-//             set_led_yellow;
-//         default:
-//             break;
-//     }
-//     return state;
-// }
+layer_state_t layer_state_set_user(layer_state_t state) {
+    current_layer = get_highest_layer(state);
+    return state;
+}
 
 // key customization happens here
 bool process_record_keymap(uint16_t keycode, keyrecord_t *record) {

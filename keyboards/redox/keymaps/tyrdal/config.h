@@ -4,7 +4,7 @@
 
 // auto shift settings
 #define AUTO_SHIFT_MODIFIERS // enable modifiers like ctrl, alt etc to work with autoshift
-#define AUTO_SHIFT_TIMEOUT 250
+#define AUTO_SHIFT_TIMEOUT 150
 #define AUTO_SHIFT_NO_AUTO_REPEAT // disables automatic key repetition after the timeout is exceeded
 
 #undef LEADER_TIMEOUT
@@ -23,7 +23,7 @@
 #define MOUSEKEY_WHEEL_TIME_TO_MAX 40 // Time until maximum scroll speed is reached
 
 #define DYNAMIC_MACRO_NO_NESTING
-#define DYNAMIC_MACRO_SIZE 112 // the default of 128 is too large for the config
+#define DYNAMIC_MACRO_SIZE 104 // the default of 128 is too large for the config
 #define DYNAMIC_MACRO_DELAY 20 // delay after echa key in ms
 #define EXTRA_SHORT_COMBOS
 

@@ -166,6 +166,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             }
             break;
 
+        case CU_ALT_MAIL:
+            if (pressed) {
+                SEND_STRING("tzrdal" SS_ALGR(SS_TAP(X_Q)) "gmx.de");
+            }
+            break;
+
 #if MOUSEKEY_ENABLE
         case CU_ACL0:
             if (pressed) {
