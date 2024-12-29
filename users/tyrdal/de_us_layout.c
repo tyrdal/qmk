@@ -1,5 +1,6 @@
 #include "de_us_layout.h"
 #include "action_util.h"
+#include "keycodes.h"
 #include "keymap_german.h"
 #ifdef CONSOLE_ENABLE
 #    include "xprintf.h"
@@ -59,13 +60,6 @@ typedef struct special_key_codes_t {
 
 // clang-format off
 const special_key_codes_t  special_codes[] = {
-  {CU_2,     KC_2,             ALGR(KC_Q)},
-  {CU_3,     KC_3,             KC_NONUS_HASH},
-  {CU_6,     KC_6,             CU_CIRC},
-  {CU_7,     KC_7,             S(KC_6)},
-  {CU_8,     KC_8,             S(KC_RIGHT_BRACKET)},
-  {CU_9,     KC_9,             S(KC_8)},
-  {CU_0,     KC_0,             S(KC_9)},
   {CU_COMM,  KC_COMMA,         KC_SCLN},
   {CU_DOT,   KC_DOT,           S(KC_NONUS_BACKSLASH)},
   {CU_SLSH,  KC_KP_SLASH,      S(KC_MINUS)},
@@ -205,9 +199,16 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
                 SEND_STRING(SS_TAP(X_GRAVE) SS_TAP(X_SPACE));
             }
             break;
+
         case CU_GRV_S:
             if (pressed) {
                 SEND_STRING(SS_LSFT(SS_TAP(X_EQUAL)) SS_TAP(X_SPACE));
+            }
+            break;
+
+        case CU_ACU_S:
+            if (pressed) {
+                SEND_STRING(SS_TAP(X_EQUAL) SS_TAP(X_SPACE));
             }
             break;
 #endif
@@ -232,13 +233,6 @@ typedef struct autoshift_key_codes_t {
 
 // clang-format off
 const autoshift_key_codes_t autoshift_codes[] = {
-    {CU_2,     KC_2,             ALGR(KC_Q)},
-    {CU_3,     KC_3,             KC_NONUS_HASH},
-    {CU_6,     KC_6,             CU_CIRC},
-    {CU_7,     KC_7,             S(KC_6)},
-    {CU_8,     KC_8,             S(KC_RIGHT_BRACKET)},
-    {CU_9,     KC_9,             S(KC_8)},
-    {CU_0,     KC_0,             S(KC_9)},
     {CU_COMM,  KC_COMMA,         S(KC_COMMA)},
     {CU_DOT,   KC_DOT,           S(KC_NONUS_BACKSLASH)},
     {CU_SLSH,  KC_KP_SLASH,      S(KC_MINUS)},
@@ -246,7 +240,7 @@ const autoshift_key_codes_t autoshift_codes[] = {
     {CU_SCLN,  S(KC_COMMA),      S(KC_DOT)},
     {CU_QUOT,  S(KC_NONUS_HASH), S(KC_2)},
     {CU_DQUO,  S(KC_2),          S(KC_NONUS_HASH)},
-    {CU_GRV,   CU_GRV_S,         S(KC_RIGHT_BRACKET)},
+    {CU_GRV,   S(KC_EQUAL),      KC_EQUAL},
     {CU_EQL,   S(KC_0),          S(KC_KP_PLUS)},
     {CU_PLUS,  S(KC_KP_PLUS),    S(KC_0)},
     {CU_LBRC,  ALGR(KC_8),       ALGR(KC_7)},
@@ -255,10 +249,6 @@ const autoshift_key_codes_t autoshift_codes[] = {
     {CU_RCURL, ALGR(KC_0),       ALGR(KC_9)},
     {CU_BSLS,  ALGR(KC_MINUS),   ALGR(KC_NONUS_BACKSLASH)},
     {CU_PDOT,  KC_DOT,           KC_COMMA },
-    {CU_P4,    KC_KP_4,          KC_LEFT},
-    {CU_P5,    KC_KP_5,          KC_DOWN},
-    {CU_P6,    KC_KP_6,          KC_RIGHT},
-    {CU_P8,    KC_KP_8,          KC_UP},
     {CU_SZ,    KC_MINUS,         ALGR(S(KC_MINUS))},
 };
 uint8_t NUM_AUTOSHIFT_CODES = sizeof(autoshift_codes) / sizeof(autoshift_key_codes_t);

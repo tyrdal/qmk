@@ -167,8 +167,8 @@ const uint16_t PROGMEM combo_surname[]           = {CU_RP_S, CU_AMPR, COMBO_END}
 const uint16_t PROGMEM combo_virt_desk_left[]    = {KC_LEFT, KC_DOWN, COMBO_END};
 const uint16_t PROGMEM combo_virt_desk_right[]   = {KC_RIGHT, KC_DOWN, COMBO_END};
 const uint16_t PROGMEM combo_util_layer[]        = {KC_C, KC_D, COMBO_END};
-const uint16_t PROGMEM combo_meh[]               = {KC_M, KC_N, KC_E, COMBO_END};
-const uint16_t PROGMEM combo_hyper[]             = {KC_S, KC_T, KC_G, COMBO_END};
+const uint16_t PROGMEM combo_meh[]               = {KC_N, KC_E, KC_I, KC_O, COMBO_END};
+const uint16_t PROGMEM combo_hyper[]             = {KC_A, KC_R, KC_S, KC_T, COMBO_END};
 
 // clang-format off
 combo_t key_combos[] = {
@@ -250,7 +250,7 @@ tap_dance_action_t tap_dance_actions[] = {
 #define TD_F11 TD(TD_F11_23)
 #define TD_F12 TD(TD_F12_24)
 
-
+// TODO ü, ß
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [BASE] = LAYOUT(
@@ -271,11 +271,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
             KC_SYRQ , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , KC_WREF , KC_WBAK , KC_WFWD , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , CU_GRV  , CU_EURO , CU_QUES , CU_LBC_S, CU_EXLM , XXXXXXX ,                          XXXXXXX , CU_TILD , CU_RBC_S, CU_PERC , CU_PARAG, CU_AT   , _______ ,
+            _______ , CU_GRV_S, CU_EURO , CU_QUES , CU_LBC_S, CU_EXLM , XXXXXXX ,                          XXXXXXX , CU_TILD , CU_RBC_S, CU_PERC , CU_PARAG, CU_ACU_S, _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , CU_HASH , CU_PIPE , CU_AMPR , CU_LP_S , CU_UNDS , XXXXXXX ,                          XXXXXXX , CU_CIRC , CU_RP_S ,CU_DQUO_S, CU_QUOT , CU_DLR  , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌────────-┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
-            _______ , QK_LLCK , CU_LT   , CU_SZ   , CU_LCL_S, KC_PPLS , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , CU_EQL_S, CU_RCL_S, QK_REP  , CU_GT   , DE_ODIA , _______ ,
+            _______ , QK_LLCK , CU_LT   , CU_SZ   , CU_LCL_S, KC_PPLS , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , CU_EQL_S, CU_RCL_S, QK_REP  , CU_GT   , DE_AT   , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
             _______ , XXXXXXX , XXXXXXX , XXXXXXX ,      _______ ,      _______ , _______ ,      _______ , _______ ,      OSM_RA  ,      XXXXXXX , XXXXXXX , CU_DEG   , _______
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘

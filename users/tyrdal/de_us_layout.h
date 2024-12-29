@@ -14,13 +14,6 @@ enum userspace_custom_keycodes {
     CU_SLSH,   // / | ?
     CU_SCLN,   // ; | :
     CU_GRV,    // ` | ~
-    CU_2,      // 2 | @
-    CU_3,      // 3 | #
-    CU_6,      // 6 | ^
-    CU_7,      // 7 | &
-    CU_8,      // 8 | *
-    CU_9,      // 9 | (
-    CU_0,      // 0 | )
     CU_EQL,    // = | +
     CU_PLUS,   // + | =
     CU_LBRC,   // [ | {
@@ -48,6 +41,7 @@ enum userspace_custom_keycodes {
     CU_COLN,   // :
     CU_QUES,   // ?
     CU_GRV_S,  // `
+    CU_ACU_S,  // ´
     CU_SCLN_S, // ;
     CU_LP_S,   // (
     CU_RP_S,   // )
@@ -58,10 +52,6 @@ enum userspace_custom_keycodes {
     CU_DOT_S,  // .
     CU_COM_S,  // ,
     CU_PARAG,  // §
-    CU_P4,     // numpad 4 | left
-    CU_P5,     // numpad 5 | down
-    CU_P6,     // numpad 6 | right
-    CU_P8,     // numpad 8 | up
     CU_ACL0,   // slowest constant mouse movement until tapped again
     CU_ACL1,   // medium constant mouse movement until tapped again
 #endif
