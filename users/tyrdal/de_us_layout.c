@@ -75,7 +75,7 @@ const special_key_codes_t  special_codes[] = {
   {CU_LBRC,  ALGR(KC_8),       ALGR(KC_7)},
   {CU_RBRC,  ALGR(KC_9),       ALGR(KC_0)},
   {CU_BSLS,  ALGR(KC_MINUS),   ALGR(KC_NONUS_BACKSLASH) }
-  {CU_PDOT,  KC_DOT,           KC_COMMA }
+  {CU_PDOT,  KC_DOT,           KC_COMMA },
   {CU_SZ,    KC_MINUS,         ALGR(S(KC_MINUS)) }
 };
 uint8_t NUM_SPECIAL_CODES = sizeof(special_codes) / sizeof(special_key_codes_t);

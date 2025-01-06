@@ -1,5 +1,6 @@
 #include "action_layer.h"
 #include "keycodes.h"
+#include "modifiers.h"
 #if __has_include("passwords.h")
 #    define HAS_PASSWORDS
 #endif
@@ -61,6 +62,9 @@ static uint8_t current_layer = BASE;
 #define OSL_UTIL OSL(UTIL)
 #define OSM_LA OSM(MOD_LALT)
 #define OSM_RA OSM(MOD_RALT)
+#define OSM_CA OSM(MOD_LCTL | MOD_LALT)
+#define OSM_CG OSM(MOD_LCTL | MOD_LGUI)
+#define OSM_CS OSM(MOD_LCTL | MOD_LSFT)
 #define KC_SERCH LGUI(KC_S)
 #define KC_EXPLR LGUI(KC_E)
 #define KC_DESK LGUI(KC_D)
@@ -250,7 +254,6 @@ tap_dance_action_t tap_dance_actions[] = {
 #define TD_F11 TD(TD_F11_23)
 #define TD_F12 TD(TD_F12_24)
 
-// TODO ü, ß
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [BASE] = LAYOUT(
@@ -269,7 +272,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [SYMBOLS] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            KC_SYRQ , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              XXXXXXX , KC_WREF , KC_WBAK , KC_WFWD , XXXXXXX , XXXXXXX ,
+            KC_SYRQ , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , _______ ,                                              _______ , KC_WREF , KC_WBAK , KC_WFWD , XXXXXXX , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , CU_GRV_S, CU_EURO , CU_QUES , CU_LBC_S, CU_EXLM , XXXXXXX ,                          XXXXXXX , CU_TILD , CU_RBC_S, CU_PERC , CU_PARAG, CU_ACU_S, _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
@@ -283,7 +286,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [NUMPAD] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX ,                                              KC_NUM  , KC_PSCR , KC_SCRL , KC_PAUS , XXXXXXX , XXXXXXX ,
+            XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , XXXXXXX , _______ ,                                              _______ , OSM_CS  , OSM_CA  , OSM_CG  , KC_NUM  , XXXXXXX ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             _______ , KC_PSCR , KC_SCRL , KC_UP   , KC_PGUP , MS_WHLU , XXXXXXX ,                          XXXXXXX , KC_PSLS , KC_P7   , KC_P8   , KC_P9   , KC_PMNS , _______ ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
