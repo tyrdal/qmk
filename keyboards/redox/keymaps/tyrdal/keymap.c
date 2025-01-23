@@ -258,7 +258,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [BASE] = LAYOUT(
         //┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐                                            ┌─────────┬─────────┬─────────┬─────────┬─────────┬─────────┐
-            KC_ALTAB, XXXXXXX , CU_BLCK , CU_ZERO , CU_SYS  , OSM_HYP ,                                              OSM_MEH , KC_VFWD , KC_VBWD , XXXXXXX , XXXXXXX , KC_MPLY ,
+            XXXXXXX , XXXXXXX , CU_BLCK , CU_ZERO , CU_SYS  , OSM_HYP ,                                              OSM_MEH , KC_VFWD , KC_VBWD , XXXXXXX , XXXXXXX , KC_MPLY ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐                        ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             KC_TAB  , KC_Q    , KC_W    , KC_F    , KC_P    , KC_B    , DM_REC1 ,                          DM_REC2 , KC_J    , KC_L    , KC_U    , DE_Y    , KC_SLSH , OSM_GUI ,
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤                        ├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
@@ -266,7 +266,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         //├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤
             OSM_SHFT, DE_Z    , KC_X    , KC_C    , KC_D    , KC_V    , XXXXXXX , XXXXXXX ,      XXXXXXX , XXXXXXX , KC_K    , KC_H    , KC_DOT  , CU_COMM , CU_DSLSH, OSM_SHFT,
         //├─────────┼─────────┼─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┤    ├─────────┼─────────┼────┬────┴────┬────┼─────────┼─────────┼─────────┼─────────┤
-            OSL_MOUS, XXXXXXX , XXXXXXX , OSL_UTIL,     LT_FKEY_C,      LT_SYM_B, LT_NUM_D,      LT_NUM_E, LT_SYM_S,      OSM_LA  ,      QK_REP  , QK_AREP , XXXXXXX , OSL_MOUS
+            OSL_MOUS, OSL_UTIL, QK_AREP , QK_REP  ,     LT_FKEY_C,      LT_SYM_B, LT_NUM_D,      LT_NUM_E, LT_SYM_S,      OSM_LA  ,      QK_REP  , QK_AREP , OSL_UTIL, OSL_MOUS
         //└─────────┴─────────┴─────────┴─────────┘    └─────────┘    └─────────┴─────────┘    └─────────┴─────────┘    └─────────┘    └─────────┴─────────┴─────────┴─────────┘
         ),
 
